@@ -3,6 +3,7 @@
 import React from 'react';
 import { FinancialInputs } from '../../lib/types';
 import { isContractorRole, formatCurrency } from '../../lib/formatters';
+import { useTranslation } from '../../lib/i18n';
 import { MapPin, Briefcase, DollarSign, User, Users } from 'lucide-react';
 
 interface DashboardHeaderProps {
@@ -10,7 +11,16 @@ interface DashboardHeaderProps {
 }
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ inputs }) => {
-  const visualSrc = inputs.country === 'CA' ? '/assets/Canada Visual.png' : '/assets/US Visual.png';
+  const { t } = useTranslation();
+
+  const visualBgMap: Record<string, string> = {
+    US: '/assets/US Visual.png',
+    CA: '/assets/Canada Visual.png',
+    MX: '/assets/Mexico Visual.png',
+    BR: '/assets/Brazil Visual.png',
+  };
+
+  const visualSrc = visualBgMap[inputs.country] || '/assets/US Visual.png';
   const isContractor = isContractorRole(inputs.employmentType);
   const displayIncome = isContractor
     ? inputs.incomeRate * inputs.workHoursPerWeek * inputs.weeksPerYear
@@ -18,7 +28,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ inputs }) => {
 
   return (
     <div className="relative rounded-3xl bg-white border border-slate-200/80 shadow-sm overflow-hidden min-h-[160px] flex items-center">
-      {/* Background Skyline Visual Image - High Visibility with Soft Gradient Fade */}
+      {/* Background Skyline Visual Image - Result Page Card Placement */}
       <div className="absolute right-0 top-0 bottom-0 w-3/4 sm:w-2/3 md:w-1/2 pointer-events-none overflow-hidden">
         <img
           src={visualSrc}
@@ -33,11 +43,11 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ inputs }) => {
       <div className="relative z-10 p-6 sm:p-7 space-y-3.5 max-w-2xl">
         <div className="space-y-1">
           <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500">
-            <span>Hello there!</span>
-            <span className="text-sm">👋</span>
+            <span>PayScope Intelligence</span>
+            <span className="text-sm">✨</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-            Here’s your financial snapshot
+            {t.financialSnapshot}
           </h1>
         </div>
 
@@ -63,7 +73,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ inputs }) => {
             <span>
               {isContractor
                 ? `${formatCurrency(inputs.incomeRate || 60, inputs.currency)}/hr (${formatCurrency(displayIncome, inputs.currency)}/yr)`
-                : `${formatCurrency(displayIncome, inputs.currency)} Annual Salary`}
+                : `${formatCurrency(displayIncome, inputs.currency)} ${t.annualSalaryLabel}`}
             </span>
           </div>
 
@@ -76,7 +86,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ inputs }) => {
           {/* Dependents Chip */}
           <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-md border border-slate-200/80 px-3 py-1.5 rounded-full shadow-2xs">
             <Users className="w-3.5 h-3.5 text-indigo-600" />
-            <span>{inputs.dependents} Dependents</span>
+            <span>{inputs.dependents} {t.dependentsLabel}</span>
           </div>
         </div>
       </div>

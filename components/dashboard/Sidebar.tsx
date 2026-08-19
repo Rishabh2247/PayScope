@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { usePathname } from 'next/navigation';
+import { useTranslation } from '../../lib/i18n';
 import {
   LayoutDashboard,
   Calculator,
@@ -23,21 +24,22 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange }) => {
   const pathname = usePathname();
+  const { t } = useTranslation();
 
   const navItems = [
-    { id: 'overview', label: 'Overview', icon: LayoutDashboard, href: '/dashboard/overview' },
-    { id: 'tax-engine', label: 'Tax Engine', icon: Calculator, href: '/dashboard/tax-engine' },
-    { id: 'rate-analysis', label: 'Rate Analysis', icon: DollarSign, href: '/dashboard/rate-analysis' },
-    { id: 'benchmarks', label: 'Benchmarks', icon: PieChart, href: '/dashboard/benchmarks' },
-    { id: 'housing', label: 'Housing', icon: Home, href: '/dashboard/housing' },
-    { id: 'fuel-commute', label: 'Fuel & Commute', icon: Fuel, href: '/dashboard/fuel-commute' },
-    { id: 'relocation', label: 'Relocation', icon: Compass, href: '/dashboard/relocation' },
+    { id: 'overview', label: t.overview, icon: LayoutDashboard, href: '/dashboard/overview' },
+    { id: 'tax-engine', label: t.taxEngine, icon: Calculator, href: '/dashboard/tax-engine' },
+    { id: 'rate-analysis', label: t.rateAnalysis, icon: DollarSign, href: '/dashboard/rate-analysis' },
+    { id: 'benchmarks', label: t.benchmarks, icon: PieChart, href: '/dashboard/benchmarks' },
+    { id: 'housing', label: t.housing, icon: Home, href: '/dashboard/housing' },
+    { id: 'fuel-commute', label: t.fuelCommute, icon: Fuel, href: '/dashboard/fuel-commute' },
+    { id: 'relocation', label: t.relocation, icon: Compass, href: '/dashboard/relocation' },
   ];
 
   const secondaryItems = [
-    { label: 'Reports', icon: FileText },
-    { label: 'Support', icon: HelpCircle },
-    { label: 'Settings', icon: Settings },
+    { label: t.reports, icon: FileText },
+    { label: t.support, icon: HelpCircle },
+    { label: t.settings, icon: Settings },
   ];
 
   const isItemActive = (item: typeof navItems[0]) => {
