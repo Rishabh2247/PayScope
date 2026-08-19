@@ -76,7 +76,7 @@ export const CandidatePipelineKanban: React.FC<CandidatePipelineKanbanProps> = (
   return (
     <div className="space-y-6">
       {/* Kanban Pipeline Columns */}
-      <div className="overflow-x-auto pb-4">
+      <div className="overflow-x-auto pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-none snap-x">
         <div className="flex items-start gap-3 min-w-[1200px]">
           {STAGES.map((stage) => {
             const stageRecords = currentJobCandidates.filter((cj) => cj.stage === stage);
