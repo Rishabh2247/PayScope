@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer utilities {
   @keyframes marquee {
     0% {
@@ -14,7 +18,12 @@
     animation: marquee 32s linear infinite;
   }
 
-  .animate-marquee:hover {
+  .animate-marquee-slow {
+    animation: marquee 55s linear infinite;
+  }
+
+  .animate-marquee:hover,
+  .animate-marquee-slow:hover {
     animation-play-state: paused;
   }
 }

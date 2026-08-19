@@ -2,9 +2,18 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Payscale | Know What Your Income Is Really Worth',
+  title: 'PayScope',
   description:
     'A location-aware financial intelligence platform for the Americas — combining income, taxes, take-home pay, local economics, housing, inflation, transportation and purchasing power into one personalized financial snapshot.',
+  icons: {
+    icon: [
+      { url: '/assets/title-logo.png', type: 'image/png' },
+      { url: '/icon.png', type: 'image/png' },
+      { url: '/favicon.ico' },
+    ],
+    shortcut: '/assets/title-logo.png',
+    apple: '/assets/title-logo.png',
+  },
   keywords: [
     'Payscale',
     'PayScope',

@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { CountryCode, CurrencyCode } from '../../lib/types';
-import { ChevronDown, Globe, RefreshCw } from 'lucide-react';
+import { ChevronDown, Globe, RefreshCw, UserCheck, Users } from 'lucide-react';
 
 interface NavbarProps {
   country: CountryCode;
@@ -13,6 +13,10 @@ interface NavbarProps {
   activeView: 'hero' | 'dashboard';
   onSwitchView: (view: 'hero' | 'dashboard') => void;
   onReset: () => void;
+  productMode?: 'payscope' | 'recruiting';
+  onProductModeChange?: (mode: 'payscope' | 'recruiting') => void;
+  recruiterTab?: string;
+  onRecruiterTabChange?: (tab: string) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -23,51 +27,138 @@ export const Navbar: React.FC<NavbarProps> = ({
   activeView,
   onSwitchView,
   onReset,
+  productMode = 'payscope',
+  onProductModeChange = () => {},
+  recruiterTab = 'calculator',
+  onRecruiterTabChange,
 }) => {
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-xs">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between">
-        {/* Brand Logo - Scaled significantly larger (h-14 sm:h-16 md:h-20) */}
-        <div className="flex items-center gap-3 cursor-pointer py-1" onClick={() => onSwitchView('hero')}>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <img
-                src="/assets/logo.png"
-                alt="Payscale Logo"
-                className="h-14 sm:h-16 md:h-20 w-auto object-contain mix-blend-multiply"
-              />
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-18 flex items-center justify-between gap-4">
+        {/* Brand Logo & Mode Toggle */}
+        <div className="flex items-center gap-4">
+          <div
+            className="flex items-center gap-3 cursor-pointer py-1"
+            onClick={() => onSwitchView('hero')}
+          >
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <img
+                  src="/assets/logo.png"
+                  alt="PayScope Logo"
+                  className="h-7 sm:h-8 md:h-9 w-auto object-contain"
+                />
+                {productMode === 'recruiting' && (
+                  <span className="bg-indigo-600 text-white font-black text-[10px] sm:text-xs px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs animate-in fade-in">
+                    RECRUIT
+                  </span>
+                )}
+              </div>
+              <span className="text-[11px] font-semibold text-slate-500 tracking-wide -mt-1 hidden sm:inline">
+                {productMode === 'recruiting'
+                  ? 'Built for recruiters, staffing agencies & talent teams.'
+                  : 'Know what your income is really worth.'}
+              </span>
             </div>
-            <span className="text-[11px] font-semibold text-slate-500 tracking-wide -mt-1">
-              Know what your income is really worth.
-            </span>
+          </div>
+
+          {/* Product Mode Toggle Switch */}
+          <div className="bg-slate-100 p-1 rounded-xl flex items-center border border-slate-200/80 shadow-inner">
+            <button
+              onClick={() => onProductModeChange('payscope')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
+                productMode === 'payscope'
+                  ? 'bg-white text-indigo-600 shadow-sm border border-slate-200/60'
+                  : 'text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              <Users className="w-3.5 h-3.5" />
+              <span>PayScope</span>
+            </button>
+            <button
+              onClick={() => onProductModeChange('recruiting')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-extrabold flex items-center gap-1.5 transition-all ${
+                productMode === 'recruiting'
+                  ? 'bg-indigo-600 text-white shadow-sm'
+                  : 'text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              <UserCheck className="w-3.5 h-3.5" />
+              <span>PayScope Recruit</span>
+            </button>
           </div>
         </div>
 
-        {/* Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
-          <a
-            onClick={() => onSwitchView('hero')}
-            className={`hover:text-indigo-600 transition-colors cursor-pointer ${
-              activeView === 'hero' ? 'text-indigo-600 font-bold' : ''
-            }`}
-          >
-            Calculators
-          </a>
-          <a
-            onClick={() => onSwitchView('dashboard')}
-            className={`hover:text-indigo-600 transition-colors cursor-pointer ${
-              activeView === 'dashboard' ? 'text-indigo-600 font-bold' : ''
-            }`}
-          >
-            Tools
-          </a>
-          <Link href="/resources" className="hover:text-indigo-600 transition-colors">
-            Resources
-          </Link>
-          <Link href="/about" className="hover:text-indigo-600 transition-colors">
-            About
-          </Link>
-        </nav>
+        {/* Dynamic Navigation Links based on Mode */}
+        {productMode === 'payscope' ? (
+          <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
+            <a
+              onClick={() => onSwitchView('hero')}
+              className={`hover:text-indigo-600 transition-colors cursor-pointer ${
+                activeView === 'hero' ? 'text-indigo-600 font-bold' : ''
+              }`}
+            >
+              Calculators
+            </a>
+            <a
+              onClick={() => onSwitchView('dashboard')}
+              className={`hover:text-indigo-600 transition-colors cursor-pointer ${
+                activeView === 'dashboard' ? 'text-indigo-600 font-bold' : ''
+              }`}
+            >
+              Tools
+            </a>
+            <Link href="/resources" className="hover:text-indigo-600 transition-colors">
+              Resources
+            </Link>
+            <Link href="/about" className="hover:text-indigo-600 transition-colors">
+              About
+            </Link>
+          </nav>
+        ) : (
+          <nav className="hidden xl:flex items-center gap-6 text-xs font-bold text-slate-600">
+            <button
+              onClick={() => onRecruiterTabChange?.('dashboard')}
+              className={`hover:text-indigo-600 transition-colors ${
+                recruiterTab === 'dashboard' ? 'text-indigo-600 font-black border-b-2 border-indigo-600 pb-1' : ''
+              }`}
+            >
+              Dashboard
+            </button>
+            <button
+              onClick={() => onRecruiterTabChange?.('search')}
+              className={`hover:text-indigo-600 transition-colors ${
+                recruiterTab === 'search' ? 'text-indigo-600 font-black border-b-2 border-indigo-600 pb-1' : ''
+              }`}
+            >
+              Search Candidates
+            </button>
+            <button
+              onClick={() => onRecruiterTabChange?.('jobs')}
+              className={`hover:text-indigo-600 transition-colors ${
+                recruiterTab === 'jobs' ? 'text-indigo-600 font-black border-b-2 border-indigo-600 pb-1' : ''
+              }`}
+            >
+              Jobs
+            </button>
+            <button
+              onClick={() => onRecruiterTabChange?.('rate')}
+              className={`hover:text-indigo-600 transition-colors ${
+                recruiterTab === 'rate' ? 'text-indigo-600 font-black border-b-2 border-indigo-600 pb-1' : ''
+              }`}
+            >
+              Rate & Margin
+            </button>
+            <button
+              onClick={() => onRecruiterTabChange?.('reports')}
+              className={`hover:text-indigo-600 transition-colors ${
+                recruiterTab === 'reports' ? 'text-indigo-600 font-black border-b-2 border-indigo-600 pb-1' : ''
+              }`}
+            >
+              Reports
+            </button>
+          </nav>
+        )}
 
         {/* Selectors & CTA */}
         <div className="flex items-center gap-3">
@@ -119,7 +210,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Switch/Reset Button when on Dashboard */}
-          {activeView === 'dashboard' && (
+          {activeView === 'dashboard' && productMode === 'payscope' && (
             <button
               onClick={onReset}
               className="flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-semibold px-4 py-2 rounded-xl text-xs transition-colors border border-indigo-200/60"

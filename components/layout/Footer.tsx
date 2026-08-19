@@ -19,9 +19,9 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className="bg-white border-t border-slate-200/80 pt-8 pb-8 mt-auto overflow-hidden">
-      {/* Transparent Light Grey Stationary Data Sources Watermark Ticker */}
-      <div className="bg-slate-100/90 text-slate-700 py-3.5 border-y border-slate-200/80 mb-8 overflow-hidden relative">
-        <div className="max-w-[1440px] mx-auto px-4 flex items-center justify-between gap-4 mb-2.5">
+      {/* Light Whitish-Grey Single-Line Slow Moving Marquee Ticker */}
+      <div className="bg-slate-100/70 text-slate-700 py-3 border-y border-slate-200/60 mb-8 overflow-hidden relative">
+        <div className="max-w-[1440px] mx-auto px-4 flex items-center justify-between gap-4 mb-2">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-700">
             <Database className="w-3.5 h-3.5 text-indigo-600" />
             <span>Official Data Sources & Information Providers</span>
@@ -31,19 +31,21 @@ export const Footer: React.FC = () => {
           </span>
         </div>
 
-        {/* Stationary Transparent Light Grey Grid Badge Bar */}
-        <div className="max-w-[1440px] mx-auto px-4 flex flex-wrap items-center gap-2">
-          {dataSources.map((source, idx) => (
-            <div
-              key={idx}
-              className="flex items-center gap-1.5 bg-white/80 border border-slate-200 px-3 py-1 rounded-full text-xs font-semibold shadow-2xs"
-            >
-              <span>{source.flag}</span>
-              <span className="font-bold text-slate-800">{source.name}</span>
-              <span className="text-slate-300">•</span>
-              <span className="text-[11px] text-slate-500 font-medium">{source.label}</span>
-            </div>
-          ))}
+        {/* Single-Line Slow Moving Marquee */}
+        <div className="w-full overflow-hidden flex">
+          <div className="animate-marquee-slow flex items-center gap-3">
+            {[...dataSources, ...dataSources].map((source, idx) => (
+              <div
+                key={idx}
+                className="flex items-center gap-1.5 bg-white/90 border border-slate-200/80 px-3.5 py-1.5 rounded-full text-xs font-semibold shadow-2xs whitespace-nowrap shrink-0"
+              >
+                <span>{source.flag}</span>
+                <span className="font-bold text-slate-800">{source.name}</span>
+                <span className="text-slate-300">•</span>
+                <span className="text-[11px] text-slate-500 font-medium">{source.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -55,7 +57,7 @@ export const Footer: React.FC = () => {
               <img
                 src="/assets/logo.png"
                 alt="PayScope Logo"
-                className="h-14 sm:h-16 w-auto object-contain mix-blend-multiply"
+                className="h-7 sm:h-8 md:h-9 w-auto object-contain"
               />
             </div>
             <p className="text-xs font-semibold text-slate-700">PayScope</p>
