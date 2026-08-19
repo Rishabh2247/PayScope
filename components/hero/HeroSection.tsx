@@ -23,9 +23,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const { t } = useTranslation();
 
   return (
-    <section className="py-8 sm:py-12 space-y-12">
+    <section className="py-8 sm:py-12 space-y-12 bg-[#ffffff] [background-image:linear-gradient(to_right,_rgba(0,_0,_0,_0.05)_1px,_transparent_1px),_linear-gradient(to_bottom,_rgba(0,_0,_0,_0.05)_1px,_transparent_1px)] [background-size:37px_37px] rounded-3xl p-4 sm:p-8 border border-slate-100/80 shadow-2xs relative overflow-hidden">
       {/* Title & Headline Banner */}
-      <div className="max-w-3xl space-y-4">
+      <div className="max-w-3xl space-y-4 relative z-10">
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.1]">
           {t.heroTitle1}{' '}
           <span className="block font-black text-slate-900">{t.heroTitle2}</span>
@@ -39,7 +39,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       </div>
 
       {/* Main 2-Column Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
         {/* Left Form: Your Details (5 cols) */}
         <div className="lg:col-span-5">
           <DetailsForm inputs={inputs} onChange={onInputsChange} onCalculate={onCalculate} />
@@ -52,7 +52,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       </div>
 
       {/* Bottom Feature Cards */}
-      <FeatureBar onSelectFeature={() => onCalculate()} />
+      <div className="relative z-10">
+        <FeatureBar onSelectFeature={() => onCalculate()} />
+      </div>
     </section>
   );
 };
