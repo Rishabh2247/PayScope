@@ -248,7 +248,7 @@ export default function Home() {
 
   return (
     <LanguageProvider language={language} setLanguage={setLanguage}>
-      <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+      <div className="min-h-screen flex flex-col bg-[#ffffff] [background-image:linear-gradient(to_right,_rgba(0,_0,_0,_0.15)_1px,_transparent_1px),_linear-gradient(to_bottom,_rgba(0,_0,_0,_0.15)_1px,_transparent_1px)] [background-size:37px_37px] text-slate-900">
       {/* Top Navbar Header */}
       <Navbar
         country={inputs.country}
