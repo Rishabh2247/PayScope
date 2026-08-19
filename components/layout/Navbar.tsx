@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { CountryCode, CurrencyCode } from '../../lib/types';
-import { SupportedLanguage } from '../../lib/i18n';
+import { SupportedLanguage, useTranslation } from '../../lib/i18n';
 import {
   Users,
   Briefcase,
@@ -50,6 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   recruiterTab = 'dashboard',
   onRecruiterTabChange = () => {},
 }) => {
+  const { t } = useTranslation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<'country' | 'currency' | 'language' | null>(null);
 
@@ -86,13 +87,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <img
                   src={productMode === 'recruiting' ? '/assets/payscope-recruit-logo.png' : '/assets/logo.png'}
                   alt="PayScope Logo"
-                  className="h-8 sm:h-9 md:h-10 w-auto object-contain"
+                  className="h-8 sm:h-10 md:h-12 w-auto object-contain"
                 />
               </div>
               <span className="text-[10px] sm:text-[11px] font-semibold text-slate-500 tracking-wide -mt-0.5 hidden md:inline">
                 {productMode === 'recruiting'
-                  ? 'Built for recruiters, staffing agencies & talent teams.'
-                  : 'Know what your income is really worth.'}
+                  ? t.recruitSubtitle
+                  : t.knowIncomeWorth}
               </span>
             </div>
           </div>
@@ -259,7 +260,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <img
                   src={productMode === 'recruiting' ? '/assets/payscope-recruit-logo.png' : '/assets/logo.png'}
                   alt="PayScope Logo"
-                  className="h-8 w-auto"
+                  className="h-9 w-auto object-contain"
                 />
               </div>
               <button onClick={() => setIsMobileMenuOpen(false)} className="text-slate-400 hover:text-slate-700 p-1">
@@ -270,7 +271,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Mobile Country, Currency & Language Touch Controls */}
             <div className="grid grid-cols-3 gap-2 text-xs font-bold pt-1">
               <div>
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Country</label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">{t.country}</label>
                 <select
                   value={country}
                   onChange={(e) => onCountryChange(e.target.value as CountryCode)}
@@ -284,7 +285,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
 
               <div>
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Currency</label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">{t.currency}</label>
                 <select
                   value={currency}
                   onChange={(e) => onCurrencyChange(e.target.value as CurrencyCode)}
@@ -298,7 +299,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
 
               <div>
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Language</label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">{t.language}</label>
                 <select
                   value={language}
                   onChange={(e) => onLanguageChange(e.target.value as SupportedLanguage)}

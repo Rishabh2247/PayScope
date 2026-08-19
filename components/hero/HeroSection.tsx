@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { CompleteFinancialSnapshot, FinancialInputs } from '../../lib/types';
+import { useTranslation } from '../../lib/i18n';
 import { DetailsForm } from './DetailsForm';
 import { SnapshotCard } from './SnapshotCard';
 import { FeatureBar } from './FeatureBar';
@@ -19,20 +20,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onInputsChange,
   onCalculate,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <section className="py-8 sm:py-12 space-y-12">
       {/* Title & Headline Banner */}
       <div className="max-w-3xl space-y-4">
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.1]">
-          Your Income.{' '}
-          <span className="block font-black text-slate-900">Decoded.</span>
+          {t.heroTitle1}{' '}
+          <span className="block font-black text-slate-900">{t.heroTitle2}</span>
           <span className="block bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700 bg-clip-text text-transparent">
-            All in One.
+            {t.heroTitle3}
           </span>
         </h1>
         <p className="text-slate-600 text-base sm:text-lg font-normal leading-relaxed max-w-2xl">
-          Calculate your take-home pay, taxes, cost of living, inflation impact, fuel expenses and see how your
-          income compares in your city.
+          {t.heroSub}
         </p>
       </div>
 

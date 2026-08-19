@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { FinancialInputs, CountryCode, CurrencyCode } from '../lib/types';
-import { SupportedLanguage, getTranslation } from '../lib/i18n';
+import { SupportedLanguage, getTranslation, LanguageProvider } from '../lib/i18n';
 import { calculateSnapshot } from '../lib/engine';
 import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
@@ -247,7 +247,8 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+    <LanguageProvider language={language} setLanguage={setLanguage}>
+      <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
       {/* Top Navbar Header */}
       <Navbar
         country={inputs.country}
@@ -447,5 +448,6 @@ export default function Home() {
       {/* Footer */}
       <Footer />
     </div>
+  </LanguageProvider>
   );
 }

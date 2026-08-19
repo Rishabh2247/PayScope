@@ -3,8 +3,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { Database } from 'lucide-react';
+import { useTranslation } from '../../lib/i18n';
 
 export const Footer: React.FC = () => {
+  const { t } = useTranslation();
+
   const dataSources = [
     { name: 'Canada Revenue Agency (CRA)', label: '2025/2026 Statutory Tax Schedules', flag: '🇨🇦' },
     { name: 'Internal Revenue Service (IRS)', label: 'Federal & State Income Tax Schedules', flag: '🇺🇸' },
@@ -24,10 +27,10 @@ export const Footer: React.FC = () => {
         <div className="max-w-[1440px] mx-auto px-4 flex items-center justify-between gap-4 mb-2">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-700">
             <Database className="w-3.5 h-3.5 text-indigo-600" />
-            <span>Official Data Sources & Information Providers</span>
+            <span>{t.officialDataSources}</span>
           </div>
           <span className="text-[10px] font-semibold text-slate-500 hidden sm:inline-block">
-            Verified 2025/2026 Statutory & Economic Feeds
+            {t.verifiedFeeds}
           </span>
         </div>
 
@@ -61,40 +64,50 @@ export const Footer: React.FC = () => {
               />
             </div>
             <p className="text-xs font-semibold text-slate-700">PayScope</p>
-            <p className="text-xs text-slate-500 font-medium">Know what your income is really worth.</p>
+            <p className="text-xs text-slate-500 font-medium">{t.knowIncomeWorth}</p>
           </div>
 
           {/* Main Navigation */}
-          <div className="space-y-2">
-            <p className="text-xs font-bold text-slate-900 uppercase tracking-wider">Navigation</p>
-            <ul className="space-y-1.5 text-xs font-semibold text-slate-600">
+          <div className="space-y-2 text-xs">
+            <p className="font-bold text-slate-900 uppercase tracking-wider">{t.quickLinks}</p>
+            <ul className="space-y-1.5 text-slate-600 font-medium">
               <li>
                 <Link href="/" className="hover:text-indigo-600 transition-colors">
-                  Calculators
+                  Calculator & Hero
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard/overview" className="hover:text-indigo-600 transition-colors">
+                  Financial Dashboard
                 </Link>
               </li>
               <li>
                 <Link href="/dashboard/tax-engine" className="hover:text-indigo-600 transition-colors">
-                  Tools
+                  Tax Engine
+                </Link>
+              </li>
+              <li>
+                <Link href="/dashboard/housing" className="hover:text-indigo-600 transition-colors">
+                  Housing Benchmark
                 </Link>
               </li>
               <li>
                 <Link href="/resources" className="hover:text-indigo-600 transition-colors">
-                  Resources
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="hover:text-indigo-600 transition-colors">
-                  About
+                  Financial Resources
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Legal Column */}
-          <div className="space-y-2">
-            <p className="text-xs font-bold text-slate-900 uppercase tracking-wider">Legal</p>
-            <ul className="space-y-1.5 text-xs font-semibold text-slate-600">
+          {/* Legal Pages */}
+          <div className="space-y-2 text-xs">
+            <p className="font-bold text-slate-900 uppercase tracking-wider">{t.legal}</p>
+            <ul className="space-y-1.5 text-slate-600 font-medium">
+              <li>
+                <Link href="/disclaimer" className="hover:text-indigo-600 transition-colors font-bold text-indigo-600">
+                  Disclaimer Notice
+                </Link>
+              </li>
               <li>
                 <Link href="/privacy-policy" className="hover:text-indigo-600 transition-colors">
                   Privacy Policy
@@ -106,41 +119,28 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/disclaimer" className="hover:text-indigo-600 transition-colors">
-                  Financial Disclaimer
+                <Link href="/cookie-policy" className="hover:text-indigo-600 transition-colors">
+                  Cookie Policy
                 </Link>
               </li>
               <li>
-                <Link href="/cookie-policy" className="hover:text-indigo-600 transition-colors">
-                  Cookie Policy
+                <Link href="/about" className="hover:text-indigo-600 transition-colors">
+                  About PayScope
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact Column */}
-          <div className="space-y-2">
-            <p className="text-xs font-bold text-slate-900 uppercase tracking-wider">Contact</p>
-            <p className="text-xs font-medium text-slate-600">Questions or support?</p>
-            <a
-              href="mailto:support@payscope.com"
-              className="inline-block text-xs font-bold text-indigo-600 hover:text-indigo-700"
-            >
-              support@payscope.com
-            </a>
+          {/* Copyright & Disclaimer Note */}
+          <div className="space-y-2 text-xs">
+            <p className="font-bold text-slate-900 uppercase tracking-wider">Compliance & Notice</p>
+            <p className="text-[11px] text-slate-500 leading-relaxed">
+              PayScope provides estimated financial insights for educational purposes only. PayScope is not a licensed tax advisor or financial planner.
+            </p>
+            <p className="text-[11px] font-bold text-slate-400 pt-1">
+              © {new Date().getFullYear()} PayScope. {t.allRightsReserved}
+            </p>
           </div>
-        </div>
-
-        {/* Copyright & Disclaimer */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-3">
-          <p>© 2026 PayScope. All rights reserved. Built independently in Lucknow, India.</p>
-          <p className="text-[11px] text-slate-400 text-center sm:text-right">
-            Estimates provided for informational purposes only. See our{' '}
-            <Link href="/disclaimer" className="underline hover:text-slate-600">
-              Financial Disclaimer
-            </Link>
-            .
-          </p>
         </div>
       </div>
     </footer>
