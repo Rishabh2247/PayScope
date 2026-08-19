@@ -248,7 +248,7 @@ export default function Home() {
 
   return (
     <LanguageProvider language={language} setLanguage={setLanguage}>
-      <div className="min-h-screen flex flex-col bg-[#ffffff] [background-image:linear-gradient(to_right,_rgba(0,_0,_0,_0.15)_1px,_transparent_1px),_linear-gradient(to_bottom,_rgba(0,_0,_0,_0.15)_1px,_transparent_1px)] [background-size:37px_37px] text-slate-900">
+      <div className="min-h-screen flex flex-col bg-[#ffffff] [background-image:linear-gradient(to_right,_rgba(0,_0,_0,_0.05)_1px,_transparent_1px),_linear-gradient(to_bottom,_rgba(0,_0,_0,_0.05)_1px,_transparent_1px)] [background-size:37px_37px] [mask-image:radial-gradient(ellipse_100%_100%_at_50%_50%,#000_80%,transparent_100%)] text-slate-900">
       {/* Top Navbar Header */}
       <Navbar
         country={inputs.country}
