@@ -28,10 +28,24 @@ export const SnapshotCard: React.FC<SnapshotCardProps> = ({ snapshot, onExploreD
 
   const netHourly = tax.contractNetHourlyRate || (tax.annualBillableHours > 0 ? tax.takeHomePayAnnual / tax.annualBillableHours : 0);
 
+  const visualBgMap: Record<string, string> = {
+    US: '/assets/US Visual.png',
+    CA: '/assets/Canada Visual.png',
+    MX: '/assets/Mexico Visual.png',
+    BR: '/assets/Brazil Visual.png',
+  };
+
+  const visualBg = visualBgMap[inputs.country] || '/assets/US Visual.png';
+
   return (
     <div
       onClick={onExploreDashboard}
       className="bg-slate-50/80 border border-slate-200/80 rounded-3xl p-5 sm:p-6 shadow-md shadow-slate-100 space-y-4 cursor-pointer group hover:border-indigo-300 transition-all relative overflow-hidden"
+      style={{
+        backgroundImage: `linear-gradient(rgba(248, 250, 252, 0.92), rgba(248, 250, 252, 0.95)), url("${encodeURI(visualBg)}")`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
     >
       {/* Top Header */}
       <div className="flex items-center justify-between">

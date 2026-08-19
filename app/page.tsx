@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { FinancialInputs, CountryCode, CurrencyCode } from '../lib/types';
+import { SupportedLanguage, getTranslation } from '../lib/i18n';
 import { calculateSnapshot } from '../lib/engine';
 import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
@@ -36,6 +37,9 @@ export default function Home() {
   // Product Mode: 'payscope' (employee/contractor) | 'recruiting' (PayScope Recruit)
   const [productMode, setProductMode] = useState<'payscope' | 'recruiting'>('payscope');
   const [activeView, setActiveView] = useState<'hero' | 'dashboard'>('hero');
+
+  // Language State: 'en' | 'es' | 'pt'
+  const [language, setLanguage] = useState<SupportedLanguage>('en');
 
   // 5 Primary Navigation Tabs for PayScope Recruit
   const [recruiterTab, setRecruiterTab] = useState<string>('dashboard');
@@ -97,35 +101,34 @@ export default function Home() {
   // Calculations
   const snapshot = useMemo(() => calculateSnapshot(inputs), [inputs]);
   const recruiterCalculation = useMemo(() => calculateRecruiterMetrics(recruiterInputs), [recruiterInputs]);
+  const t = useMemo(() => getTranslation(language), [language]);
 
+  // Handle Country Selection - Independent of Currency!
   const handleCountryChange = (country: CountryCode) => {
-    let defaultCurrency: CurrencyCode = 'USD';
-    let defaultEmployment = 'Full-time Employee';
     let defaultState = 'Texas';
     let defaultCity = 'Austin';
+    let defaultLang: SupportedLanguage = 'en';
 
     if (country === 'CA') {
-      defaultCurrency = 'CAD';
-      defaultEmployment = 'Full-time Employee';
       defaultState = 'Ontario';
       defaultCity = 'Toronto';
+      defaultLang = 'en';
     } else if (country === 'MX') {
-      defaultCurrency = 'MXN';
-      defaultEmployment = 'Full-time Employee';
       defaultState = 'Mexico City';
       defaultCity = 'Mexico City';
+      defaultLang = 'es';
     } else if (country === 'BR') {
-      defaultCurrency = 'BRL';
-      defaultEmployment = 'Full-time Employee';
       defaultState = 'São Paulo';
       defaultCity = 'São Paulo';
+      defaultLang = 'pt';
     }
+
+    setLanguage(defaultLang);
 
     setInputs((prev) => ({
       ...prev,
       country,
-      currency: defaultCurrency,
-      employmentType: defaultEmployment,
+      // Note: Currency remains unchanged to allow independent selection!
       state: defaultState,
       city: defaultCity,
     }));
@@ -133,12 +136,12 @@ export default function Home() {
     setRecruiterInputs((prev) => ({
       ...prev,
       country,
-      currency: defaultCurrency,
       state: defaultState,
       city: defaultCity,
     }));
   };
 
+  // Handle Currency Selection - Independent of Country!
   const handleCurrencyChange = (currency: CurrencyCode) => {
     setInputs((prev) => ({ ...prev, currency }));
     setRecruiterInputs((prev) => ({ ...prev, currency }));
@@ -249,8 +252,10 @@ export default function Home() {
       <Navbar
         country={inputs.country}
         currency={inputs.currency}
+        language={language}
         onCountryChange={handleCountryChange}
         onCurrencyChange={handleCurrencyChange}
+        onLanguageChange={setLanguage}
         activeView={activeView}
         onSwitchView={setActiveView}
         onReset={handleReset}
