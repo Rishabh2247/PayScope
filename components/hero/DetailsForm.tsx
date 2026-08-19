@@ -5,7 +5,7 @@ import { FinancialInputs } from '../../lib/types';
 import { isContractorRole, formatCurrency } from '../../lib/formatters';
 import { getProvincesForCountry, getCitiesForProvince } from '../../lib/geography';
 import { useTranslation } from '../../lib/i18n';
-import { Briefcase, ChevronDown, ChevronUp, Calculator } from 'lucide-react';
+import { Briefcase, ChevronDown, ChevronUp, Calculator, Clock, Calendar } from 'lucide-react';
 
 interface DetailsFormProps {
   inputs: FinancialInputs;
@@ -149,44 +149,48 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
           )}
         </div>
 
-        {/* Contractor Hours & Weeks Configuration */}
-        {isContractor && (
-          <div className="grid grid-cols-2 gap-3 p-3 bg-indigo-50/50 rounded-2xl border border-indigo-100">
-            <div className="space-y-1">
-              <label className="block text-[11px] font-bold text-indigo-900">Work Hours / Week</label>
-              <input
-                type="number"
-                value={inputs.workHoursPerWeek}
-                onChange={(e) => {
-                  const val = Number(e.target.value);
-                  onChange({
-                    ...inputs,
-                    workHoursPerWeek: val,
-                    annualSalary: inputs.incomeRate * val * inputs.weeksPerYear,
-                  });
-                }}
-                className="w-full px-2.5 py-1.5 bg-white border border-indigo-200 rounded-lg text-xs font-bold text-slate-900"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className="block text-[11px] font-bold text-indigo-900">Billable Weeks / Year</label>
-              <input
-                type="number"
-                value={inputs.weeksPerYear}
-                onChange={(e) => {
-                  const val = Number(e.target.value);
-                  onChange({
-                    ...inputs,
-                    weeksPerYear: val,
-                    annualSalary: inputs.incomeRate * inputs.workHoursPerWeek * val,
-                  });
-                }}
-                className="w-full px-2.5 py-1.5 bg-white border border-indigo-200 rounded-lg text-xs font-bold text-slate-900"
-              />
-            </div>
+        {/* Work Hours & Weeks Row */}
+        <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50/80 rounded-2xl border border-slate-200/60">
+          <div className="space-y-1">
+            <label className="block text-[11px] font-bold text-slate-700 flex items-center gap-1">
+              <Clock className="w-3 h-3 text-indigo-600" />
+              <span>Work Hours / Week</span>
+            </label>
+            <input
+              type="number"
+              value={inputs.workHoursPerWeek}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                onChange({
+                  ...inputs,
+                  workHoursPerWeek: val,
+                  annualSalary: isContractor ? inputs.incomeRate * val * inputs.weeksPerYear : inputs.incomeRate,
+                });
+              }}
+              className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+            />
           </div>
-        )}
+
+          <div className="space-y-1">
+            <label className="block text-[11px] font-bold text-slate-700 flex items-center gap-1">
+              <Calendar className="w-3 h-3 text-indigo-600" />
+              <span>Weeks / Year</span>
+            </label>
+            <input
+              type="number"
+              value={inputs.weeksPerYear}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                onChange({
+                  ...inputs,
+                  weeksPerYear: val,
+                  annualSalary: isContractor ? inputs.incomeRate * inputs.workHoursPerWeek * val : inputs.incomeRate,
+                });
+              }}
+              className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
+            />
+          </div>
+        </div>
 
         {/* State / Province & City Selector Row */}
         <div className="grid grid-cols-2 gap-3">
