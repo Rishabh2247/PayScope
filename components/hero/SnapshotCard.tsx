@@ -136,19 +136,10 @@ export const SnapshotCard: React.FC<SnapshotCardProps> = ({ snapshot, onExploreD
         </div>
       </div>
 
-      {/* Action CTA Button */}
-      <div className="space-y-2">
-        <button
-          onClick={onExploreDashboard}
-          className="w-full py-3 px-5 bg-[#1F8F68] hover:bg-[#176F52] text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-lg shadow-[#1F8F68]/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
-        >
-          <span>{t.seeFullSnapshot}</span>
-        </button>
-
-        <p className="text-center text-[10px] text-[#BFE5D3]/70 font-medium">
-          {t.updatesLive}
-        </p>
-      </div>
+      {/* Live Updates Footer Note */}
+      <p className="text-center text-[10px] text-[#BFE5D3]/80 font-medium pt-2">
+        ⚡ {t.updatesLive}
+      </p>
     </div>
   );
 };

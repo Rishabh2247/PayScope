@@ -350,7 +350,7 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
 
       {/* Defaults Subtext & Primary CTA Button */}
       <div className="space-y-3 pt-2">
-        <p className="text-[11px] sm:text-xs text-[#1F8F68] font-semibold flex items-center gap-1.5 bg-[#EAF7F1] px-3 py-2 rounded-xl border border-[#BFE5D3]/60">
+        <p className="text-[11px] text-[#1F8F68] font-medium flex items-center gap-1.5">
           <span>💡</span> <span>{t.defaultsApplied}</span>
         </p>
 
