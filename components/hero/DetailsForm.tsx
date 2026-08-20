@@ -166,10 +166,10 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                   key={opt}
                   type="button"
                   onClick={() => handleEmploymentTypeChange(opt)}
-                  className={`flex-1 min-w-[120px] py-2 px-3 rounded-xl transition-all text-center whitespace-normal cursor-pointer ${
+                  className={`flex-1 min-w-[95px] sm:min-w-[110px] py-2 px-2.5 rounded-xl transition-all text-center leading-tight whitespace-normal break-words text-[11px] sm:text-xs cursor-pointer ${
                     isSelected
                       ? 'bg-[#1F8F68] text-white shadow-xs font-extrabold'
-                      : 'hover:text-[#12372A] hover:bg-[#EAF7F1] text-slate-700 bg-white/60'
+                      : 'hover:text-[#12372A] hover:bg-[#EAF7F1] text-slate-700 bg-white/60 font-semibold'
                   }`}
                 >
                   {label}
@@ -348,10 +348,21 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
         </div>
       </form>
 
-      {/* Defaults Subtext */}
-      <p className="text-[11px] text-[#1F8F68] font-medium flex items-center gap-1">
-        <span>💡</span> {t.defaultsApplied}
-      </p>
+      {/* Defaults Subtext & Primary CTA Button */}
+      <div className="space-y-3 pt-2">
+        <p className="text-[11px] sm:text-xs text-[#1F8F68] font-semibold flex items-center gap-1.5 bg-[#EAF7F1] px-3 py-2 rounded-xl border border-[#BFE5D3]/60">
+          <span>💡</span> <span>{t.defaultsApplied}</span>
+        </p>
+
+        <button
+          type="button"
+          onClick={onCalculate}
+          className="w-full bg-[#1F8F68] hover:bg-[#176F52] text-white font-extrabold text-sm sm:text-base py-3.5 px-6 rounded-2xl shadow-lg shadow-[#1F8F68]/25 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] border border-[#1F8F68]"
+        >
+          <span>⚡ See Your Full Interactive Financial Snapshot</span>
+          <Calculator className="w-5 h-5" />
+        </button>
+      </div>
     </div>
   );
 };
