@@ -11,70 +11,75 @@ export const FeatureBar: React.FC<FeatureBarProps> = ({ onSelectFeature }) => {
   const features = [
     {
       id: 'taxes',
-      icon: Calculator,
+      icon: '💸',
       title: 'Salary After Tax',
-      desc: 'Calculate your take-home pay',
-      color: 'bg-blue-50 text-blue-600',
+      desc: 'Calculate your take-home pay with accurate federal, state, and local withholding.',
+      bgColor: 'bg-blue-50/80',
     },
     {
       id: 'col',
-      icon: Home,
+      icon: '🏠',
       title: 'Cost of Living',
-      desc: 'See local living expenses',
-      color: 'bg-indigo-50 text-indigo-600',
+      desc: 'See local living expenses, housing costs, and commute estimates for your city.',
+      bgColor: 'bg-amber-50/80',
     },
     {
       id: 'inflation',
-      icon: TrendingUp,
+      icon: '📈',
       title: 'Inflation Impact',
-      desc: 'Understand future purchasing power',
-      color: 'bg-purple-50 text-purple-600',
+      desc: 'Understand future purchasing power and the raise you need to keep pace with inflation.',
+      bgColor: 'bg-emerald-50/80',
     },
     {
       id: 'commute',
-      icon: Fuel,
+      icon: '⛽',
       title: 'Fuel & Commute',
-      desc: 'Estimate fuel and commute costs',
-      color: 'bg-emerald-50 text-emerald-600',
+      desc: 'Estimate fuel and commute costs based on location and typical usage patterns.',
+      bgColor: 'bg-rose-50/80',
     },
     {
       id: 'benchmarks',
-      icon: BarChart3,
+      icon: '📊',
       title: 'Income Benchmarks',
-      desc: 'Compare with local income levels',
-      color: 'bg-amber-50 text-amber-600',
+      desc: 'Compare with local income levels and understand your purchasing power relative to peers.',
+      bgColor: 'bg-indigo-50/80',
     },
     {
       id: 'countries',
-      icon: Globe,
+      icon: '🌐',
       title: 'All Countries',
-      desc: 'Support for multiple countries',
-      color: 'bg-sky-50 text-sky-600',
+      desc: 'Support for multiple countries with localized tax rules and cost of living adjustments.',
+      bgColor: 'bg-sky-50/80',
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 pt-8 border-t border-slate-100">
-      {features.map((item) => {
-        const Icon = item.icon;
-        return (
+    <div className="space-y-8 pt-16">
+      {/* Centered Heading */}
+      <h3 className="text-2xl sm:text-3xl font-bold text-center text-slate-900 tracking-tight">
+        Everything that shapes your paycheck
+      </h3>
+
+      {/* 6 Cards Grid (3 columns on desktop) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {features.map((item) => (
           <div
             key={item.id}
             onClick={() => onSelectFeature(item.id)}
-            className="p-4 bg-white border border-slate-200/70 rounded-2xl shadow-sm hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer group space-y-2"
+            className="p-6 bg-white border border-slate-200/80 rounded-2xl shadow-xs hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group space-y-3"
           >
-            <div className={`w-10 h-10 rounded-xl ${item.color} flex items-center justify-center group-hover:scale-105 transition-transform`}>
-              <Icon className="w-5 h-5" />
+            <div className={`w-10 h-10 rounded-xl ${item.bgColor} flex items-center justify-center text-xl`}>
+              {item.icon}
             </div>
-            <div>
-              <h4 className="text-xs font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">
+            <div className="space-y-1">
+              <h4 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
                 {item.title}
               </h4>
-              <p className="text-[11px] text-slate-500 line-clamp-2 mt-0.5 leading-snug">{item.desc}</p>
+              <p className="text-xs text-slate-500 font-normal leading-relaxed">{item.desc}</p>
             </div>
           </div>
-        );
-      })}
+        ))}
+      </div>
     </div>
   );
 };

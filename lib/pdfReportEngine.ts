@@ -285,3 +285,132 @@ export function generateRatePdf(inputs: RecruiterInputs, calc: RecruiterCalculat
   addPdfHeaderFooter(doc, 'Rate & Margin Report');
   doc.save(`PayScope_Rate_Report_${inputs.jobTitle.replace(/\s+/g, '_')}.pdf`);
 }
+
+/**
+ * 5. Full PayScope Interactive Financial Snapshot PDF Report (Excel-Style Statement & Visual Expense Bars)
+ */
+export function generateFinancialSnapshotPdf(snapshot: any) {
+  const doc = new jsPDF();
+  const { inputs, tax, economic } = snapshot;
+
+  const currency = inputs.currency || 'USD';
+  const hoursPerWeek = inputs.workHoursPerWeek || 40;
+  const weeksPerYear = inputs.weeksPerYear || 52;
+  const totalHours = hoursPerWeek * weeksPerYear;
+
+  // Header Green Bar
+  doc.setFillColor(31, 143, 104); // PayScope Green #1F8F68
+  doc.rect(0, 0, 210, 16, 'F');
+
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12);
+  doc.text('PAYSCOPE FINANCIAL SNAPSHOT REPORT', 14, 11);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.text(`${new Date().toLocaleDateString()}`, 165, 11);
+
+  // Profile Summary Box
+  doc.setFillColor(243, 251, 247);
+  doc.rect(14, 22, 182, 28, 'F');
+  doc.setDrawColor(191, 229, 211);
+  doc.rect(14, 22, 182, 28, 'S');
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(18, 55, 42);
+  doc.text(`Location: ${economic.cityLabel || inputs.city || 'Austin'}, ${inputs.state}, ${inputs.country}`, 18, 30);
+
+  doc.setFontSize(8.5);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(71, 85, 105);
+  doc.text(`Employment Type: ${inputs.employmentType}  |  Hours Worked: ${totalHours} hrs/yr (${hoursPerWeek} hrs/wk)`, 18, 37);
+  doc.text(`Filing Status: ${inputs.filingStatus}  |  Dependents: ${inputs.dependents}`, 18, 43);
+
+  // Excel-Sheet Style Table (Financial Income Statement)
+  const excelTableRows = [
+    ['Gross Revenue / Annual Income', formatCurrency(tax.annualGross, currency), formatCurrency(tax.monthlyGross, currency), '100.0%'],
+    ['Federal Income Tax', `-${formatCurrency(tax.federalTax, currency)}`, `-${formatCurrency(tax.federalTax / 12, currency)}`, `${formatPercent(tax.federalTaxPercentage)}`],
+    [`State/Provincial Tax (${inputs.state})`, `-${formatCurrency(tax.stateTax, currency)}`, `-${formatCurrency(tax.stateTax / 12, currency)}`, `${formatPercent(tax.stateTaxPercentage)}`],
+    ['Social Security / Pension / CPP', `-${formatCurrency(tax.socialSecurityTax, currency)}`, `-${formatCurrency(tax.socialSecurityTax / 12, currency)}`, `${formatPercent(tax.socialSecurityTaxPercentage)}`],
+    ['Medicare / EI Insurance', `-${formatCurrency(tax.medicareTax, currency)}`, `-${formatCurrency(tax.medicareTax / 12, currency)}`, `${formatPercent(tax.medicareTaxPercentage)}`],
+  ];
+
+  if (tax.businessExpenses > 0) {
+    excelTableRows.push(['Business Expense Write-offs', `-${formatCurrency(tax.businessExpenses, currency)}`, `-${formatCurrency(tax.businessExpenses / 12, currency)}`, `${formatPercent((tax.businessExpenses / tax.annualGross) * 100)}`]);
+  }
+
+  // Summary Row: Net Take Home Pay
+  excelTableRows.push(['NET TAKE-HOME PAY (AFTER TAX)', formatCurrency(tax.takeHomePayAnnual, currency), formatCurrency(tax.takeHomePayMonthly, currency), `${formatPercent(tax.takeHomePercentage)}`]);
+
+  // Expenses Row: Estimated Monthly Cost of Living
+  const colMonthly = economic.colTotalMonthly || 2400;
+  const fuelMonthly = inputs.country === 'CA' ? 144 : 85.6;
+  const totalMonthlyExpenses = colMonthly + fuelMonthly;
+  const annualExpenses = totalMonthlyExpenses * 12;
+  const disposableMonthly = Math.max(0, tax.takeHomePayMonthly - totalMonthlyExpenses);
+  const disposableAnnual = disposableMonthly * 12;
+
+  excelTableRows.push(['Estimated Living & Housing Expenses', `-${formatCurrency(annualExpenses, currency)}`, `-${formatCurrency(totalMonthlyExpenses, currency)}`, `${formatPercent((annualExpenses / tax.annualGross) * 100)}`]);
+  excelTableRows.push(['NET DISPOSABLE SAVINGS', formatCurrency(disposableAnnual, currency), formatCurrency(disposableMonthly, currency), `${formatPercent((disposableAnnual / tax.annualGross) * 100)}`]);
+
+  autoTable(doc, {
+    startY: 55,
+    head: [['Financial Statement Item', 'Annual Amount', 'Monthly Amount', '% of Gross']],
+    body: excelTableRows,
+    headStyles: { fillColor: [31, 143, 104], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 9 },
+    alternateRowStyles: { fillColor: [243, 251, 247] },
+    styles: { fontSize: 8.5, cellPadding: 3.5, font: 'helvetica' },
+    didParseCell: function(data) {
+      if (data.row.index === excelTableRows.length - 3 || data.row.index === excelTableRows.length - 1) {
+        data.cell.styles.fontStyle = 'bold';
+        data.cell.styles.fillColor = [234, 247, 241];
+        data.cell.styles.textColor = [18, 55, 42];
+      }
+    }
+  });
+
+  let currentY = (doc as any).lastAutoTable.finalY + 12;
+
+  // Expense Visual Breakdown Bars Section
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(18, 55, 42);
+  doc.text('Expense & Income Allocation Breakdown Bars', 14, currentY);
+
+  currentY += 8;
+
+  const barCategories = [
+    { label: 'Net Take-Home Pay', pct: Math.min(100, Math.max(0, tax.takeHomePercentage)), color: [31, 143, 104] },
+    { label: 'Taxes & Deductions', pct: Math.min(100, Math.max(0, tax.effectiveTaxRate)), color: [239, 68, 68] },
+    { label: 'Living & Housing Expenses', pct: Math.min(100, Math.max(0, (annualExpenses / tax.annualGross) * 100)), color: [245, 158, 11] },
+    { label: 'Remaining Savings Margin', pct: Math.min(100, Math.max(0, (disposableAnnual / tax.annualGross) * 100)), color: [59, 130, 246] },
+  ];
+
+  barCategories.forEach((cat) => {
+    doc.setFontSize(8.5);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(30, 41, 59);
+    doc.text(`${cat.label}: ${cat.pct.toFixed(1)}%`, 14, currentY);
+
+    // Draw background gray bar
+    doc.setFillColor(226, 232, 240);
+    doc.rect(80, currentY - 3.5, 100, 4, 'F');
+
+    // Draw active colored bar
+    doc.setFillColor(cat.color[0], cat.color[1], cat.color[2]);
+    doc.rect(80, currentY - 3.5, Math.max(2, (cat.pct / 100) * 100), 4, 'F');
+
+    currentY += 8;
+  });
+
+  // Footer Notice
+  doc.setFontSize(7.5);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(148, 163, 184);
+  doc.text(`Generated by PayScope Statutory Financial Engine · Official 2026 Tax Rules · Page 1 of 1`, 14, 285);
+
+  doc.save(`PayScope_Financial_Snapshot_${(inputs.city || 'Result').replace(/\s+/g, '_')}.pdf`);
+}
+

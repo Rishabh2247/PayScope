@@ -7,9 +7,10 @@ import { DollarSign, ArrowRight, TrendingUp, Calculator } from 'lucide-react';
 
 interface RateAnalysisSectionProps {
   snapshot: CompleteFinancialSnapshot;
+  onInputsChange?: (newInputs: any) => void;
 }
 
-export const RateAnalysisSection: React.FC<RateAnalysisSectionProps> = ({ snapshot }) => {
+export const RateAnalysisSection: React.FC<RateAnalysisSectionProps> = ({ snapshot, onInputsChange }) => {
   const { tax, inputs } = snapshot;
 
   const billableHours = (inputs.workHoursPerWeek || 40) * (inputs.weeksPerYear || 52);

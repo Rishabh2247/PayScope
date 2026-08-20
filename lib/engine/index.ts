@@ -1,6 +1,8 @@
 import { CompleteFinancialSnapshot, FinancialInputs, TaxCalculationResult } from '../types';
 import { calculateCATax } from './ca-tax';
 import { calculateUSTax } from './us-tax';
+import { calculateMXTax } from './mx-tax';
+import { calculateBRTax } from './br-tax';
 import { getCountryEconomicData } from './country-data';
 import { isContractorRole } from '../formatters';
 
@@ -29,11 +31,23 @@ export function calculateSnapshot(inputs: FinancialInputs): CompleteFinancialSna
     annualSalary: annualGross,
   };
 
-  // Perform Country Tax & Deductions Calculation
-  const taxResultBase: TaxCalculationResult =
-    country === 'CA'
-      ? calculateCATax(inputsWithAnnualGross)
-      : calculateUSTax(inputsWithAnnualGross);
+  // Dispatch to Country-Specific Tax & Deductions Engine (2026 Rules)
+  let taxResultBase: TaxCalculationResult;
+  switch (country) {
+    case 'CA':
+      taxResultBase = calculateCATax(inputsWithAnnualGross);
+      break;
+    case 'MX':
+      taxResultBase = calculateMXTax(inputsWithAnnualGross);
+      break;
+    case 'BR':
+      taxResultBase = calculateBRTax(inputsWithAnnualGross);
+      break;
+    case 'US':
+    default:
+      taxResultBase = calculateUSTax(inputsWithAnnualGross);
+      break;
+  }
 
   const contractNetHourlyRate = annualBillableHours > 0 ? taxResultBase.takeHomePayAnnual / annualBillableHours : 0;
 

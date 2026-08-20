@@ -17,6 +17,8 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
+import { AnimatedCounter } from '../ui/AnimatedCounter';
+
 interface SnapshotCardProps {
   snapshot: CompleteFinancialSnapshot;
   onExploreDashboard: () => void;
@@ -24,162 +26,128 @@ interface SnapshotCardProps {
 
 export const SnapshotCard: React.FC<SnapshotCardProps> = ({ snapshot, onExploreDashboard }) => {
   const { t } = useTranslation();
-  const { tax, economic, purchasingPowerNeeded, inputs } = snapshot;
+  const { tax, economic, inputs } = snapshot;
   const isContractor = isContractorRole(inputs.employmentType);
 
-  const netHourly = tax.contractNetHourlyRate || (tax.annualBillableHours > 0 ? tax.takeHomePayAnnual / tax.annualBillableHours : 0);
+  const billableHours = (inputs.workHoursPerWeek || 40) * (inputs.weeksPerYear || 52);
+  const beforeTaxHourly = isContractor ? (inputs.incomeRate || 60) : (inputs.incomeRate > 1000 ? inputs.incomeRate / billableHours : (inputs.annualSalary || 120000) / billableHours);
+  const afterTaxHourly = tax.contractNetHourlyRate || (billableHours > 0 ? tax.takeHomePayAnnual / billableHours : 0);
+
+  const monthlyGross = isContractor ? (tax.monthlyContractRevenue || (inputs.incomeRate * inputs.workHoursPerWeek * inputs.weeksPerYear / 12)) : (tax.grossIncome / 12);
+  const monthlyNet = tax.takeHomePayMonthly;
+
+  const yearlyGross = isContractor ? (tax.annualContractRevenue || inputs.annualSalary) : (tax.grossIncome || inputs.annualSalary);
+  const yearlyNet = tax.takeHomePayAnnual;
+
+  const effectiveRate = tax.effectiveTaxRate || 22.8;
 
   return (
-    <div
-      onClick={onExploreDashboard}
-      className="bg-slate-50/50 border border-slate-200/70 rounded-3xl p-5 sm:p-5.5 shadow-sm space-y-3.5 cursor-pointer group hover:border-indigo-300 transition-all relative overflow-hidden h-full flex flex-col justify-between"
-    >
-      {/* Top Header */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-base font-bold text-slate-900 tracking-tight">{t.financialSnapshot}</h3>
-        <span className="bg-emerald-100/80 text-emerald-700 text-xs font-bold px-3 py-0.5 rounded-full">
-          {isContractor ? t.contractEstimateBadge : t.estimatedBadge}
-        </span>
-      </div>
+    <div className="bg-[#12372A] text-white rounded-3xl p-5 sm:p-7 shadow-xl flex flex-col justify-between h-full min-h-[380px] relative overflow-hidden border border-[#BFE5D3]/30 animate-fade-in">
+      {/* Glow background accent */}
+      <div className="absolute -top-24 -right-24 w-60 h-60 bg-[#1F8F68]/20 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Row 1 Main 3 KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-        {/* CARD 1: Annual Take-Home */}
-        <div className="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-xs space-y-1">
-          <div className="flex items-center gap-1.5">
-            <div className="w-7 h-7 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-              {isContractor ? <Clock className="w-3.5 h-3.5" /> : <Wallet className="w-3.5 h-3.5" />}
-            </div>
-            <span className="text-[11px] font-bold text-slate-700">
-              {isContractor ? t.contractBillingRate : t.takeHomePay}
-            </span>
+      {/* Top Header Badge */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="inline-flex items-center gap-2 bg-[#176F52]/80 border border-[#BFE5D3]/40 rounded-full px-3 py-1 text-xs font-bold text-white">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#198754] animate-pulse" />
+            <span>⚡ {t.liveInstantEstimate}</span>
           </div>
-          <div>
-            <div className="text-xl sm:text-2xl font-black text-emerald-600">
-              {isContractor
-                ? `${formatCurrency(tax.contractBillingRate, inputs.currency)}/hr`
-                : formatCurrency(tax.takeHomePayAnnual, inputs.currency)}
-            </div>
-            <p className="text-[10px] text-slate-500 font-medium pt-0.5">
-              {isContractor
-                ? `Net: ${formatCurrency(netHourly, inputs.currency)}/hr`
-                : t.afterTaxesDeductions}
-            </p>
-          </div>
+          <span className="text-[10px] font-bold text-[#BFE5D3] uppercase tracking-wider bg-[#176F52]/50 px-2 py-0.5 rounded-md">
+            {isContractor ? t.contractorTaxMode : t.employeeMode}
+          </span>
         </div>
 
-        {/* CARD 2: Monthly Take-Home */}
-        <div className="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-xs space-y-1">
-          <div className="flex items-center gap-1.5">
-            <div className="w-7 h-7 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-              <Calendar className="w-3.5 h-3.5" />
-            </div>
-            <span className="text-[11px] font-bold text-slate-700">
-              {isContractor ? t.monthlyRevenue : t.takeHomePay}
-            </span>
+        {/* Primary Take-Home Highlight with Animated Counter */}
+        <div className="space-y-0.5">
+          <p className="text-xs font-semibold text-[#BFE5D3]">{t.estimatedMonthlyTakeHome}</p>
+          <div className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white">
+            <AnimatedCounter
+              value={monthlyNet}
+              formatter={(val) => formatCurrency(val, inputs.currency)}
+            />
           </div>
-          <div>
-            <div className="text-xl sm:text-2xl font-black text-slate-900">
-              {formatCurrency(
-                isContractor ? tax.monthlyContractRevenue : tax.takeHomePayMonthly,
-                inputs.currency
-              )}
-            </div>
-            <p className="text-[10px] text-slate-500 font-medium pt-0.5">
-              {isContractor
-                ? `Net: ${formatCurrency(tax.takeHomePayMonthly, inputs.currency)}/mo`
-                : t.monthlyNetIncome}
-            </p>
-          </div>
-        </div>
-
-        {/* CARD 3: Taxes & Deductions */}
-        <div className="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-xs space-y-1">
-          <div className="flex items-center gap-1.5">
-            <div className="w-7 h-7 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-              <TrendingUp className="w-3.5 h-3.5" />
-            </div>
-            <span className="text-[11px] font-bold text-slate-700">
-              {isContractor ? t.annualRevenue : t.taxesDeductions}
-            </span>
-          </div>
-          <div>
-            <div className="text-xl sm:text-2xl font-black text-slate-900">
-              {isContractor
-                ? formatCurrency(tax.annualContractRevenue, inputs.currency)
-                : formatCurrency(tax.totalTax, inputs.currency)}
-            </div>
-            <p className="text-[10px] text-slate-500 font-medium pt-0.5">
-              {isContractor
-                ? `Net: ${formatCurrency(tax.takeHomePayAnnual, inputs.currency)}/yr`
-                : `${formatPercent(tax.effectiveTaxRate)} Effective Tax Rate`}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Row 2 Economic Breakdown Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-        {/* Housing */}
-        <div className="bg-white p-3 rounded-2xl border border-slate-100 shadow-xs space-y-1">
-          <div className="flex items-center gap-1 text-indigo-600">
-            <Home className="w-3.5 h-3.5" />
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-600">{t.housing}</span>
-          </div>
-          <div className="text-sm font-black text-slate-900">
-            {formatCurrency(economic.colTotalMonthly, inputs.currency)}
-          </div>
-          <p className="text-[10px] text-slate-400 font-medium leading-snug">{t.estimatedMonthlyHousing}</p>
-        </div>
-
-        {/* Fuel & Commute */}
-        <div className="bg-white p-3 rounded-2xl border border-slate-100 shadow-xs space-y-1">
-          <div className="flex items-center gap-1 text-amber-600">
-            <Fuel className="w-3.5 h-3.5" />
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-600">{t.fuelCommute}</span>
-          </div>
-          <div className="text-sm font-black text-slate-900">
-            {formatCurrency(economic.fuelPriceToday, inputs.currency)}
-          </div>
-          <p className="text-[10px] text-slate-400 font-medium leading-snug">{t.estimatedMonthlyFuel}</p>
-        </div>
-
-        {/* Cost of Living */}
-        <div className="bg-white p-3 rounded-2xl border border-slate-100 shadow-xs space-y-1">
-          <div className="flex items-center gap-1 text-rose-600">
-            <Flame className="w-3.5 h-3.5" />
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-600">{t.costOfLiving}</span>
-          </div>
-          <div className="text-sm font-black text-rose-600">
-            {formatPercent(economic.inflationRate)}
-          </div>
-          <p className="text-[10px] text-slate-400 font-medium leading-snug">{t.inflationImpact}</p>
-        </div>
-
-        {/* Real Purchasing Power */}
-        <div className="bg-white p-3 rounded-2xl border border-slate-100 shadow-xs space-y-1">
-          <div className="flex items-center gap-1 text-emerald-600">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-600">{t.purchasingPower}</span>
-          </div>
-          <div className="text-sm font-black text-emerald-600">
-            {formatCurrency(purchasingPowerNeeded, inputs.currency)}
-          </div>
-          <p className="text-[10px] text-slate-400 font-medium leading-snug">{t.purchasingPowerNeeded}</p>
-        </div>
-      </div>
-
-      {/* Legal Disclaimer Bar */}
-      <div className="space-y-1 text-xs font-medium text-slate-500 bg-slate-100/80 p-3 rounded-2xl border border-slate-200/50">
-        <div className="flex items-start gap-2">
-          <CheckCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-          <p className="leading-snug text-[10.5px]">
-            {isContractor ? t.disclaimerTextContractor : t.disclaimerTextEmployee}{' '}
-            <Link href="/disclaimer" className="underline font-semibold text-slate-700 hover:text-indigo-600">
-              {t.readDisclaimer}
-            </Link>
+          <p className="text-xs text-[#EAF7F1]/80 font-medium pt-0.5">
+            <AnimatedCounter
+              value={effectiveRate}
+              decimals={1}
+              formatter={(val) => formatPercent(val)}
+            /> {t.effectiveTaxRate}
           </p>
         </div>
+      </div>
+
+      {/* Detailed Before vs After Tax Matrix Cards */}
+      <div className="my-4 space-y-2">
+        <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#BFE5D3]">
+          {isContractor ? t.contractorIncomeBreakdown : t.salaryTakeHomeBreakdown}
+        </p>
+
+        <div className="grid grid-cols-1 gap-2 text-xs">
+          {/* Hourly Before & After (Highlight for Contractor Roles) */}
+          {isContractor && (
+            <div className="bg-[#176F52]/50 border border-[#BFE5D3]/30 rounded-2xl p-2.5 flex items-center justify-between">
+              <div className="space-y-0.5">
+                <span className="text-[10px] font-bold text-[#BFE5D3] uppercase tracking-wider block">⏱️ {t.hourlyRateLabel}</span>
+                <span className="text-xs font-medium text-white/80">
+                  {t.beforeTax}: <strong className="text-white"><AnimatedCounter value={beforeTaxHourly} formatter={(val) => `${formatCurrency(val, inputs.currency)}/hr`} /></strong>
+                </span>
+              </div>
+              <div className="text-right">
+                <span className="text-[10px] font-bold text-[#198754] bg-[#EAF7F1] px-1.5 py-0.5 rounded uppercase block">{t.afterTaxNet}</span>
+                <span className="text-sm font-black text-white">
+                  <AnimatedCounter value={afterTaxHourly} formatter={(val) => `${formatCurrency(val, inputs.currency)}/hr`} />
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Monthly Before & After */}
+          <div className="bg-[#176F52]/50 border border-[#BFE5D3]/30 rounded-2xl p-2.5 flex items-center justify-between">
+            <div className="space-y-0.5">
+              <span className="text-[10px] font-bold text-[#BFE5D3] uppercase tracking-wider block">📅 {t.monthlyPayLabel}</span>
+              <span className="text-xs font-medium text-white/80">
+                {t.beforeTax}: <strong className="text-white"><AnimatedCounter value={monthlyGross} formatter={(val) => formatCurrency(val, inputs.currency)} /></strong>
+              </span>
+            </div>
+            <div className="text-right">
+              <span className="text-[10px] font-bold text-[#198754] bg-[#EAF7F1] px-1.5 py-0.5 rounded uppercase block">{t.afterTaxNet}</span>
+              <span className="text-sm font-black text-white">
+                <AnimatedCounter value={monthlyNet} formatter={(val) => formatCurrency(val, inputs.currency)} />
+              </span>
+            </div>
+          </div>
+
+          {/* Yearly Before & After */}
+          <div className="bg-[#176F52]/50 border border-[#BFE5D3]/30 rounded-2xl p-2.5 flex items-center justify-between">
+            <div className="space-y-0.5">
+              <span className="text-[10px] font-bold text-[#BFE5D3] uppercase tracking-wider block">🗓️ {t.yearlyTotalLabel}</span>
+              <span className="text-xs font-medium text-white/80">
+                {t.beforeTax}: <strong className="text-white"><AnimatedCounter value={yearlyGross || 0} formatter={(val) => formatCurrency(val, inputs.currency)} /></strong>
+              </span>
+            </div>
+            <div className="text-right">
+              <span className="text-[10px] font-bold text-[#198754] bg-[#EAF7F1] px-1.5 py-0.5 rounded uppercase block">{t.afterTaxNet}</span>
+              <span className="text-sm font-black text-white">
+                <AnimatedCounter value={yearlyNet} formatter={(val) => formatCurrency(val, inputs.currency)} />
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Action CTA Button */}
+      <div className="space-y-2">
+        <button
+          onClick={onExploreDashboard}
+          className="w-full py-3 px-5 bg-[#1F8F68] hover:bg-[#176F52] text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-lg shadow-[#1F8F68]/30 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
+        >
+          <span>{t.seeFullSnapshot}</span>
+        </button>
+
+        <p className="text-center text-[10px] text-[#BFE5D3]/70 font-medium">
+          {t.updatesLive}
+        </p>
       </div>
     </div>
   );

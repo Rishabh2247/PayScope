@@ -1,118 +1,101 @@
 import { FinancialInputs, TaxCalculationResult, TaxDeductionItem } from '../types';
+import { CA_FEDERAL_TAX_2026 } from '../tax-rules/canada/2026/federal';
+import { CA_PROVINCIAL_TAX_2026 } from '../tax-rules/canada/2026/provinces';
 
 export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
-  const gross = inputs.annualSalary || (inputs.incomeRate ? inputs.incomeRate * (inputs.workHoursPerWeek || 40) * (inputs.weeksPerYear || 52) : 120000);
+  const hoursPerWeek = inputs.workHoursPerWeek || 40;
+  const weeksPerYear = inputs.weeksPerYear || 52;
+  const annualHours = hoursPerWeek * weeksPerYear;
+
+  const gross = inputs.annualSalary || (inputs.incomeRate ? inputs.incomeRate * annualHours : 120000);
   const province = inputs.state || 'Ontario';
   const empType = inputs.employmentType || 'Full-time Employee';
 
   let businessWriteOffs = 0;
   let cpp = 0;
+  let cpp2 = 0;
   let ei = 0;
   let smallBusinessCorpTax = 0;
   let federalTax = 0;
   let provincialTax = 0;
 
-  if (empType === 'Incorporated') {
-    // 1. Incorporated Contractor (Small Business Corp)
-    const expensePercent = inputs.k401Contribution || 12; // 12% typical business expense write-offs
-    businessWriteOffs = gross * (expensePercent / 100);
+  const provConfig = CA_PROVINCIAL_TAX_2026[province] || CA_PROVINCIAL_TAX_2026['Ontario'];
+  const fedRules = CA_FEDERAL_TAX_2026;
+
+  // Determine strict category:
+  // Is this self-employed / sole prop? ONLY if explicitly selected as Sole Proprietorship / Self-Employed!
+  const isSoleProp = empType.includes('Sole Proprietorship') || empType.includes('Self-Employed') || empType.includes('1099');
+  const isIncorporated = empType.includes('Incorporated') || empType.includes('Corporation');
+
+  if (isIncorporated) {
+    // 1. INCORPORATED CONTRACTOR (SMALL BUSINESS CORPORATION)
+    const writeOffPct = (inputs.k401Contribution || 12) / 100;
+    businessWriteOffs = gross * writeOffPct;
     const activeNetCorpIncome = Math.max(0, gross - businessWriteOffs);
 
-    // Ontario Small Business Deduction (SBD) Corp Tax = 9% Fed + 3.2% ON = 12.2%
+    // Ontario Small Business Rate (SBD): 9% Fed + 3.2% ON = 12.2%
     smallBusinessCorpTax = activeNetCorpIncome * 0.122;
 
-    // Remaining Corp Net Income drawn as owner non-eligible dividend
     const ownerDividendDraw = Math.max(0, activeNetCorpIncome - smallBusinessCorpTax);
-
-    // Ontario Personal Non-Eligible Dividend Tax Integration (~11.8% effective tax rate)
     federalTax = ownerDividendDraw * 0.075;
     provincialTax = ownerDividendDraw * 0.043;
-  } else if (empType.includes('Contractor')) {
-    // 2. Sole Proprietorship / C2C Contractor
-    const expensePercent = inputs.k401Contribution || 10;
-    businessWriteOffs = gross * (expensePercent / 100);
+
+  } else if (isSoleProp) {
+    // 2. SELF-EMPLOYED / SOLE PROPRIETOR
+    const writeOffPct = (inputs.k401Contribution || 10) / 100;
+    businessWriteOffs = gross * writeOffPct;
     const netBusinessIncome = Math.max(0, gross - businessWriteOffs);
 
-    // Self-Employed CPP (11.9% on earnings between $3,500 and $68,500 max = $7,735)
-    cpp = Math.min(Math.max(0, netBusinessIncome - 3500) * 0.119, 7735);
-    ei = 0;
+    // Self-Employed CPP Tier 1 (11.9% on earnings between $3,500 and $71,300)
+    const cppEarnings1 = Math.max(0, Math.min(netBusinessIncome, fedRules.cpp.ympe) - fedRules.cpp.basicExemption);
+    cpp = Math.min(cppEarnings1 * fedRules.cpp.selfEmployedRate, fedRules.cpp.maxSelfEmployedContrib);
 
-    // CRA Taxable Income (50% CPP deduction)
-    const taxablePersonal = Math.max(0, netBusinessIncome - cpp / 2);
+    // Self-Employed CPP Tier 2 (8.0% on earnings between $71,300 and $76,000)
+    const cppEarnings2 = Math.max(0, Math.min(netBusinessIncome, fedRules.cpp2.ceiling) - fedRules.cpp.ympe);
+    cpp2 = Math.min(cppEarnings2 * fedRules.cpp2.selfEmployedRate, fedRules.cpp2.maxSelfEmployedContrib);
 
-    // Federal Tax (15% up to 55,867; 20.5% up to 111,733; 26% over) less $2,355.75 BPA credit
-    let fedGrossTax = 0;
-    if (taxablePersonal <= 55867) {
-      fedGrossTax = taxablePersonal * 0.15;
-    } else if (taxablePersonal <= 111733) {
-      fedGrossTax = 8380.05 + (taxablePersonal - 55867) * 0.205;
-    } else {
-      fedGrossTax = 19832.58 + (taxablePersonal - 111733) * 0.26;
-    }
-    federalTax = Math.max(0, fedGrossTax - 2355.75);
+    ei = 0; // Self-employed do not pay employee EI unless opted in
 
-    // Ontario Tax (5.05% up to 51,446; 9.15% up to 102,894; 11.16% over) less $626.15 BPA credit
-    let provGrossTax = 0;
-    if (province === 'Ontario') {
-      if (taxablePersonal <= 51446) {
-        provGrossTax = taxablePersonal * 0.0505;
-      } else if (taxablePersonal <= 102894) {
-        provGrossTax = 2598.02 + (taxablePersonal - 51446) * 0.0915;
-      } else {
-        provGrossTax = 7310.56 + (taxablePersonal - 102894) * 0.1116;
-      }
-      provincialTax = Math.max(0, provGrossTax - 626.15);
-    } else if (province === 'British Columbia') {
-      provGrossTax = taxablePersonal <= 47937 ? taxablePersonal * 0.0506 : 2425 + (taxablePersonal - 47937) * 0.077;
-      provincialTax = Math.max(0, provGrossTax - 550);
-    } else {
-      provincialTax = taxablePersonal * 0.082;
-    }
+    // CRA Taxable Income (50% deduction of self-employed CPP/CPP2)
+    const taxablePersonal = Math.max(0, netBusinessIncome - (cpp + cpp2) / 2);
+
+    // Progressive Federal Income Tax Calculation
+    federalTax = calculateProgressiveTax(taxablePersonal, fedRules.brackets, fedRules.basicPersonalAmount * 0.15);
+
+    // Progressive Provincial Income Tax Calculation
+    provincialTax = calculateProgressiveTax(taxablePersonal, provConfig.brackets, provConfig.basicPersonalAmount * (provConfig.brackets[0]?.rate || 0.0505));
+
   } else {
-    // 3. T4 / Full-time Employee
-    cpp = Math.min(Math.max(0, gross - 3500) * 0.0595, 3867.5);
-    ei = Math.min(gross * 0.0166, 1049.12);
+    // 3. T4 / PAYROLL EMPLOYEE OR T4 CONTRACTOR
+    // Employee CPP Tier 1 (5.95% on earnings between $3,500 and $71,300, max $4,034.10)
+    const cppEarnings1 = Math.max(0, Math.min(gross, fedRules.cpp.ympe) - fedRules.cpp.basicExemption);
+    cpp = Math.min(cppEarnings1 * fedRules.cpp.employeeRate, fedRules.cpp.maxEmployeeContrib);
 
-    const taxablePersonal = Math.max(0, gross - cpp - ei);
+    // Employee CPP Tier 2 (4.0% on earnings between $71,300 and $76,000, max $188.00)
+    const cppEarnings2 = Math.max(0, Math.min(gross, fedRules.cpp2.ceiling) - fedRules.cpp.ympe);
+    cpp2 = Math.min(cppEarnings2 * fedRules.cpp2.employeeRate, fedRules.cpp2.maxEmployeeContrib);
 
-    // Federal Tax less $2,355.75 BPA credit
-    let fedGrossTax = 0;
-    if (taxablePersonal <= 55867) {
-      fedGrossTax = taxablePersonal * 0.15;
-    } else if (taxablePersonal <= 111733) {
-      fedGrossTax = 8380.05 + (taxablePersonal - 55867) * 0.205;
-    } else {
-      fedGrossTax = 19832.58 + (taxablePersonal - 111733) * 0.26;
-    }
-    federalTax = Math.max(0, fedGrossTax - 2355.75);
+    // Employee EI (1.64% on insurable earnings up to $65,700, max $1,077.48)
+    const eiEarnings = Math.min(gross, fedRules.ei.maxInsurableEarnings);
+    ei = Math.min(eiEarnings * fedRules.ei.employeeRate, fedRules.ei.maxEmployeeContrib);
 
-    // Ontario Tax less $626.15 BPA credit
-    let provGrossTax = 0;
-    if (province === 'Ontario') {
-      if (taxablePersonal <= 51446) {
-        provGrossTax = taxablePersonal * 0.0505;
-      } else if (taxablePersonal <= 102894) {
-        provGrossTax = 2598.02 + (taxablePersonal - 51446) * 0.0915;
-      } else {
-        provGrossTax = 7310.56 + (taxablePersonal - 102894) * 0.1116;
-      }
-      provincialTax = Math.max(0, provGrossTax - 626.15);
-    } else if (province === 'British Columbia') {
-      provGrossTax = taxablePersonal <= 47937 ? taxablePersonal * 0.0506 : 2425 + (taxablePersonal - 47937) * 0.077;
-      provincialTax = Math.max(0, provGrossTax - 550);
-    } else {
-      provincialTax = taxablePersonal * 0.082;
-    }
+    // Taxable Income for T4 (gross less CPP, CPP2, EI)
+    const taxablePersonal = Math.max(0, gross - cpp - cpp2 - ei);
+
+    // Progressive Federal Tax (less BPA credit)
+    federalTax = calculateProgressiveTax(taxablePersonal, fedRules.brackets, fedRules.basicPersonalAmount * 0.15);
+
+    // Progressive Provincial Tax (less Provincial BPA credit)
+    provincialTax = calculateProgressiveTax(taxablePersonal, provConfig.brackets, provConfig.basicPersonalAmount * (provConfig.brackets[0]?.rate || 0.0505));
   }
 
-  // Calculate Net Take-Home Pay (Annual & Monthly)
-  const totalTaxes = federalTax + provincialTax + cpp + ei + smallBusinessCorpTax;
-  const takeHomePayAnnual = Math.max(0, gross - totalTaxes - businessWriteOffs);
+  // Mandatory statutory deductions sum
+  const mandatoryDeductions = federalTax + provincialTax + cpp + cpp2 + ei + smallBusinessCorpTax;
+  const takeHomePayAnnual = Math.max(0, gross - mandatoryDeductions - businessWriteOffs);
   const takeHomePayMonthly = takeHomePayAnnual / 12;
 
-  const totalHours = (inputs.workHoursPerWeek || 40) * (inputs.weeksPerYear || 52);
-  const grossHourlyRate = totalHours > 0 ? gross / totalHours : 0;
-  const effectiveHourlyRate = totalHours > 0 ? takeHomePayAnnual / totalHours : 0;
+  const grossHourlyRate = annualHours > 0 ? gross / annualHours : 0;
+  const effectiveHourlyRate = annualHours > 0 ? takeHomePayAnnual / annualHours : 0;
   const takeHomePercentage = gross > 0 ? (takeHomePayAnnual / gross) * 100 : 0;
 
   const breakdown: TaxDeductionItem[] = [
@@ -120,10 +103,10 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
       name: 'Net Take-Home Pay',
       amount: takeHomePayAnnual,
       percentage: takeHomePercentage,
-      color: '#10B981',
+      color: '#1F8F68',
     },
     {
-      name: 'Federal Income Tax',
+      name: 'Federal Income Tax (CRA 2026)',
       amount: federalTax,
       percentage: (federalTax / gross) * 100,
       color: '#EF4444',
@@ -136,48 +119,48 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
     },
   ];
 
-  if (empType === 'Incorporated') {
+  if (cpp > 0) {
+    breakdown.push({
+      name: isSoleProp ? 'CPP Tier 1 (Self-Employed 11.9%)' : 'CPP Pension (Employee 5.95%)',
+      amount: cpp,
+      percentage: (cpp / gross) * 100,
+      color: '#3B82F6',
+    });
+  }
+
+  if (cpp2 > 0) {
+    breakdown.push({
+      name: isSoleProp ? 'CPP2 Tier 2 (Self-Employed 8%)' : 'CPP2 Tier 2 (Employee 4%)',
+      amount: cpp2,
+      percentage: (cpp2 / gross) * 100,
+      color: '#60A5FA',
+    });
+  }
+
+  if (ei > 0) {
+    breakdown.push({
+      name: 'EI Premium (1.64%)',
+      amount: ei,
+      percentage: (ei / gross) * 100,
+      color: '#8B5CF6',
+    });
+  }
+
+  if (smallBusinessCorpTax > 0) {
     breakdown.push({
       name: 'Small Business Corp Tax (12.2%)',
       amount: smallBusinessCorpTax,
       percentage: (smallBusinessCorpTax / gross) * 100,
       color: '#8B5CF6',
     });
-    if (businessWriteOffs > 0) {
-      breakdown.push({
-        name: 'Corporate Expense Write-offs',
-        amount: businessWriteOffs,
-        percentage: (businessWriteOffs / gross) * 100,
-        color: '#6366F1',
-      });
-    }
-  } else if (empType.includes('Contractor')) {
+  }
+
+  if (businessWriteOffs > 0) {
     breakdown.push({
-      name: 'Self-Employed CPP (11.9%)',
-      amount: cpp,
-      percentage: (cpp / gross) * 100,
-      color: '#3B82F6',
-    });
-    if (businessWriteOffs > 0) {
-      breakdown.push({
-        name: 'Business Expense Write-offs',
-        amount: businessWriteOffs,
-        percentage: (businessWriteOffs / gross) * 100,
-        color: '#6366F1',
-      });
-    }
-  } else {
-    breakdown.push({
-      name: 'CPP (Pension 5.95%)',
-      amount: cpp,
-      percentage: (cpp / gross) * 100,
-      color: '#3B82F6',
-    });
-    breakdown.push({
-      name: 'EI (Insurance 1.66%)',
-      amount: ei,
-      percentage: (ei / gross) * 100,
-      color: '#8B5CF6',
+      name: 'Business Expense Write-offs',
+      amount: businessWriteOffs,
+      percentage: (businessWriteOffs / gross) * 100,
+      color: '#6366F1',
     });
   }
 
@@ -185,7 +168,7 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
     grossIncome: gross,
     annualGross: gross,
     monthlyGross: gross / 12,
-    annualBillableHours: totalHours,
+    annualBillableHours: annualHours,
     grossHourlyRate,
     takeHomePayAnnual,
     takeHomePayMonthly,
@@ -208,14 +191,28 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
     federalTaxPercentage: (federalTax / gross) * 100,
     stateTax: provincialTax,
     stateTaxPercentage: (provincialTax / gross) * 100,
-    socialSecurityTax: cpp,
-    socialSecurityTaxPercentage: (cpp / gross) * 100,
+    socialSecurityTax: cpp + cpp2,
+    socialSecurityTaxPercentage: ((cpp + cpp2) / gross) * 100,
     medicareTax: ei,
     medicareTaxPercentage: (ei / gross) * 100,
     otherDeductions: businessWriteOffs,
     otherDeductionsPercentage: (businessWriteOffs / gross) * 100,
-    totalTax: totalTaxes + businessWriteOffs,
-    effectiveTaxRate: ((totalTaxes + businessWriteOffs) / gross) * 100,
+    totalTax: mandatoryDeductions + businessWriteOffs,
+    effectiveTaxRate: ((mandatoryDeductions + businessWriteOffs) / gross) * 100,
     breakdown,
   };
+}
+
+function calculateProgressiveTax(taxable: number, brackets: { min: number; max: number | null; rate: number }[], taxCredit = 0): number {
+  if (taxable <= 0) return 0;
+  let tax = 0;
+
+  for (const b of brackets) {
+    if (taxable > b.min) {
+      const chunk = b.max ? Math.min(taxable - b.min, b.max - b.min) : taxable - b.min;
+      tax += chunk * b.rate;
+    }
+  }
+
+  return Math.max(0, tax - taxCredit);
 }

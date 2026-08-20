@@ -248,7 +248,7 @@ export default function Home() {
 
   return (
     <LanguageProvider language={language} setLanguage={setLanguage}>
-      <div className="min-h-screen flex flex-col bg-[#ffffff] [background-image:linear-gradient(to_right,_rgba(0,_0,_0,_0.05)_1px,_transparent_1px),_linear-gradient(to_bottom,_rgba(0,_0,_0,_0.05)_1px,_transparent_1px)] [background-size:37px_37px] [mask-image:radial-gradient(ellipse_100%_100%_at_50%_50%,#000_80%,transparent_100%)] text-slate-900">
+      <div className="min-h-screen flex flex-col bg-[#FAF9F5] [background-image:linear-gradient(to_right,_rgba(0,_0,_0,_0.04)_1px,_transparent_1px),_linear-gradient(to_bottom,_rgba(0,_0,_0,_0.04)_1px,_transparent_1px)] [background-size:37px_37px] [mask-image:radial-gradient(ellipse_100%_100%_at_50%_50%,#000_80%,transparent_100%)] text-slate-900">
       {/* Top Navbar Header */}
       <Navbar
         country={inputs.country}
@@ -266,10 +266,7 @@ export default function Home() {
         onRecruiterTabChange={handleNavigateTab}
       />
 
-      {/* Top Google Leaderboard Ad Space */}
-      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <GoogleAdSlot type="leaderboard" adSlotId="top-leaderboard-01" />
-      </div>
+
 
       {/* Main Container - Expanded Width (max-w-[1440px]) with Motion.dev Animations */}
       <div className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-2">
@@ -289,9 +286,14 @@ export default function Home() {
                   snapshot={snapshot}
                   onInputsChange={setInputs}
                   onCalculate={() => setActiveView('dashboard')}
+                  onCountryChange={handleCountryChange}
                 />
               ) : (
-                <DashboardView inputs={inputs} snapshot={snapshot} />
+                <DashboardView
+                  inputs={inputs}
+                  snapshot={snapshot}
+                  onInputsChange={setInputs}
+                />
               )}
             </motion.div>
           ) : (

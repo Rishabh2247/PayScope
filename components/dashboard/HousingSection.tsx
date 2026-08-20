@@ -7,9 +7,10 @@ import { Home, Filter, RefreshCw, Info } from 'lucide-react';
 
 interface HousingSectionProps {
   snapshot: CompleteFinancialSnapshot;
+  onInputsChange?: (newInputs: any) => void;
 }
 
-export const HousingSection: React.FC<HousingSectionProps> = ({ snapshot }) => {
+export const HousingSection: React.FC<HousingSectionProps> = ({ snapshot, onInputsChange }) => {
   const { economic, inputs, tax } = snapshot;
   const [activeMode, setActiveMode] = useState<'Rent' | 'Buy'>('Rent');
   const [propertyType, setPropertyType] = useState('Apartment');

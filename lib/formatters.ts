@@ -4,12 +4,8 @@ export function isContractorRole(employmentType: string): boolean {
   if (!employmentType) return false;
   const lower = employmentType.toLowerCase();
 
-  // Full-time and standard payroll employees are NOT contractors
-  if (lower.includes('full-time') || lower.includes('w-2') || lower.includes('t4') || lower.includes('clt') || lower.includes('sueldo')) {
-    return false;
-  }
-
-  return (
+  // Explicit contractor checks first
+  if (
     lower.includes('contractor') ||
     lower.includes('1099') ||
     lower.includes('c2c') ||
@@ -18,8 +14,24 @@ export function isContractorRole(employmentType: string): boolean {
     lower.includes('autônomo') ||
     lower.includes('pj') ||
     lower.includes('incorporated') ||
-    lower.includes('contract')
-  );
+    lower.includes('actividad empresarial')
+  ) {
+    return true;
+  }
+
+  // Full-time and standard payroll employee checks
+  if (
+    lower.includes('full-time') ||
+    lower.includes('w2 employee') ||
+    lower.includes('w-2') ||
+    (lower.includes('t4') && !lower.includes('contractor')) ||
+    lower.includes('clt') ||
+    lower.includes('sueldo')
+  ) {
+    return false;
+  }
+
+  return lower.includes('contract');
 }
 
 export function formatCurrency(

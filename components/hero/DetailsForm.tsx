@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FinancialInputs } from '../../lib/types';
+import { FinancialInputs, CountryCode } from '../../lib/types';
 import { isContractorRole, formatCurrency } from '../../lib/formatters';
 import { getProvincesForCountry, getCitiesForProvince } from '../../lib/geography';
 import { useTranslation } from '../../lib/i18n';
@@ -11,12 +11,38 @@ interface DetailsFormProps {
   inputs: FinancialInputs;
   onChange: (inputs: FinancialInputs) => void;
   onCalculate: () => void;
+  onCountryChange?: (country: CountryCode) => void;
 }
 
-export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCalculate }) => {
+export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCalculate, onCountryChange }) => {
   const { t } = useTranslation();
   const [showAdvanced, setShowAdvanced] = useState(false);
   const isContractor = isContractorRole(inputs.employmentType);
+
+  const countriesList: { code: CountryCode; flag: string; name: string }[] = [
+    { code: 'US', flag: '🇺🇸', name: 'United States' },
+    { code: 'CA', flag: '🇨🇦', name: 'Canada' },
+    { code: 'MX', flag: '🇲🇽', name: 'Mexico' },
+    { code: 'BR', flag: '🇧🇷', name: 'Brazil' },
+  ];
+
+  const handleCountrySelect = (code: CountryCode) => {
+    if (onCountryChange) {
+      onCountryChange(code);
+    } else {
+      let defaultState = 'Texas';
+      let defaultCity = 'Austin';
+      if (code === 'CA') { defaultState = 'Ontario'; defaultCity = 'Toronto'; }
+      if (code === 'MX') { defaultState = 'Mexico City'; defaultCity = 'Mexico City'; }
+      if (code === 'BR') { defaultState = 'São Paulo'; defaultCity = 'São Paulo'; }
+      onChange({
+        ...inputs,
+        country: code,
+        state: defaultState,
+        city: defaultCity,
+      });
+    }
+  };
 
   const handleFieldChange = (field: keyof FinancialInputs, value: any) => {
     onChange({
@@ -62,7 +88,7 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
 
   const getEmploymentOptions = () => {
     if (inputs.country === 'CA') {
-      return ['Full-time Employee', 'Sole Proprietorship Contractor', 'Incorporated Contractor (Corporation)'];
+      return ['Full-time Employee (T4)', 'T4 Contractor', 'Incorporated Contractor (Corporation)'];
     }
     if (inputs.country === 'MX') {
       return ['Sueldos y Salarios (Employee)', 'RESICO (Simplified Trust)', 'Persona Física con Actividad Empresarial'];
@@ -84,125 +110,136 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
   const totalAnnualContractRevenue = currentRate * inputs.workHoursPerWeek * inputs.weeksPerYear;
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200/80 shadow-md p-6 space-y-5">
-      {/* Header */}
-      <div className="space-y-1 pb-2 border-b border-slate-100">
-        <h2 className="text-lg font-bold text-slate-900 tracking-tight">{t.yourDetails}</h2>
-        <p className="text-xs text-slate-500 font-medium">{t.knowIncomeWorth}</p>
-      </div>
+    <div className="space-y-4">
+      {/* Form Card Header + Country Dropdown Button */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#BFE5D3]/40">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-bold text-[#12372A] tracking-tight">{t.yourFinancialDetails}</h2>
+          <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
+            {t.just3Things}
+          </p>
+        </div>
 
-      {/* Inputs Form Grid */}
-      <div className="space-y-4">
-        {/* Employment Type */}
-        <div className="space-y-1.5">
-          <label className="block text-xs font-semibold text-slate-600">
-            {t.employmentTypeLabel}
-          </label>
+        {/* Side Country Dropdown Button */}
+        <div className="space-y-1">
+          <label className="text-[10px] font-bold text-[#1F8F68] uppercase tracking-wider block">{t.country}:</label>
           <div className="relative">
-            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-              <Briefcase className="w-4 h-4" />
-            </div>
             <select
-              value={inputs.employmentType}
-              onChange={(e) => handleEmploymentTypeChange(e.target.value)}
-              className="w-full pl-10 pr-8 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all appearance-none"
+              value={inputs.country}
+              onChange={(e) => handleCountrySelect(e.target.value as CountryCode)}
+              className="bg-[#F3FBF7] hover:bg-[#EAF7F1] border border-[#BFE5D3] rounded-xl px-3.5 py-1.5 text-xs font-extrabold text-[#12372A] focus:outline-none focus:ring-2 focus:ring-[#1F8F68] appearance-none pr-8 cursor-pointer shadow-2xs"
             >
-              {getEmploymentOptions().map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
+              {countriesList.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {c.flag} {c.name}
                 </option>
               ))}
             </select>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <ChevronDown className="w-4 h-4 text-[#1F8F68] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
         </div>
+      </div>
 
-        {/* Dynamic Rate Input */}
+      {/* Inputs Form with Enter key submit */}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onCalculate();
+        }}
+        className="space-y-4"
+      >
+        {/* Employment Type Control Bar with Flexible Wrapping */}
         <div className="space-y-1.5">
-          <label className="block text-xs font-semibold text-slate-600">
-            {isContractor ? t.hourlyRateLabel : t.annualSalaryLabel}
+          <label className="block text-xs font-semibold text-[#12372A]">
+            {t.employmentTypeAndTaxTerm}
           </label>
-          <div className="relative">
-            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-xs pointer-events-none">
-              {getCurrencySymbol()}
-            </div>
-            <input
-              type="number"
-              value={inputs.incomeRate || ''}
-              onChange={(e) => {
-                const val = Number(e.target.value);
-                onChange({
-                  ...inputs,
-                  incomeRate: val,
-                  annualSalary: isContractor ? val * inputs.workHoursPerWeek * inputs.weeksPerYear : val,
-                });
-              }}
-              placeholder={isContractor ? '60' : '120,000'}
-              className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
-            />
-          </div>
+          <div className="flex flex-wrap gap-1.5 p-1.5 bg-[#F3FBF7] rounded-2xl border border-[#BFE5D3] text-xs font-bold text-slate-600">
+            {getEmploymentOptions().map((opt) => {
+              const isSelected = inputs.employmentType === opt;
+              let label = opt;
+              if (opt === 'Full-time Employee') label = 'W2 Employee';
+              if (opt === '1099 Contractor / Sole Proprietorship') label = '1099 / Sole Prop';
+              if (opt === 'C2C / LLC Contractor') label = 'C2C / LLC';
 
-          {isContractor && (
-            <p className="text-[10px] text-indigo-600 font-bold tracking-tight">
-              {formatCurrency(totalAnnualContractRevenue, inputs.currency)}/yr total revenue ({getCurrencySymbol()}{currentRate}/hr × {inputs.workHoursPerWeek}h × {inputs.weeksPerYear}w)
-            </p>
-          )}
-        </div>
-
-        {/* Work Hours & Weeks Row */}
-        <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50/80 rounded-2xl border border-slate-200/60">
-          <div className="space-y-1">
-            <label className="block text-[11px] font-bold text-slate-700 flex items-center gap-1">
-              <Clock className="w-3 h-3 text-indigo-600" />
-              <span>Work Hours / Week</span>
-            </label>
-            <input
-              type="number"
-              value={inputs.workHoursPerWeek}
-              onChange={(e) => {
-                const val = Number(e.target.value);
-                onChange({
-                  ...inputs,
-                  workHoursPerWeek: val,
-                  annualSalary: isContractor ? inputs.incomeRate * val * inputs.weeksPerYear : inputs.incomeRate,
-                });
-              }}
-              className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="block text-[11px] font-bold text-slate-700 flex items-center gap-1">
-              <Calendar className="w-3 h-3 text-indigo-600" />
-              <span>Weeks / Year</span>
-            </label>
-            <input
-              type="number"
-              value={inputs.weeksPerYear}
-              onChange={(e) => {
-                const val = Number(e.target.value);
-                onChange({
-                  ...inputs,
-                  weeksPerYear: val,
-                  annualSalary: isContractor ? inputs.incomeRate * inputs.workHoursPerWeek * val : inputs.incomeRate,
-                });
-              }}
-              className="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
-            />
+              return (
+                <button
+                  key={opt}
+                  type="button"
+                  onClick={() => handleEmploymentTypeChange(opt)}
+                  className={`flex-1 min-w-[120px] py-2 px-3 rounded-xl transition-all text-center whitespace-normal cursor-pointer ${
+                    isSelected
+                      ? 'bg-[#1F8F68] text-white shadow-xs font-extrabold'
+                      : 'hover:text-[#12372A] hover:bg-[#EAF7F1] text-slate-700 bg-white/60'
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* State / Province & City Selector Row */}
-        <div className="grid grid-cols-2 gap-3">
+        {/* Annual Salary & Filing Status Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Gross Income Input */}
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-slate-600">
-              {t.stateProvinceLabel}
+            <label className="block text-xs font-semibold text-[#12372A]">
+              {isContractor ? t.hourlyRateLabel : t.annualGrossIncome}
             </label>
+            <div className="relative">
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#1F8F68] font-bold text-sm pointer-events-none">
+                {getCurrencySymbol()}
+              </div>
+              <input
+                type="number"
+                value={inputs.incomeRate || ''}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    onCalculate();
+                  }
+                }}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  onChange({
+                    ...inputs,
+                    incomeRate: val,
+                    annualSalary: isContractor ? val * inputs.workHoursPerWeek * inputs.weeksPerYear : val,
+                  });
+                }}
+                placeholder={isContractor ? '60' : '120,000'}
+                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-[#BFE5D3] rounded-xl text-sm font-bold text-[#12372A] focus:outline-none focus:ring-2 focus:ring-[#1F8F68] transition-all shadow-2xs"
+              />
+            </div>
+          </div>
+
+          {/* Filing Status Selector */}
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-[#12372A]">{t.filingStatus}</label>
+            <div className="relative">
+              <select
+                value={inputs.filingStatus}
+                onChange={(e) => handleFieldChange('filingStatus', e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-white border border-[#BFE5D3] rounded-xl text-sm font-semibold text-[#12372A] focus:outline-none focus:ring-2 focus:ring-[#1F8F68] transition-all appearance-none pr-8 shadow-2xs cursor-pointer"
+              >
+                <option value="Single">{t.single}</option>
+                <option value="Married Filing Jointly">{t.marriedFilingJointly}</option>
+                <option value="Head of Household">{t.headOfHousehold}</option>
+              </select>
+              <ChevronDown className="w-4 h-4 text-[#1F8F68] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
+          </div>
+        </div>
+
+        {/* State & City Selector Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-[#12372A]">{t.stateProvinceLabel}</label>
             <div className="relative">
               <select
                 value={inputs.state}
                 onChange={(e) => handleProvinceChange(e.target.value)}
-                className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all appearance-none pr-7"
+                className="w-full px-3.5 py-2.5 bg-white border border-[#BFE5D3] rounded-xl text-sm font-semibold text-[#12372A] focus:outline-none focus:ring-2 focus:ring-[#1F8F68] transition-all appearance-none pr-8 shadow-2xs cursor-pointer"
               >
                 {provinces.map((prov) => (
                   <option key={prov.name} value={prov.name}>
@@ -210,17 +247,17 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                   </option>
                 ))}
               </select>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <ChevronDown className="w-4 h-4 text-[#1F8F68] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-slate-600">{t.cityLabel}</label>
+            <label className="block text-xs font-semibold text-[#12372A]">{t.cityLabel}</label>
             <div className="relative">
               <select
                 value={inputs.city}
                 onChange={(e) => handleFieldChange('city', e.target.value)}
-                className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all appearance-none pr-7"
+                className="w-full px-3.5 py-2.5 bg-white border border-[#BFE5D3] rounded-xl text-sm font-semibold text-[#12372A] focus:outline-none focus:ring-2 focus:ring-[#1F8F68] transition-all appearance-none pr-8 shadow-2xs cursor-pointer"
               >
                 {cities.map((ct) => (
                   <option key={ct} value={ct}>
@@ -228,90 +265,93 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                   </option>
                 ))}
               </select>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <ChevronDown className="w-4 h-4 text-[#1F8F68] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
           </div>
         </div>
 
-        {/* Filing Status & Dependents Row */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-slate-600">{t.filingStatusLabel}</label>
-            <div className="relative">
-              <select
-                value={inputs.filingStatus}
-                onChange={(e) => handleFieldChange('filingStatus', e.target.value)}
-                className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all appearance-none pr-7"
-              >
-                <option value="Single">Single</option>
-                <option value="Married Filing Jointly">Married Filing Jointly</option>
-                <option value="Head of Household">Head of Household</option>
-              </select>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            </div>
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-slate-600">{t.dependentsLabel}</label>
-            <input
-              type="number"
-              min={0}
-              max={10}
-              value={inputs.dependents}
-              onChange={(e) => handleFieldChange('dependents', Number(e.target.value))}
-              className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
-            />
-          </div>
-        </div>
-
-        {/* Collapsible Advanced Section */}
-        <div className="pt-2 border-t border-slate-100">
+        {/* Collapsible Accordion Drawer Button */}
+        <div className="pt-1">
           <button
             type="button"
             onClick={() => setShowAdvanced(!showAdvanced)}
-            className="flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+            className="w-full py-2.5 px-4 bg-white hover:bg-[#F3FBF7] border border-[#BFE5D3] rounded-xl text-xs font-semibold text-[#12372A] transition-all flex items-center justify-between shadow-2xs cursor-pointer"
           >
-            {showAdvanced ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            <span>{t.advancedOptions}</span>
+            <span>{t.moreDetailsAccordion}</span>
+            <span className="text-[#1F8F68] font-bold text-base">{showAdvanced ? '−' : '+'}</span>
           </button>
 
           {showAdvanced && (
-            <div className="mt-3 p-3 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-3 text-xs">
-              <div>
-                <label className="block text-slate-600 font-medium mb-1">
-                  {isContractor ? t.expenseWriteoffLabel : t.k401Label}
-                </label>
-                <input
-                  type="number"
-                  value={inputs.k401Contribution || 0}
-                  onChange={(e) => handleFieldChange('k401Contribution', Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-slate-800"
-                  placeholder="6%"
-                />
+            <div className="mt-3 p-4 bg-[#F3FBF7] rounded-2xl border border-[#BFE5D3] space-y-3 text-xs">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[#12372A] font-semibold mb-1">{t.workHoursPerWeek}</label>
+                  <input
+                    type="number"
+                    value={inputs.workHoursPerWeek}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      onChange({
+                        ...inputs,
+                        workHoursPerWeek: val,
+                        annualSalary: isContractor ? inputs.incomeRate * val * inputs.weeksPerYear : inputs.incomeRate,
+                      });
+                    }}
+                    className="w-full px-3 py-2 bg-white border border-[#BFE5D3] rounded-lg text-[#12372A] font-bold focus:outline-none focus:ring-2 focus:ring-[#1F8F68]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[#12372A] font-semibold mb-1">{t.weeksPerYear}</label>
+                  <input
+                    type="number"
+                    value={inputs.weeksPerYear}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      onChange({
+                        ...inputs,
+                        weeksPerYear: val,
+                        annualSalary: isContractor ? inputs.incomeRate * inputs.workHoursPerWeek * val : inputs.incomeRate,
+                      });
+                    }}
+                    className="w-full px-3 py-2 bg-white border border-[#BFE5D3] rounded-lg text-[#12372A] font-bold focus:outline-none focus:ring-2 focus:ring-[#1F8F68]"
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-slate-600 font-medium mb-1">{t.healthInsuranceLabel}</label>
-                <input
-                  type="number"
-                  value={inputs.healthInsuranceMonthly || 0}
-                  onChange={(e) => handleFieldChange('healthInsuranceMonthly', Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-slate-800"
-                  placeholder="$250"
-                />
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[#12372A] font-semibold mb-1">{t.dependents}</label>
+                  <input
+                    type="number"
+                    min={0}
+                    max={10}
+                    value={inputs.dependents}
+                    onChange={(e) => handleFieldChange('dependents', Number(e.target.value))}
+                    className="w-full px-3 py-2 bg-white border border-[#BFE5D3] rounded-lg text-[#12372A] font-bold focus:outline-none focus:ring-2 focus:ring-[#1F8F68]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[#12372A] font-semibold mb-1">
+                    {isContractor ? t.businessExpenseWriteoff : t.k401Contribution}
+                  </label>
+                  <input
+                    type="number"
+                    value={inputs.k401Contribution || 0}
+                    onChange={(e) => handleFieldChange('k401Contribution', Number(e.target.value))}
+                    className="w-full px-3 py-2 bg-white border border-[#BFE5D3] rounded-lg text-[#12372A] font-bold focus:outline-none focus:ring-2 focus:ring-[#1F8F68]"
+                    placeholder="e.g. 6%"
+                  />
+                </div>
               </div>
             </div>
           )}
         </div>
-      </div>
+      </form>
 
-      {/* Main Calculate CTA Button */}
-      <button
-        onClick={onCalculate}
-        className="w-full py-4 px-6 bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700 hover:from-indigo-700 hover:to-blue-800 text-white font-bold text-sm rounded-2xl shadow-lg shadow-indigo-200 hover:shadow-indigo-300 transition-all flex items-center justify-center gap-2 group cursor-pointer active:scale-[0.99]"
-      >
-        <Calculator className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-        <span>{t.calculateResults}</span>
-      </button>
+      {/* Defaults Subtext */}
+      <p className="text-[11px] text-[#1F8F68] font-medium flex items-center gap-1">
+        <span>💡</span> {t.defaultsApplied}
+      </p>
     </div>
   );
 };

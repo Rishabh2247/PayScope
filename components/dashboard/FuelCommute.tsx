@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { CompleteFinancialSnapshot } from '../../lib/types';
 import { formatCurrency } from '../../lib/formatters';
+import { useTranslation } from '../../lib/i18n';
 import { Info, Car } from 'lucide-react';
 
 interface FuelCommuteProps {
@@ -10,114 +11,173 @@ interface FuelCommuteProps {
 }
 
 export const FuelCommute: React.FC<FuelCommuteProps> = ({ snapshot }) => {
+  const { t } = useTranslation();
   const { economic, inputs } = snapshot;
 
-  const mpg = 28;
-  const milesPerDay = 20;
-  const daysPerWeek = 5;
+  const [commuteMode, setCommuteMode] = useState<'Gasoline' | 'Hybrid' | 'EV' | 'Public Transit'>('Gasoline');
+  
+  const liveGasPrice = economic.fuelPriceToday || (inputs.country === 'CA' ? 1.65 : 3.45);
+  const liveEvPrice = 0.16; // $ / kWh
+  const liveTransitPrice = inputs.country === 'CA' ? 7.50 : 5.50; // $ / day
+
+  const [customPrice, setCustomPrice] = useState<number>(liveGasPrice);
+  const [milesPerDay, setMilesPerDay] = useState<number>(20);
+  const [daysPerWeek, setDaysPerWeek] = useState<number>(5);
+
   const weeksPerYear = inputs.weeksPerYear || 52;
 
-  const dailyFuelCost = inputs.country === 'CA' ? 7.20 : 4.28;
-  const monthlyFuelCost = (dailyFuelCost * daysPerWeek * weeksPerYear) / 12;
-  const annualFuelCost = monthlyFuelCost * 12;
+  const handleModeChange = (mode: 'Gasoline' | 'Hybrid' | 'EV' | 'Public Transit') => {
+    setCommuteMode(mode);
+    if (mode === 'Gasoline') setCustomPrice(liveGasPrice);
+    if (mode === 'Hybrid') setCustomPrice(liveGasPrice);
+    if (mode === 'EV') setCustomPrice(liveEvPrice);
+    if (mode === 'Public Transit') setCustomPrice(liveTransitPrice);
+  };
+
+  // Calculate daily cost based on user inputs
+  const getDailyCost = () => {
+    const roundtrip = milesPerDay * 2;
+    const price = customPrice > 0 ? customPrice : liveGasPrice;
+
+    switch (commuteMode) {
+      case 'Hybrid':
+        return (roundtrip / 48) * price;
+      case 'EV':
+        return (roundtrip / 3.8) * price;
+      case 'Public Transit':
+        return price;
+      case 'Gasoline':
+      default:
+        return (roundtrip / 28) * price;
+    }
+  };
+
+  const dailyCost = getDailyCost();
+  const monthlyCost = (dailyCost * daysPerWeek * weeksPerYear) / 12;
+  const annualCost = monthlyCost * 12;
+
+  const modeIcons: Record<string, string> = {
+    Gasoline: '⛽',
+    Hybrid: '🔋',
+    EV: '⚡',
+    'Public Transit': '🚌',
+  };
 
   return (
-    <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm flex flex-col justify-between h-full min-h-[380px] space-y-4 overflow-hidden">
-      {/* Title */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-base font-bold text-slate-900">Fuel & Commute</h3>
-          <p className="text-xs text-slate-400">Based on {milesPerDay} miles one way in {economic.cityLabel}</p>
-        </div>
-        <Info className="w-4 h-4 text-slate-400 cursor-pointer shrink-0" />
-      </div>
-
-      {/* Fuel & Commute Subcards Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
-        {/* Left Subcard: Fuel Price Today (5 cols) */}
-        <div className="sm:col-span-5 bg-slate-50/90 p-3 rounded-2xl border border-slate-100 flex flex-col justify-between space-y-1 min-w-0 overflow-hidden">
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider truncate">Fuel Price Today</p>
-          <div>
-            <div className="flex items-baseline gap-1 flex-wrap">
-              <span className="text-xl sm:text-2xl font-black text-slate-900 leading-tight">
-                {economic.currencySymbol}{economic.fuelPriceToday.toFixed(2)}
-              </span>
-              <span className="text-xs text-slate-500 font-semibold">{economic.fuelPriceUnit}</span>
-            </div>
-            <div className="inline-block bg-emerald-100 text-emerald-700 text-[10px] font-bold px-1.5 py-0.5 rounded mt-1 whitespace-nowrap">
-              {economic.fuelPriceVsYesterday} vs yesterday
-            </div>
-          </div>
-        </div>
-
-        {/* Right Subcard: Commute Cost Est. (7 cols) */}
-        <div className="sm:col-span-7 bg-slate-50/90 p-3 rounded-2xl border border-slate-100 space-y-1.5 min-w-0 overflow-hidden">
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider truncate">Commute Cost (Est.)</p>
-          <div className="grid grid-cols-3 gap-1 text-center">
-            <div className="bg-white py-1.5 px-1 rounded-xl border border-slate-100 min-w-0 overflow-hidden">
-              <p className="text-[9px] text-slate-400 font-semibold truncate">Daily</p>
-              <p className="text-[11px] font-bold text-slate-900 truncate">
-                {formatCurrency(dailyFuelCost, inputs.currency)}
-              </p>
-            </div>
-            <div className="bg-white py-1.5 px-1 rounded-xl border border-slate-100 min-w-0 overflow-hidden">
-              <p className="text-[9px] text-slate-400 font-semibold truncate">Monthly</p>
-              <p className="text-[11px] font-bold text-indigo-600 truncate">
-                {formatCurrency(monthlyFuelCost, inputs.currency)}
-              </p>
-            </div>
-            <div className="bg-white py-1.5 px-1 rounded-xl border border-slate-100 min-w-0 overflow-hidden">
-              <p className="text-[9px] text-slate-400 font-semibold truncate">Yearly</p>
-              <p className="text-[11px] font-bold text-slate-900 truncate">
-                {formatCurrency(annualFuelCost, inputs.currency)}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Vehicle Specs Bar */}
-      <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100 flex flex-wrap items-center justify-center gap-1.5 text-[11px] font-semibold text-slate-600">
-        <div className="flex items-center gap-1">
-          <Car className="w-3.5 h-3.5 text-slate-700 shrink-0" />
-          <span>{mpg} MPG</span>
-        </div>
-        <span className="text-slate-300">•</span>
-        <span>{milesPerDay * 2} mi/day</span>
-        <span className="text-slate-300">•</span>
-        <span>5 days/wk</span>
-        <span className="text-slate-300">•</span>
-        <span>{weeksPerYear} wks/yr</span>
-      </div>
-
-      {/* Market Update Subcard */}
-      <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200/80 space-y-2 min-w-0 overflow-hidden">
+    <div className="bg-white p-5 rounded-3xl border border-[#BFE5D3] shadow-sm flex flex-col justify-between h-full min-h-[380px] space-y-4 hover:border-[#1F8F68] transition-colors">
+      {/* Title & Live Prices Bar */}
+      <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <div className="min-w-0">
-            <p className="text-xs font-bold text-slate-900 truncate">Market Update</p>
-            <p className="text-[10px] text-slate-500 truncate">{economic.cityLabel} Market</p>
+          <div>
+            <h3 className="text-base font-bold text-[#12372A]">{t.fuelCommuteTitle}</h3>
+            <p className="text-xs text-slate-500">{economic.cityLabel} Live Prices</p>
           </div>
-          <span className="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">
-            Favoring renters
+          <Info className="w-4 h-4 text-[#1F8F68] cursor-pointer shrink-0" />
+        </div>
+
+        {/* Minimal Live Price Badges Bar */}
+        <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-bold text-[#12372A]">
+          <span className="bg-[#EAF7F1] text-[#1F8F68] border border-[#BFE5D3] px-2 py-0.5 rounded-lg flex items-center gap-1">
+            ⛽ Gas: ${liveGasPrice.toFixed(2)}/{economic.fuelPriceUnit || 'gal'}
+          </span>
+          <span className="bg-[#EAF7F1] text-[#1F8F68] border border-[#BFE5D3] px-2 py-0.5 rounded-lg flex items-center gap-1">
+            ⚡ EV: ${liveEvPrice.toFixed(2)}/kWh
+          </span>
+          <span className="bg-[#EAF7F1] text-[#1F8F68] border border-[#BFE5D3] px-2 py-0.5 rounded-lg flex items-center gap-1">
+            🚌 Transit: ${liveTransitPrice.toFixed(2)}/day
+          </span>
+        </div>
+      </div>
+
+      {/* Transit Mode Selection */}
+      <div className="grid grid-cols-4 gap-1 p-1 bg-[#F3FBF7] rounded-xl border border-[#BFE5D3] text-xs font-bold text-[#12372A]">
+        {(['Gasoline', 'Hybrid', 'EV', 'Public Transit'] as const).map((mode) => (
+          <button
+            key={mode}
+            type="button"
+            onClick={() => handleModeChange(mode)}
+            className={`py-1 px-1 rounded-lg transition-all text-center truncate cursor-pointer flex items-center justify-center gap-1 ${
+              commuteMode === mode
+                ? 'bg-[#1F8F68] text-white shadow-xs font-extrabold'
+                : 'hover:text-[#12372A] hover:bg-[#EAF7F1] text-slate-700'
+            }`}
+          >
+            <span>{modeIcons[mode]}</span>
+            <span className="hidden sm:inline truncate">{mode}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Minimal Numerical Inputs (NO Sliders) */}
+      <div className="bg-[#F3FBF7] p-3 rounded-2xl border border-[#BFE5D3] space-y-2.5 text-xs">
+        <div className="grid grid-cols-3 gap-2">
+          {/* User Price Input */}
+          <div className="space-y-1">
+            <label className="text-[10px] font-bold text-[#12372A] block">
+              {commuteMode === 'EV' ? 'Price ($/kWh)' : commuteMode === 'Public Transit' ? 'Fare ($/day)' : 'Gas ($/gal)'}
+            </label>
+            <input
+              type="number"
+              step="0.05"
+              value={customPrice || ''}
+              onChange={(e) => setCustomPrice(Number(e.target.value))}
+              className="w-full px-2 py-1.5 bg-white border border-[#BFE5D3] rounded-lg text-[#12372A] font-bold text-center focus:ring-2 focus:ring-[#1F8F68]"
+            />
+          </div>
+
+          {/* User Miles Input */}
+          <div className="space-y-1">
+            <label className="text-[10px] font-bold text-[#12372A] block">One-way Miles</label>
+            <input
+              type="number"
+              value={milesPerDay || ''}
+              onChange={(e) => setMilesPerDay(Number(e.target.value))}
+              className="w-full px-2 py-1.5 bg-white border border-[#BFE5D3] rounded-lg text-[#12372A] font-bold text-center focus:ring-2 focus:ring-[#1F8F68]"
+            />
+          </div>
+
+          {/* User Days Input */}
+          <div className="space-y-1">
+            <label className="text-[10px] font-bold text-[#12372A] block">Days / Week</label>
+            <input
+              type="number"
+              min={1}
+              max={7}
+              value={daysPerWeek || ''}
+              onChange={(e) => setDaysPerWeek(Number(e.target.value))}
+              className="w-full px-2 py-1.5 bg-white border border-[#BFE5D3] rounded-lg text-[#12372A] font-bold text-center focus:ring-2 focus:ring-[#1F8F68]"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Calculated Commute Cost Results */}
+      <div className="bg-[#F3FBF7] p-3 rounded-2xl border border-[#BFE5D3] space-y-1.5 min-w-0 overflow-hidden">
+        <div className="flex items-center justify-between text-[10px] font-bold text-[#1F8F68] uppercase tracking-wider">
+          <span>{commuteMode} Cost Result</span>
+          <span className="text-[#12372A] bg-white px-2 py-0.5 rounded-md border border-[#BFE5D3]">
+            {milesPerDay * 2} mi/day · {daysPerWeek}d/wk
           </span>
         </div>
 
-        <div className="grid grid-cols-4 gap-1 text-center pt-0.5">
-          <div className="bg-white p-1 rounded-xl border border-slate-100 min-w-0 overflow-hidden">
-            <p className="text-[8px] sm:text-[9px] text-slate-400 truncate">New</p>
-            <p className="text-[10px] sm:text-[11px] font-bold text-emerald-600 truncate">↑ 8.2%</p>
+        <div className="grid grid-cols-3 gap-1 text-center">
+          <div className="bg-white py-1.5 px-1 rounded-xl border border-[#BFE5D3]/60 min-w-0 overflow-hidden">
+            <p className="text-[9px] text-slate-400 font-semibold truncate">Daily</p>
+            <p className="text-[11px] font-extrabold text-[#12372A] truncate">
+              {formatCurrency(dailyCost, inputs.currency)}
+            </p>
           </div>
-          <div className="bg-white p-1 rounded-xl border border-slate-100 min-w-0 overflow-hidden">
-            <p className="text-[8px] sm:text-[9px] text-slate-400 truncate">Active</p>
-            <p className="text-[10px] sm:text-[11px] font-bold text-emerald-600 truncate">↑ 6.7%</p>
+          <div className="bg-white py-1.5 px-1 rounded-xl border border-[#BFE5D3]/60 min-w-0 overflow-hidden">
+            <p className="text-[9px] text-slate-400 font-semibold truncate">Monthly</p>
+            <p className="text-[11px] font-black text-[#1F8F68] truncate">
+              {formatCurrency(monthlyCost, inputs.currency)}
+            </p>
           </div>
-          <div className="bg-white p-1 rounded-xl border border-slate-100 min-w-0 overflow-hidden">
-            <p className="text-[8px] sm:text-[9px] text-slate-400 truncate">Rent</p>
-            <p className="text-[10px] sm:text-[11px] font-bold text-emerald-600 truncate">↓ 1.4%</p>
-          </div>
-          <div className="bg-white p-1 rounded-xl border border-slate-100 min-w-0 overflow-hidden">
-            <p className="text-[8px] sm:text-[9px] text-slate-400 truncate">Days</p>
-            <p className="text-[10px] sm:text-[11px] font-bold text-slate-800 truncate">↑ 5 days</p>
+          <div className="bg-white py-1.5 px-1 rounded-xl border border-[#BFE5D3]/60 min-w-0 overflow-hidden">
+            <p className="text-[9px] text-slate-400 font-semibold truncate">Yearly</p>
+            <p className="text-[11px] font-extrabold text-[#12372A] truncate">
+              {formatCurrency(annualCost, inputs.currency)}
+            </p>
           </div>
         </div>
       </div>

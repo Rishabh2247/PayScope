@@ -27,7 +27,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ inputs }) => {
     : (inputs.incomeRate || inputs.annualSalary || 0);
 
   return (
-    <div className="relative rounded-3xl bg-white border border-slate-200/80 shadow-sm overflow-hidden min-h-[160px] flex items-center">
+    <div className="relative rounded-3xl bg-white border border-[#BFE5D3] shadow-sm overflow-hidden min-h-[160px] flex items-center">
       {/* Background Skyline Visual Image - Result Page Card Placement */}
       <div className="absolute right-0 top-0 bottom-0 w-3/4 sm:w-2/3 md:w-1/2 pointer-events-none overflow-hidden">
         <img
@@ -42,34 +42,34 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ inputs }) => {
       {/* Content Container */}
       <div className="relative z-10 p-6 sm:p-7 space-y-3.5 max-w-2xl">
         <div className="space-y-1">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#1F8F68]">
             <span>PayScope Intelligence</span>
             <span className="text-sm">✨</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-[#12372A] tracking-tight">
             {t.financialSnapshot}
           </h1>
         </div>
 
         {/* Input Parameter Chips Bar */}
-        <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-700 pt-0.5">
+        <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-[#12372A] pt-0.5">
           {/* Location Chip */}
-          <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-md border border-slate-200/80 px-3 py-1.5 rounded-full shadow-2xs">
-            <MapPin className="w-3.5 h-3.5 text-indigo-600" />
+          <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-md border border-[#BFE5D3] px-3 py-1.5 rounded-full shadow-2xs">
+            <MapPin className="w-3.5 h-3.5 text-[#1F8F68]" />
             <span>
               {inputs.city}, {inputs.state}, {inputs.country}
             </span>
           </div>
 
           {/* Employment Chip */}
-          <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-md border border-slate-200/80 px-3 py-1.5 rounded-full shadow-2xs">
-            <Briefcase className="w-3.5 h-3.5 text-indigo-600" />
+          <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-md border border-[#BFE5D3] px-3 py-1.5 rounded-full shadow-2xs">
+            <Briefcase className="w-3.5 h-3.5 text-[#1F8F68]" />
             <span>{inputs.employmentType}</span>
           </div>
 
           {/* Income Chip */}
-          <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-md border border-slate-200/80 px-3 py-1.5 rounded-full shadow-2xs">
-            <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
+          <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-md border border-[#BFE5D3] px-3 py-1.5 rounded-full shadow-2xs">
+            <DollarSign className="w-3.5 h-3.5 text-[#1F8F68]" />
             <span>
               {isContractor
                 ? `${formatCurrency(inputs.incomeRate || 60, inputs.currency)}/hr (${formatCurrency(displayIncome, inputs.currency)}/yr)`
@@ -78,14 +78,14 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ inputs }) => {
           </div>
 
           {/* Filing Status Chip */}
-          <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-md border border-slate-200/80 px-3 py-1.5 rounded-full shadow-2xs">
-            <User className="w-3.5 h-3.5 text-indigo-600" />
+          <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-md border border-[#BFE5D3] px-3 py-1.5 rounded-full shadow-2xs">
+            <User className="w-3.5 h-3.5 text-[#1F8F68]" />
             <span>{inputs.filingStatus}</span>
           </div>
 
           {/* Dependents Chip */}
-          <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-md border border-slate-200/80 px-3 py-1.5 rounded-full shadow-2xs">
-            <Users className="w-3.5 h-3.5 text-indigo-600" />
+          <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-md border border-[#BFE5D3] px-3 py-1.5 rounded-full shadow-2xs">
+            <Users className="w-3.5 h-3.5 text-[#1F8F68]" />
             <span>{inputs.dependents} {t.dependentsLabel}</span>
           </div>
         </div>

@@ -8,9 +8,10 @@ import { getProvincesForCountry, getCitiesForProvince } from '../../lib/geograph
 
 interface RelocationSectionProps {
   snapshot: CompleteFinancialSnapshot;
+  onInputsChange?: (newInputs: any) => void;
 }
 
-export const RelocationSection: React.FC<RelocationSectionProps> = ({ snapshot }) => {
+export const RelocationSection: React.FC<RelocationSectionProps> = ({ snapshot, onInputsChange }) => {
   const { economic, inputs, tax } = snapshot;
 
   const [destCountry, setDestCountry] = useState<CountryCode>(inputs.country === 'CA' ? 'US' : 'CA');

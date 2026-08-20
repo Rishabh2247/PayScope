@@ -33,22 +33,56 @@ export interface TranslationDictionary {
   language: string;
   recalculating: string;
   recruitSubtitle: string;
+  trustedByThousands: string;
+  acrossNorthAmerica: string;
+  backedByOfficialData: string;
+  yourIncomeDecoded: string;
+  allInOnePlace: string;
+  heroSubtitle: string;
 
   // Details Form
   yourDetails: string;
+  yourFinancialDetails: string;
+  just3Things: string;
   employmentTypeLabel: string;
+  employmentTypeAndTaxTerm: string;
   annualSalaryLabel: string;
   hourlyRateLabel: string;
+  annualGrossIncome: string;
   stateProvinceLabel: string;
   cityLabel: string;
   filingStatusLabel: string;
+  filingStatus: string;
+  single: string;
+  marriedFilingJointly: string;
+  headOfHousehold: string;
   dependentsLabel: string;
+  dependents: string;
   advancedOptions: string;
+  moreDetailsAccordion: string;
+  workHoursPerWeek: string;
+  weeksPerYear: string;
   k401Label: string;
+  k401Contribution: string;
   healthInsuranceLabel: string;
   expenseWriteoffLabel: string;
+  businessExpenseWriteoff: string;
+  defaultsApplied: string;
 
   // Snapshot Card
+  liveInstantEstimate: string;
+  contractorTaxMode: string;
+  employeeMode: string;
+  estimatedMonthlyTakeHome: string;
+  effectiveTaxRate: string;
+  contractorIncomeBreakdown: string;
+  salaryTakeHomeBreakdown: string;
+  monthlyPayLabel: string;
+  yearlyTotalLabel: string;
+  beforeTax: string;
+  afterTaxNet: string;
+  seeFullSnapshot: string;
+  updatesLive: string;
   afterTaxesDeductions: string;
   monthlyNetIncome: string;
   annualNetIncome: string;
@@ -60,19 +94,26 @@ export interface TranslationDictionary {
   disclaimerTextContractor: string;
   readDisclaimer: string;
 
-  // Dashboard
+  // Dashboard & Cards
   overview: string;
   taxEngine: string;
   rateAnalysis: string;
   benchmarks: string;
   housing: string;
   fuelCommute: string;
+  fuelCommuteTitle: string;
+  realIncome: string;
+  taxBreakdown: string;
+  housingSnapshot: string;
+  incomeVsBenchmark: string;
+  costOfLivingTitle: string;
   relocation: string;
   reports: string;
   support: string;
   settings: string;
   downloadReport: string;
   detailedBreakdown: string;
+  editValues: string;
 
   // Footer
   officialDataSources: string;
@@ -110,20 +151,54 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     language: 'Language',
     recalculating: 'Recalculating financial snapshot...',
     recruitSubtitle: 'Built for recruiters, staffing agencies & talent teams.',
+    trustedByThousands: 'Trusted by thousands',
+    acrossNorthAmerica: 'across North America',
+    backedByOfficialData: 'Backed by official IRS, CRA, BLS & EIA tax databases',
+    yourIncomeDecoded: 'Your income. Decoded.',
+    allInOnePlace: 'All in one place.',
+    heroSubtitle: 'See your real take-home pay, taxes, cost of living, and purchasing power - personalized to your city, in under a minute.',
 
     yourDetails: 'Your Financial Details',
+    yourFinancialDetails: 'Your financial details',
+    just3Things: 'Just 3 things to start - add more for a sharper estimate.',
     employmentTypeLabel: 'Employment Type',
+    employmentTypeAndTaxTerm: 'Employment type / Tax term',
     annualSalaryLabel: 'Annual Gross Income / Salary',
-    hourlyRateLabel: 'Contract Billing Rate ($/hr)',
+    hourlyRateLabel: 'Hourly Rate',
+    annualGrossIncome: 'Annual Gross Income',
     stateProvinceLabel: 'State / Province',
     cityLabel: 'City',
     filingStatusLabel: 'Filing Status',
+    filingStatus: 'Filing status',
+    single: 'Single',
+    marriedFilingJointly: 'Married Filing Jointly',
+    headOfHousehold: 'Head of Household',
     dependentsLabel: 'Dependents',
+    dependents: 'Dependents',
     advancedOptions: 'Advanced Tax & Expense Options',
+    moreDetailsAccordion: '⚡ More details - hours/week, dependents, advanced tax options',
+    workHoursPerWeek: 'Work Hours / Week',
+    weeksPerYear: 'Weeks / Year',
     k401Label: '401k / RRSP Contribution (%)',
+    k401Contribution: '401(k) Contribution (%)',
     healthInsuranceLabel: 'Health Insurance ($/mo)',
     expenseWriteoffLabel: 'Business Write-offs (%)',
+    businessExpenseWriteoff: 'Business Expense Write-off',
+    defaultsApplied: 'Defaults applied: 40 hrs/week, 52 weeks/year - editable anytime.',
 
+    liveInstantEstimate: 'Live Instant Estimate',
+    contractorTaxMode: 'Contractor Tax Mode',
+    employeeMode: 'Employee Mode',
+    estimatedMonthlyTakeHome: 'Estimated Monthly Take-Home (Net Pay)',
+    effectiveTaxRate: 'effective tax & deduction rate',
+    contractorIncomeBreakdown: 'Contractor Income & Net Pay Breakdown',
+    salaryTakeHomeBreakdown: 'Salary vs Take-Home Breakdown',
+    monthlyPayLabel: 'Monthly Pay',
+    yearlyTotalLabel: 'Yearly Total',
+    beforeTax: 'Before Tax',
+    afterTaxNet: 'After Tax Net',
+    seeFullSnapshot: 'See my full interactive financial snapshot →',
+    updatesLive: 'Updates live as you tweak parameters - 100% free & private.',
     afterTaxesDeductions: 'After taxes & deductions',
     monthlyNetIncome: 'Monthly net income',
     annualNetIncome: 'Annual net income',
@@ -141,12 +216,19 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     benchmarks: 'Benchmarks',
     housing: 'Housing',
     fuelCommute: 'Fuel & Commute',
+    fuelCommuteTitle: 'Fuel & Commute Calculator',
+    realIncome: 'Real Take-Home Income',
+    taxBreakdown: 'Tax & Deduction Breakdown',
+    housingSnapshot: 'Housing & Rent Snapshot',
+    incomeVsBenchmark: 'Income vs Local Benchmark',
+    costOfLivingTitle: 'Cost of Living Index',
     relocation: 'Relocation',
     reports: 'Reports',
     support: 'Support',
     settings: 'Settings',
     downloadReport: 'Download Report',
     detailedBreakdown: 'Detailed breakdown',
+    editValues: 'Edit',
 
     officialDataSources: 'Official Data Sources & Information Providers',
     verifiedFeeds: 'Verified Statutory & Economic Feeds',
@@ -182,20 +264,54 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     language: 'Idioma',
     recalculating: 'Recalculando resumen financiero...',
     recruitSubtitle: 'Diseñado para reclutadores y equipos de talento.',
+    trustedByThousands: 'Con la confianza de miles',
+    acrossNorthAmerica: 'en toda América del Norte',
+    backedByOfficialData: 'Respaldado por bases de datos oficiales de impuestos IRS, CRA, BLS y SAT',
+    yourIncomeDecoded: 'Tus ingresos. Decodificados.',
+    allInOnePlace: 'Todo en un solo lugar.',
+    heroSubtitle: 'Conoce tu salario neto real, impuestos, costo de vida y poder adquisitivo - personalizado para tu ciudad en menos de un minuto.',
 
     yourDetails: 'Tus Datos Financieros',
+    yourFinancialDetails: 'Tus datos financieros',
+    just3Things: 'Solo 3 datos para comenzar - agrega más para mayor precisión.',
     employmentTypeLabel: 'Tipo de Empleo',
+    employmentTypeAndTaxTerm: 'Tipo de empleo / Régimen fiscal',
     annualSalaryLabel: 'Ingreso Bruto Anual / Salario',
-    hourlyRateLabel: 'Tarifa de Facturación ($/hr)',
+    hourlyRateLabel: 'Tarifa por Hora',
+    annualGrossIncome: 'Ingreso Bruto Anual',
     stateProvinceLabel: 'Estado / Provincia',
     cityLabel: 'Ciudad',
     filingStatusLabel: 'Estado Civil / Fiscal',
+    filingStatus: 'Estado fiscal',
+    single: 'Soltero(a)',
+    marriedFilingJointly: 'Casado(a) Declaración Conjunta',
+    headOfHousehold: 'Cabeza de Familia',
     dependentsLabel: 'Dependientes',
+    dependents: 'Dependientes',
     advancedOptions: 'Opciones Avanzadas de Impuestos',
+    moreDetailsAccordion: '⚡ Más detalles - horas/semana, dependientes, opciones fiscales',
+    workHoursPerWeek: 'Horas de Trabajo / Semana',
+    weeksPerYear: 'Semanas / Año',
     k401Label: 'Aportación Retiro / 401k (%)',
+    k401Contribution: 'Aportación Retiro (%)',
     healthInsuranceLabel: 'Seguro de Salud ($/mes)',
     expenseWriteoffLabel: 'Deducciones de Negocio (%)',
+    businessExpenseWriteoff: 'Deducción de Gastos de Negocio',
+    defaultsApplied: 'Valores por defecto: 40 hrs/semana, 52 semanas/año - editable en cualquier momento.',
 
+    liveInstantEstimate: 'Estimación en Vivo',
+    contractorTaxMode: 'Modo Impuestos Contratista',
+    employeeMode: 'Modo Empleado',
+    estimatedMonthlyTakeHome: 'Salario Neto Mensual Estimado',
+    effectiveTaxRate: 'tasa efectiva de impuestos y deducciones',
+    contractorIncomeBreakdown: 'Desglose de Ingresos y Salario Neto Contratista',
+    salaryTakeHomeBreakdown: 'Desglose de Salario vs Neto Libre',
+    monthlyPayLabel: 'Pago Mensual',
+    yearlyTotalLabel: 'Total Anual',
+    beforeTax: 'Antes de Impuestos',
+    afterTaxNet: 'Neto Libre',
+    seeFullSnapshot: 'Ver mi resumen financiero completo →',
+    updatesLive: 'Se actualiza en vivo al modificar parámetros - 100% gratis y privado.',
     afterTaxesDeductions: 'Después de impuestos y deducciones',
     monthlyNetIncome: 'Ingreso neto mensual',
     annualNetIncome: 'Ingreso neto anual',
@@ -213,12 +329,19 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     benchmarks: 'Comparativas',
     housing: 'Vivienda',
     fuelCommute: 'Combustible y Movilidad',
+    fuelCommuteTitle: 'Calculadora de Combustible y Movilidad',
+    realIncome: 'Ingreso Neto Real',
+    taxBreakdown: 'Desglose de Impuestos',
+    housingSnapshot: 'Vivienda y Renta Estimada',
+    incomeVsBenchmark: 'Ingreso vs Promedio Local',
+    costOfLivingTitle: 'Índice de Costo de Vida',
     relocation: 'Relocalización',
     reports: 'Reportes',
     support: 'Soporte',
     settings: 'Configuración',
     downloadReport: 'Descargar Reporte',
     detailedBreakdown: 'Desglose detallado',
+    editValues: 'Editar',
 
     officialDataSources: 'Fuentes Oficiales y Proveedores de Información',
     verifiedFeeds: 'Fuentes Estatutarias y Económicas Verificadas',
@@ -254,20 +377,54 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     language: 'Idioma',
     recalculating: 'Recalculando resumo financeiro...',
     recruitSubtitle: 'Criado para recrutadores e equipes de talentos.',
+    trustedByThousands: 'Com a confiança de milhares',
+    acrossNorthAmerica: 'em toda a América do Norte',
+    backedByOfficialData: 'Com suporte das bases de dados oficiais de impostos IRS, CRA, BLS e Receita Federal',
+    yourIncomeDecoded: 'Sua renda. Decodificada.',
+    allInOnePlace: 'Tudo em um só lugar.',
+    heroSubtitle: 'Veja seu salário líquido real, impostos, custo de vida e poder de compra - personalizado para sua cidade em menos de um minuto.',
 
     yourDetails: 'Seus Dados Financeiros',
-    employmentTypeLabel: 'Tipo de Emprego / Vínculo',
+    yourFinancialDetails: 'Seus dados financeiros',
+    just3Things: 'Apenas 3 dados para começar - adicione mais para maior precisão.',
+    employmentTypeLabel: 'Tipo de Emprego',
+    employmentTypeAndTaxTerm: 'Tipo de emprego / Regime fiscal',
     annualSalaryLabel: 'Rendimento Bruto Anual / Salário',
-    hourlyRateLabel: 'Taxa de Faturamento PJ ($/hr)',
+    hourlyRateLabel: 'Valor por Hora PJ',
+    annualGrossIncome: 'Rendimento Bruto Anual',
     stateProvinceLabel: 'Estado / Província',
     cityLabel: 'Cidade',
     filingStatusLabel: 'Estado Civil / Fiscal',
+    filingStatus: 'Estado fiscal',
+    single: 'Solteiro(a)',
+    marriedFilingJointly: 'Casado(a) Declaração Conjunta',
+    headOfHousehold: 'Chefe de Família',
     dependentsLabel: 'Dependentes',
+    dependents: 'Dependentes',
     advancedOptions: 'Opções Avançadas de Impostos',
+    moreDetailsAccordion: '⚡ Mais detalhes - horas/semana, dependentes, opções fiscais',
+    workHoursPerWeek: 'Horas de Trabalho / Semana',
+    weeksPerYear: 'Semanas / Ano',
     k401Label: 'Contribuição Previdência (%)',
+    k401Contribution: 'Contribuição Previdência (%)',
     healthInsuranceLabel: 'Plano de Saúde ($/mês)',
     expenseWriteoffLabel: 'Despesas Dedutíveis (%)',
+    businessExpenseWriteoff: 'Dedução de Despesas PJ',
+    defaultsApplied: 'Valores padrão: 40 hrs/semana, 52 semanas/ano - editável a qualquer momento.',
 
+    liveInstantEstimate: 'Estimativa ao Vivo',
+    contractorTaxMode: 'Modo Impostos PJ',
+    employeeMode: 'Modo CLT / Empregado',
+    estimatedMonthlyTakeHome: 'Rendimento Líquido Mensal Estimado',
+    effectiveTaxRate: 'taxa efetiva de impostos e deduções',
+    contractorIncomeBreakdown: 'Detalhamento de Renda e Salário Líquido PJ',
+    salaryTakeHomeBreakdown: 'Detalhamento de Salário vs Líquido',
+    monthlyPayLabel: 'Pagamento Mensal',
+    yearlyTotalLabel: 'Total Anual',
+    beforeTax: 'Antes de Impostos',
+    afterTaxNet: 'Líquido',
+    seeFullSnapshot: 'Ver meu resumo financeiro completo →',
+    updatesLive: 'Atualiza ao vivo ao ajustar parâmetros - 100% gratuito e privado.',
     afterTaxesDeductions: 'Após impostos e deduções',
     monthlyNetIncome: 'Rendimento líquido mensal',
     annualNetIncome: 'Rendimento líquido anual',
@@ -285,12 +442,19 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     benchmarks: 'Comparativos',
     housing: 'Habitação',
     fuelCommute: 'Combustível e Transporte',
+    fuelCommuteTitle: 'Calculadora de Combustível e Transporte',
+    realIncome: 'Renda Líquida Real',
+    taxBreakdown: 'Detalhamento de Impostos',
+    housingSnapshot: 'Habitação e Aluguel Estimado',
+    incomeVsBenchmark: 'Renda vs Comparativo Local',
+    costOfLivingTitle: 'Índice de Custo de Vida',
     relocation: 'Relocalização',
     reports: 'Relatórios',
     support: 'Suporte',
     settings: 'Configurações',
     downloadReport: 'Baixar Relatório',
     detailedBreakdown: 'Detalhamento completo',
+    editValues: 'Editar',
 
     officialDataSources: 'Fontes Oficiais e Provedores de Informação',
     verifiedFeeds: 'Dados Estatutários e Econômicos Verificados',

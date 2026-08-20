@@ -1,11 +1,57 @@
 @import "tailwindcss";
 
+:root {
+  --green-primary: #1F8F68;
+  --green-hover: #176F52;
+  --green-dark: #12372A;
+  --green-light: #EAF7F1;
+  --green-subtle: #F3FBF7;
+  --green-border: #BFE5D3;
+  --green-success: #198754;
+}
+
+@theme {
+  --color-green-primary: #1F8F68;
+  --color-green-hover: #176F52;
+  --color-green-dark: #12372A;
+  --color-green-light: #EAF7F1;
+  --color-green-subtle: #F3FBF7;
+  --color-green-border: #BFE5D3;
+  --color-green-success: #198754;
+
+  /* Remap indigo/blue/emerald aliases to green palette for unified theme */
+  --color-indigo-50: #F3FBF7;
+  --color-indigo-100: #EAF7F1;
+  --color-indigo-200: #BFE5D3;
+  --color-indigo-600: #1F8F68;
+  --color-indigo-700: #176F52;
+  --color-indigo-800: #12372A;
+  --color-indigo-900: #0C231B;
+
+  --color-blue-50: #F3FBF7;
+  --color-blue-100: #EAF7F1;
+  --color-blue-200: #BFE5D3;
+  --color-blue-600: #1F8F68;
+  --color-blue-700: #176F52;
+  --color-blue-800: #12372A;
+
+  --color-emerald-50: #F3FBF7;
+  --color-emerald-100: #EAF7F1;
+  --color-emerald-200: #BFE5D3;
+  --color-emerald-500: #1F8F68;
+  --color-emerald-600: #1F8F68;
+  --color-emerald-700: #176F52;
+  --color-emerald-800: #12372A;
+}
+
 html,
 body {
   overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
   scroll-behavior: smooth;
+  background-color: #FAF9F5; /* Cream White */
+  color: #12372A;
 }
 
 /* Minimum Touch Target Size & Touch Enhancements for Mobile */
@@ -15,6 +61,82 @@ input,
 select,
 textarea {
   touch-action: manipulation;
+}
+
+/* Custom Green Theme Helper Classes */
+.bg-green-primary { background-color: var(--green-primary); }
+.bg-green-hover { background-color: var(--green-hover); }
+.bg-green-dark { background-color: var(--green-dark); }
+.bg-green-light { background-color: var(--green-light); }
+.bg-green-subtle { background-color: var(--green-subtle); }
+.border-green-border { border-color: var(--green-border); }
+.text-green-primary { color: var(--green-primary); }
+.text-green-dark { color: var(--green-dark); }
+.text-green-hover { color: var(--green-hover); }
+
+/* Global Smooth Transitions & Slider Smooth Scroll */
+* {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Skeleton Loading Shimmer Keyframes */
+@keyframes skeletonShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-box {
+  background: linear-gradient(90deg, #F3FBF7 25%, #EAF7F1 37%, #F3FBF7 63%);
+  background-size: 400% 100%;
+  animation: skeletonShimmer 1.4s ease infinite;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Page Fade-In Entrance Animation */
+@keyframes pageFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-fade-in {
+  animation: pageFadeIn 0.5s ease-out forwards;
+}
+
+/* Navigation Wrap Light Green Transparent Hover Effect */
+.nav-wrap-item {
+  background-color: transparent;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-wrap-item:hover {
+  background-color: rgba(31, 143, 104, 0.12); /* Light green transparent */
+  backdrop-filter: blur(8px);
+  border-color: rgba(191, 229, 211, 0.6);
+  color: #1F8F68;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @layer utilities {
@@ -40,3 +162,4 @@ textarea {
     animation-play-state: paused;
   }
 }
+
