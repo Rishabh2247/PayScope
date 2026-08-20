@@ -36,7 +36,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
         {/* Main Centered Title */}
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#12372A] tracking-tight leading-[1.15]">
-          Your income. <span className="text-[#1F8F68]">Decoded.</span> <br />
+          Your income. <span className="text-[#1F8F68] font-great-vibes font-normal text-5xl sm:text-6xl lg:text-7xl align-baseline inline-block px-1">Decoded.</span> <br />
           {t.allInOnePlace}
         </h1>
 

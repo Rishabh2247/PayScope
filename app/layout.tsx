@@ -1,5 +1,19 @@
 import type { Metadata } from 'next';
+import { Great_Vibes, EB_Garamond } from 'next/font/google';
 import './globals.css';
+
+const greatVibes = Great_Vibes({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-great-vibes',
+  display: 'swap',
+});
+
+const ebGaramond = EB_Garamond({
+  subsets: ['latin'],
+  variable: '--font-eb-garamond',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'PayScope',
@@ -32,8 +46,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="antialiased selection:bg-indigo-500 selection:text-white">
+    <html lang="en" className={`${greatVibes.variable} ${ebGaramond.variable}`}>
+      <body className="antialiased font-eb-garamond selection:bg-indigo-500 selection:text-white">
         {children}
       </body>
     </html>

@@ -11,6 +11,7 @@ import { HeroSection } from '../components/hero/HeroSection';
 import { DashboardView } from '../components/dashboard/DashboardView';
 import { GoogleAdSlot } from '../components/ads/GoogleAdSlot';
 import { MotionContainer } from '../components/common/MotionContainer';
+import { InteractiveGridPattern } from '../components/ui/InteractiveGridPattern';
 
 // Recruiter Mode Imports
 import { RecruiterInputs, TalentCandidate } from '../lib/recruiterTypes';
@@ -248,7 +249,19 @@ export default function Home() {
 
   return (
     <LanguageProvider language={language} setLanguage={setLanguage}>
-      <div className="min-h-screen flex flex-col bg-[#FAF9F5] [background-image:linear-gradient(to_right,_rgba(0,_0,_0,_0.04)_1px,_transparent_1px),_linear-gradient(to_bottom,_rgba(0,_0,_0,_0.04)_1px,_transparent_1px)] [background-size:37px_37px] [mask-image:radial-gradient(ellipse_100%_100%_at_50%_50%,#000_80%,transparent_100%)] text-slate-900">
+      <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-slate-900 relative overflow-hidden">
+        {/* Dynamic Interactive Grid Pattern Background */}
+        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-100">
+          <InteractiveGridPattern
+            width={40}
+            height={40}
+            squares={[60, 80]}
+            className="[mask-image:radial-gradient(ellipse_100%_100%_at_50%_40%,#000_90%,transparent_100%)]"
+          />
+        </div>
+
+        {/* Page Content Layer */}
+        <div className="relative z-10 flex flex-col min-h-screen">
       {/* Top Navbar Header */}
       <Navbar
         country={inputs.country}
@@ -449,7 +462,8 @@ export default function Home() {
 
       {/* Footer */}
       <Footer />
-    </div>
-  </LanguageProvider>
+        </div>
+      </div>
+    </LanguageProvider>
   );
 }

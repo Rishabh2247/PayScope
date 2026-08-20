@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  --font-great-vibes-family: var(--font-great-vibes), 'Great Vibes', cursive;
   --green-primary: #1F8F68;
   --green-hover: #176F52;
   --green-dark: #12372A;
@@ -11,6 +12,8 @@
 }
 
 @theme {
+  --font-great-vibes: var(--font-great-vibes), 'Great Vibes', cursive;
+  --font-eb-garamond: var(--font-eb-garamond), 'EB Garamond', Georgia, serif;
   --color-green-primary: #1F8F68;
   --color-green-hover: #176F52;
   --color-green-dark: #12372A;
@@ -46,6 +49,7 @@
 
 html,
 body {
+  font-family: var(--font-eb-garamond), 'EB Garamond', Georgia, serif;
   overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
@@ -73,6 +77,13 @@ textarea {
 .text-green-primary { color: var(--green-primary); }
 .text-green-dark { color: var(--green-dark); }
 .text-green-hover { color: var(--green-hover); }
+.font-great-vibes {
+  font-family: var(--font-great-vibes), 'Great Vibes', cursive;
+  font-weight: 400;
+}
+.font-eb-garamond {
+  font-family: var(--font-eb-garamond), 'EB Garamond', Georgia, serif;
+}
 
 /* Global Smooth Transitions & Slider Smooth Scroll */
 * {
