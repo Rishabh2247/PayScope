@@ -102,12 +102,12 @@ export interface VelarisProps {
   children?: React.ReactNode;
 }
 
-// Light Mode Configuration: Clean off-white base + visible, ambient soft green gradient motion
-const LIGHT_BG = '#FAFBF8';
+// Light Mode Configuration: Clean white base + visible, ambient soft green gradient motion
+const LIGHT_BG = '#FFFFFF';
 const LIGHT_COLORS = ['#BBF7D0', '#86EFAC', '#4ADE80', '#16A34A'];
 const LIGHT_SPEED = 1.0;
 const LIGHT_GRAIN = 0.015;
-const LIGHT_MIX_INTENSITY = 0.40;
+const LIGHT_MIX_INTENSITY = 0.35;
 const LIGHT_GLOW_INTENSITY = 0.0;
 const LIGHT_VIGNETTE_INTENSITY = 0.0;
 
@@ -133,15 +133,18 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [webglSupported, setWebglSupported] = useState(true);
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
+  // Target Theme Ref for instant, zero-re-render uniform interpolation
   const targetThemeRef = useRef<'light' | 'dark'>('light');
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Update target theme ref without triggering component re-renders or recreating WebGL context
   useEffect(() => {
     targetThemeRef.current = resolvedTheme === 'dark' ? 'dark' : 'light';
   }, [resolvedTheme]);
@@ -154,7 +157,14 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
 
     let gl: WebGLRenderingContext | null = null;
     try {
-      gl = canvas.getContext('webgl', { alpha: false, antialias: false, powerPreference: 'low-power' });
+      gl = canvas.getContext('webgl', {
+        alpha: false,
+        antialias: false,
+        depth: false,
+        stencil: false,
+        preserveDrawingBuffer: false,
+        powerPreference: 'low-power',
+      });
     } catch (e) {
       gl = null;
     }
@@ -208,11 +218,13 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
       bg: gl.getUniformLocation(program, 'u_bg'),
     };
 
+    // Mobile DPR optimization: 1.5 max on mobile (< 768px), 2.0 max on desktop
     const resize = () => {
       if (!canvas || !container || !gl) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = container.clientWidth * dpr;
-      canvas.height = container.clientHeight * dpr;
+      const isMobile = window.innerWidth < 768;
+      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2.0);
+      canvas.width = Math.floor(container.clientWidth * dpr);
+      canvas.height = Math.floor(container.clientHeight * dpr);
       gl.viewport(0, 0, canvas.width, canvas.height);
     };
 
@@ -222,17 +234,20 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
 
     // Initial State Based On Active Theme
     const initialIsDark = targetThemeRef.current === 'dark';
-    let currentBgRgb = hexToRgb(initialIsDark ? DARK_BG : LIGHT_BG);
-    let currentColorsRgb = (initialIsDark ? DARK_COLORS : LIGHT_COLORS).flatMap(hexToRgb);
+    const currentBgRgb = hexToRgb(initialIsDark ? DARK_BG : LIGHT_BG);
+    const currentColorsRgb = (initialIsDark ? DARK_COLORS : LIGHT_COLORS).flatMap(hexToRgb);
     let currentSpeed = initialIsDark ? DARK_SPEED : LIGHT_SPEED;
     let currentGrain = initialIsDark ? DARK_GRAIN : LIGHT_GRAIN;
     let currentMix = initialIsDark ? DARK_MIX_INTENSITY : LIGHT_MIX_INTENSITY;
     let currentGlow = initialIsDark ? DARK_GLOW_INTENSITY : LIGHT_GLOW_INTENSITY;
     let currentVignette = initialIsDark ? DARK_VIGNETTE_INTENSITY : LIGHT_VIGNETTE_INTENSITY;
 
+    // Pre-allocated Float32Array to avoid garbage collection on animation frames
+    const colorsFloatBuffer = new Float32Array(12);
+
     let raf: number;
     let isPaused = false;
-    let startTime = performance.now();
+    const startTime = performance.now();
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -243,6 +258,7 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
 
     const lerp = (a: number, b: number, factor: number) => a + (b - a) * factor;
 
+    // Continuous requestAnimationFrame render loop with zero context recreation
     const render = (t: number) => {
       if (!isPaused && gl) {
         const isDark = targetThemeRef.current === 'dark';
@@ -254,14 +270,15 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
         const targetGlow = isDark ? DARK_GLOW_INTENSITY : LIGHT_GLOW_INTENSITY;
         const targetVignette = isDark ? DARK_VIGNETTE_INTENSITY : LIGHT_VIGNETTE_INTENSITY;
 
-        // Ultra-Fast & Snappy Theme Lerp Rate (0.55 factor = ~80ms-120ms completion time)
-        const lerpRate = 0.55;
+        // Smooth 200ms-250ms Lerp Rate (0.18 factor per frame at 60fps)
+        const lerpRate = 0.18;
         currentBgRgb[0] = lerp(currentBgRgb[0], targetBg[0], lerpRate);
         currentBgRgb[1] = lerp(currentBgRgb[1], targetBg[1], lerpRate);
         currentBgRgb[2] = lerp(currentBgRgb[2], targetBg[2], lerpRate);
 
         for (let i = 0; i < currentColorsRgb.length; i++) {
           currentColorsRgb[i] = lerp(currentColorsRgb[i], targetColors[i], lerpRate);
+          colorsFloatBuffer[i] = currentColorsRgb[i];
         }
 
         currentSpeed = lerp(currentSpeed, targetSpeed, lerpRate);
@@ -279,7 +296,7 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
         gl.uniform1f(locs.glowIntensity, currentGlow);
         gl.uniform1f(locs.vignetteIntensity, currentVignette);
         gl.uniform3f(locs.bg, currentBgRgb[0], currentBgRgb[1], currentBgRgb[2]);
-        gl.uniform3fv(locs.colors, new Float32Array(currentColorsRgb));
+        gl.uniform3fv(locs.colors, colorsFloatBuffer);
 
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       }
@@ -316,8 +333,8 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
         />
       ) : (
         /* CSS WebGL Fallback */
-        <div className="absolute inset-0 bg-[#FAFBF8] dark:bg-[#080B09] transition-colors duration-300">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(187,247,208,0.4),rgba(250,251,248,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(22,101,52,0.3),rgba(8,11,9,0))]" />
+        <div className="absolute inset-0 bg-[#FFFFFF] dark:bg-[#080B09] transition-colors duration-200">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(187,247,208,0.4),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(22,101,52,0.3),rgba(8,11,9,0))]" />
         </div>
       )}
       {children}

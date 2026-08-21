@@ -139,9 +139,14 @@ body,
   font-family: 'DomineDigits', var(--font-domine), 'Domine', 'Rogles', var(--font-playfair), 'Playfair Display', Georgia, serif;
 }
 
-/* Fast, seamless theme color transitions across elements without flashing */
-html, body, button, input, select, textarea, div, span, p, h1, h2, h3, h4, h5, h6, table, tr, td, th, a {
-  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+/* Fast, seamless theme color transitions without animating layout or geometry */
+html, body, header, nav, footer, main, section, article, div, button, input, select, textarea, span, p, h1, h2, h3, h4, h5, h6, table, tr, td, th, a {
+  transition:
+    background-color 180ms ease-out,
+    color 180ms ease-out,
+    border-color 180ms ease-out,
+    box-shadow 180ms ease-out,
+    opacity 180ms ease-out;
 }
 
 /* Navigation bar links: clean sans font, non-cursive, non-italic */
