@@ -111,24 +111,40 @@ export default function Home() {
   const recruiterCalculation = useMemo(() => calculateRecruiterMetrics(recruiterInputs), [recruiterInputs]);
   const t = useMemo(() => getTranslation(language), [language]);
 
-  // Handle Country Selection - Independent of Currency!
-  const handleCountryChange = (country: CountryCode) => {
+  // Handle Country Selection with Persistence & State Reset
+  const handleCountryChange = (country: CountryCode, isManual: boolean = true) => {
     let defaultState = 'Texas';
     let defaultCity = 'Austin';
+    let defaultCurrency: CurrencyCode = 'USD';
     let defaultLang: SupportedLanguage = 'en';
+    let defaultEmpType = 'Full-time Employee';
 
     if (country === 'CA') {
       defaultState = 'Ontario';
       defaultCity = 'Toronto';
+      defaultCurrency = 'CAD';
       defaultLang = 'en';
+      defaultEmpType = 'Full-time Employee (T4)';
     } else if (country === 'MX') {
       defaultState = 'Mexico City';
       defaultCity = 'Mexico City';
+      defaultCurrency = 'MXN';
       defaultLang = 'es';
+      defaultEmpType = 'Sueldos y Salarios (Employee)';
     } else if (country === 'BR') {
       defaultState = 'São Paulo';
       defaultCity = 'São Paulo';
+      defaultCurrency = 'BRL';
       defaultLang = 'pt';
+      defaultEmpType = 'CLT Employee';
+    }
+
+    if (isManual && typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('payscope_country', country);
+      } catch (e) {
+        // Safe fallback for restricted storage environments
+      }
     }
 
     setLanguage(defaultLang);
@@ -136,18 +152,77 @@ export default function Home() {
     setInputs((prev) => ({
       ...prev,
       country,
-      // Note: Currency remains unchanged to allow independent selection!
+      currency: defaultCurrency,
       state: defaultState,
       city: defaultCity,
+      employmentType: defaultEmpType,
     }));
 
     setRecruiterInputs((prev) => ({
       ...prev,
       country,
+      currency: defaultCurrency,
       state: defaultState,
       city: defaultCity,
     }));
   };
+
+  // Automatic Country Detection Engine (Hydration Mismatch Safe)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // 1. Check saved manual preference first
+    try {
+      const savedCountry = localStorage.getItem('payscope_country') as CountryCode | null;
+      if (savedCountry && ['US', 'CA', 'MX', 'BR'].includes(savedCountry)) {
+        if (savedCountry !== inputs.country) {
+          handleCountryChange(savedCountry, false);
+        }
+        return;
+      }
+    } catch (e) {
+      // Ignore storage errors
+    }
+
+    // 2. Fetch server/IP-based detection
+    fetch('/api/detect-country')
+      .then((res) => res.json())
+      .then((data) => {
+        // If user changed country manually while fetch was in flight, do not override
+        try {
+          if (localStorage.getItem('payscope_country')) return;
+        } catch (e) {}
+
+        const detectedCountry = data?.country as CountryCode | null;
+        if (detectedCountry && ['US', 'CA', 'MX', 'BR'].includes(detectedCountry)) {
+          handleCountryChange(detectedCountry, false);
+          return;
+        }
+
+        // 3. Fallback to client browser locale
+        const navLang = (navigator.language || '').toLowerCase();
+        let localeCountry: CountryCode = 'US';
+        if (navLang.includes('-ca') || navLang.includes('fr-ca')) localeCountry = 'CA';
+        else if (navLang.includes('-mx') || navLang.includes('es-mx')) localeCountry = 'MX';
+        else if (navLang.includes('-br') || navLang.includes('pt-br')) localeCountry = 'BR';
+
+        if (localeCountry !== inputs.country) {
+          handleCountryChange(localeCountry, false);
+        }
+      })
+      .catch(() => {
+        // Fallback to client browser locale on error
+        const navLang = (navigator.language || '').toLowerCase();
+        let localeCountry: CountryCode = 'US';
+        if (navLang.includes('-ca') || navLang.includes('fr-ca')) localeCountry = 'CA';
+        else if (navLang.includes('-mx') || navLang.includes('es-mx')) localeCountry = 'MX';
+        else if (navLang.includes('-br') || navLang.includes('pt-br')) localeCountry = 'BR';
+
+        if (localeCountry !== inputs.country) {
+          handleCountryChange(localeCountry, false);
+        }
+      });
+  }, []);
 
   // Handle Currency Selection - Independent of Country!
   const handleCurrencyChange = (currency: CurrencyCode) => {
