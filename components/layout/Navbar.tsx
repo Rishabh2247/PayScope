@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { CountryCode, CurrencyCode } from '../../lib/types';
 import { SupportedLanguage, useTranslation } from '../../lib/i18n';
+import { ThemeToggle } from './ThemeToggle';
 import {
   Users,
   Briefcase,
@@ -206,7 +207,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         } ${
           isAtTop
             ? 'bg-transparent backdrop-blur-none border-b border-transparent shadow-none'
-            : 'bg-[#FAF9F5]/85 backdrop-blur-md border-b border-[#BFE5D3]/40 shadow-2xs'
+            : 'bg-[#FAF9F5]/85 dark:bg-[#080B09]/85 backdrop-blur-md border-b border-[#BFE5D3]/40 dark:border-[#26302A] shadow-2xs'
         }`}
       >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
@@ -219,18 +220,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             <img
               src="/assets/logo.png"
               alt="PayScope Logo"
-              className="h-9 sm:h-10 w-auto object-contain transition-transform group-hover:scale-105"
+              className="h-9 sm:h-10 w-auto object-contain transition-transform group-hover:scale-105 dark:brightness-110"
             />
           </div>
 
           {/* Center MacOS-Styled Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider text-[#12372A]">
+          <nav className="hidden lg:flex items-center gap-1 text-[11px] sm:text-xs font-black uppercase tracking-wider text-[#12372A] dark:text-[#F9FAFB]">
             <button
               onClick={() => onSwitchView('hero')}
               className={`px-3 py-1.5 rounded-full transition-all duration-300 ease-out cursor-pointer flex items-center gap-1.5 ${
                 activeView === 'hero'
-                  ? 'bg-[#1F8F68] text-white shadow-md shadow-[#1F8F68]/20 font-extrabold border border-[#1F8F68]'
-                  : 'hover:bg-[#1F8F68]/10 hover:text-[#1F8F68] border border-transparent hover:border-[#BFE5D3]/60 text-slate-900 font-extrabold'
+                  ? 'bg-[#1F8F68] dark:bg-[#22C55E] text-white shadow-md shadow-[#1F8F68]/20 font-extrabold border border-[#1F8F68] dark:border-[#22C55E]'
+                  : 'hover:bg-[#1F8F68]/10 dark:hover:bg-[#22C55E]/10 hover:text-[#1F8F68] dark:hover:text-[#22C55E] border border-transparent hover:border-[#BFE5D3]/60 dark:hover:border-[#26302A] text-slate-900 dark:text-slate-100 font-extrabold'
               }`}
             >
               <Calculator className="w-3.5 h-3.5" />
@@ -240,8 +241,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => onSwitchView('dashboard')}
               className={`px-3 py-1.5 rounded-full transition-all duration-300 ease-out cursor-pointer flex items-center gap-1.5 ${
                 activeView === 'dashboard'
-                  ? 'bg-[#1F8F68] text-white shadow-md shadow-[#1F8F68]/20 font-extrabold border border-[#1F8F68]'
-                  : 'hover:bg-[#1F8F68]/10 hover:text-[#1F8F68] border border-transparent hover:border-[#BFE5D3]/60 text-slate-900 font-extrabold'
+                  ? 'bg-[#1F8F68] dark:bg-[#22C55E] text-white shadow-md shadow-[#1F8F68]/20 font-extrabold border border-[#1F8F68] dark:border-[#22C55E]'
+                  : 'hover:bg-[#1F8F68]/10 dark:hover:bg-[#22C55E]/10 hover:text-[#1F8F68] dark:hover:text-[#22C55E] border border-transparent hover:border-[#BFE5D3]/60 dark:hover:border-[#26302A] text-slate-900 dark:text-slate-100 font-extrabold'
               }`}
             >
               <LayoutDashboard className="w-3.5 h-3.5" />
@@ -249,21 +250,21 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
             <button
               onClick={() => onSwitchView('dashboard')}
-              className="px-3 py-1.5 rounded-full hover:bg-[#1F8F68]/10 hover:text-[#1F8F68] border border-transparent hover:border-[#BFE5D3]/60 text-slate-900 font-extrabold transition-all duration-300 ease-out cursor-pointer flex items-center gap-1.5"
+              className="px-3 py-1.5 rounded-full hover:bg-[#1F8F68]/10 dark:hover:bg-[#22C55E]/10 hover:text-[#1F8F68] dark:hover:text-[#22C55E] border border-transparent hover:border-[#BFE5D3]/60 dark:hover:border-[#26302A] text-slate-900 dark:text-slate-100 font-extrabold transition-all duration-300 ease-out cursor-pointer flex items-center gap-1.5"
             >
               <Scale className="w-3.5 h-3.5" />
               <span>TAX ENGINE</span>
             </button>
             <button
               onClick={() => onSwitchView('dashboard')}
-              className="px-3 py-1.5 rounded-full hover:bg-[#1F8F68]/10 hover:text-[#1F8F68] border border-transparent hover:border-[#BFE5D3]/60 text-slate-900 font-extrabold transition-all duration-300 ease-out cursor-pointer flex items-center gap-1.5"
+              className="px-3 py-1.5 rounded-full hover:bg-[#1F8F68]/10 dark:hover:bg-[#22C55E]/10 hover:text-[#1F8F68] dark:hover:text-[#22C55E] border border-transparent hover:border-[#BFE5D3]/60 dark:hover:border-[#26302A] text-slate-900 dark:text-slate-100 font-extrabold transition-all duration-300 ease-out cursor-pointer flex items-center gap-1.5"
             >
               <Home className="w-3.5 h-3.5" />
               <span>HOUSING</span>
             </button>
             <a
               href="/resources"
-              className="px-3 py-1.5 rounded-full hover:bg-[#1F8F68]/10 hover:text-[#1F8F68] border border-transparent hover:border-[#BFE5D3]/60 text-slate-900 font-extrabold transition-all duration-300 ease-out cursor-pointer flex items-center gap-1.5"
+              className="px-3 py-1.5 rounded-full hover:bg-[#1F8F68]/10 dark:hover:bg-[#22C55E]/10 hover:text-[#1F8F68] dark:hover:text-[#22C55E] border border-transparent hover:border-[#BFE5D3]/60 dark:hover:border-[#26302A] text-slate-900 dark:text-slate-100 font-extrabold transition-all duration-300 ease-out cursor-pointer flex items-center gap-1.5"
             >
               <FileText className="w-3.5 h-3.5" />
               <span>RESOURCES</span>
@@ -271,23 +272,26 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
         </div>
 
-        {/* Right Desktop Controls - Language & Currency Buttons */}
-        <div className="flex items-center gap-3">
+        {/* Right Desktop Controls - Language, Currency, & Theme Toggle */}
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          {/* Theme Toggle Button */}
+          <ThemeToggle />
+
           {/* Currency Button */}
           <div className="relative">
             <button
               onClick={() => handleToggleDropdown('currency')}
-              className="flex items-center gap-1.5 bg-[#F3FBF7] hover:bg-[#EAF7F1] border border-[#BFE5D3] rounded-xl px-3 py-1.5 text-xs font-bold text-[#12372A] transition-all cursor-pointer shadow-2xs"
+              className="flex items-center gap-1.5 bg-[#F3FBF7] dark:bg-[#101512] hover:bg-[#EAF7F1] dark:hover:bg-[#151C17] border border-[#BFE5D3] dark:border-[#26302A] rounded-xl px-3 py-1.5 text-xs font-bold text-[#12372A] dark:text-[#F9FAFB] transition-all cursor-pointer shadow-2xs"
             >
-              <Globe className="w-3.5 h-3.5 text-[#1F8F68]" />
+              <Globe className="w-3.5 h-3.5 text-[#1F8F68] dark:text-[#22C55E]" />
               <span>{currencyMap[currency]?.label || currency}</span>
-              <ChevronDown className="w-3.5 h-3.5 text-[#1F8F68]" />
+              <ChevronDown className="w-3.5 h-3.5 text-[#1F8F68] dark:text-[#22C55E]" />
             </button>
 
             {openDropdown === 'currency' && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border border-[#BFE5D3] rounded-2xl shadow-xl p-2 z-50 animate-in fade-in zoom-in-95 space-y-1">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-[#1F8F68] px-2 pt-1 flex items-center gap-1">
-                  <Globe className="w-3 h-3 text-[#1F8F68]" /> Currency / Divisa
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#101512] border border-[#BFE5D3] dark:border-[#26302A] rounded-2xl shadow-xl p-2 z-50 animate-in fade-in zoom-in-95 space-y-1">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-[#1F8F68] dark:text-[#22C55E] px-2 pt-1 flex items-center gap-1">
+                  <Globe className="w-3 h-3 text-[#1F8F68] dark:text-[#22C55E]" /> Currency / Divisa
                 </div>
                 {(['USD', 'CAD', 'MXN', 'BRL'] as CurrencyCode[]).map((cur) => (
                   <button
@@ -298,8 +302,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                     className={`w-full text-left px-3 py-2 text-xs font-bold rounded-xl flex items-center justify-between transition-colors ${
                       currency === cur
-                        ? 'bg-[#1F8F68] text-white shadow-xs'
-                        : 'text-[#12372A] hover:bg-[#F3FBF7]'
+                        ? 'bg-[#1F8F68] dark:bg-[#22C55E] text-white shadow-xs'
+                        : 'text-[#12372A] dark:text-[#F9FAFB] hover:bg-[#F3FBF7] dark:hover:bg-[#151C17]'
                     }`}
                   >
                     <span>{currencyMap[cur].label}</span>
@@ -314,17 +318,17 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="relative">
             <button
               onClick={() => handleToggleDropdown('language')}
-              className="flex items-center gap-1.5 bg-[#F3FBF7] hover:bg-[#EAF7F1] border border-[#BFE5D3] rounded-xl px-3 py-1.5 text-xs font-bold text-[#12372A] transition-all cursor-pointer shadow-2xs"
+              className="flex items-center gap-1.5 bg-[#F3FBF7] dark:bg-[#101512] hover:bg-[#EAF7F1] dark:hover:bg-[#151C17] border border-[#BFE5D3] dark:border-[#26302A] rounded-xl px-3 py-1.5 text-xs font-bold text-[#12372A] dark:text-[#F9FAFB] transition-all cursor-pointer shadow-2xs"
             >
-              <Languages className="w-3.5 h-3.5 text-[#1F8F68]" />
+              <Languages className="w-3.5 h-3.5 text-[#1F8F68] dark:text-[#22C55E]" />
               <span>{languageMap[language]?.label || language.toUpperCase()}</span>
-              <ChevronDown className="w-3.5 h-3.5 text-[#1F8F68]" />
+              <ChevronDown className="w-3.5 h-3.5 text-[#1F8F68] dark:text-[#22C55E]" />
             </button>
 
             {openDropdown === 'language' && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border border-[#BFE5D3] rounded-2xl shadow-xl p-2 z-50 animate-in fade-in zoom-in-95 space-y-1">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-[#1F8F68] px-2 pt-1 flex items-center gap-1">
-                  <Languages className="w-3 h-3 text-[#1F8F68]" /> Language / Idioma
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#101512] border border-[#BFE5D3] dark:border-[#26302A] rounded-2xl shadow-xl p-2 z-50 animate-in fade-in zoom-in-95 space-y-1">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-[#1F8F68] dark:text-[#22C55E] px-2 pt-1 flex items-center gap-1">
+                  <Languages className="w-3 h-3 text-[#1F8F68] dark:text-[#22C55E]" /> Language / Idioma
                 </div>
                 {(['en', 'es', 'pt'] as SupportedLanguage[]).map((lang) => (
                   <button
@@ -335,8 +339,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                     className={`w-full text-left px-3 py-2 text-xs font-bold rounded-xl flex items-center justify-between transition-colors ${
                       language === lang
-                        ? 'bg-[#1F8F68] text-white shadow-xs'
-                        : 'text-[#12372A] hover:bg-[#F3FBF7]'
+                        ? 'bg-[#1F8F68] dark:bg-[#22C55E] text-white shadow-xs'
+                        : 'text-[#12372A] dark:text-[#F9FAFB] hover:bg-[#F3FBF7] dark:hover:bg-[#151C17]'
                     }`}
                   >
                     <span>{languageMap[lang].label}</span>
@@ -350,7 +354,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Mobile Hamburger Button Trigger (< 1024px) */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 text-slate-700 hover:bg-slate-100 rounded-xl transition-colors"
+            className="lg:hidden p-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
             aria-label="Toggle Navigation Menu"
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

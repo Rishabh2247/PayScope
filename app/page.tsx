@@ -11,6 +11,7 @@ import { HeroSection } from '../components/hero/HeroSection';
 import { DashboardView } from '../components/dashboard/DashboardView';
 import { GoogleAdSlot } from '../components/ads/GoogleAdSlot';
 import { MotionContainer } from '../components/common/MotionContainer';
+import Velaris from '../components/ui/velaris';
 import { InteractiveGridPattern } from '../components/ui/InteractiveGridPattern';
 
 // Recruiter Mode Imports
@@ -342,14 +343,17 @@ export default function Home() {
 
   return (
     <LanguageProvider language={language} setLanguage={setLanguage}>
-      <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-slate-900 relative overflow-hidden">
-        {/* Dynamic Interactive Grid Pattern Background */}
-        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-100">
+      <div className="min-h-screen flex flex-col bg-[#F7F8F4] dark:bg-[#080B09] text-slate-900 dark:text-slate-100 relative overflow-hidden transition-colors duration-500">
+        {/* Global Velaris Ambient WebGL Background */}
+        <Velaris />
+
+        {/* Dynamic Interactive Grid Pattern Background Overlay */}
+        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-30 dark:opacity-20">
           <InteractiveGridPattern
             width={40}
             height={40}
             squares={[60, 80]}
-            className="[mask-image:radial-gradient(ellipse_100%_100%_at_50%_40%,#000_90%,transparent_100%)]"
+            className="[mask-image:radial-gradient(ellipse_100%_100%_at_50%_40%,#000_90%,transparent_100%)] stroke-[#12372A]/20 dark:stroke-emerald-500/20"
           />
         </div>
 

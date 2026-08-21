@@ -25,6 +25,8 @@
   font-display: swap;
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --font-great-vibes-family: var(--font-great-vibes), 'Great Vibes', cursive;
   --font-lora-family: var(--font-lora), 'Lora', Georgia, serif;
@@ -38,6 +40,30 @@
   --green-subtle: #F3FBF7;
   --green-border: #BFE5D3;
   --green-success: #198754;
+
+  --bg-primary: #F7F8F4;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #F3FBF7;
+  --text-primary: #111827;
+  --text-secondary: #6B7280;
+  --border-color: #BFE5D3;
+}
+
+.dark {
+  --green-primary: #22C55E;
+  --green-hover: #16A34A;
+  --green-dark: #064E3B;
+  --green-light: #151C17;
+  --green-subtle: #101512;
+  --green-border: #26302A;
+  --green-success: #22C55E;
+
+  --bg-primary: #080B09;
+  --bg-surface: #101512;
+  --bg-elevated: #151C17;
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --border-color: #26302A;
 }
 
 @theme {

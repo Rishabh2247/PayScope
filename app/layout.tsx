@@ -61,15 +61,23 @@ export const metadata: Metadata = {
   ],
 };
 
+import { ThemeProvider } from '../components/theme-provider';
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${greatVibes.variable} ${playfairDisplay.variable} ${cormorantGaramond.variable} ${lora.variable} ${domine.variable}`}>
-      <body className="antialiased font-rogles selection:bg-indigo-500 selection:text-white">
-        {children}
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${greatVibes.variable} ${playfairDisplay.variable} ${cormorantGaramond.variable} ${lora.variable} ${domine.variable}`}
+    >
+      <body className="antialiased font-rogles selection:bg-emerald-500 selection:text-white bg-[#F7F8F4] dark:bg-[#080B09] text-slate-900 dark:text-slate-100 transition-colors duration-300">
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

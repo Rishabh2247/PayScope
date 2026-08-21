@@ -136,19 +136,19 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
   return (
     <div ref={formRef} className="space-y-4">
       {/* Form Card Header + Responsive Mobile Country Selector */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#BFE5D3]/40">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#BFE5D3]/40 dark:border-[#26302A]">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-[#12372A] tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-bold text-[#12372A] dark:text-[#F9FAFB] tracking-tight">
             <span className="font-extrabold">Y</span>our <span className="font-extrabold">F</span>inancial <span className="font-extrabold">D</span>etails
           </h2>
-          <p className="text-xs sm:text-sm text-slate-800 font-normal mt-0.5">
+          <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-300 font-normal mt-0.5">
             {t.just3Things}
           </p>
         </div>
 
         {/* Mobile Wrap Safe Country Select - Modern Floating Popover */}
-        <div className="flex items-center justify-between sm:justify-end gap-2.5 w-full sm:w-auto bg-[#F3FBF7] sm:bg-transparent p-2 sm:p-0 rounded-2xl border border-[#BFE5D3]/60 sm:border-none">
-          <label className="text-xs font-extrabold text-[#1F8F68] uppercase tracking-wider whitespace-nowrap">
+        <div className="flex items-center justify-between sm:justify-end gap-2.5 w-full sm:w-auto bg-[#F3FBF7] dark:bg-[#151C17] sm:bg-transparent p-2 sm:p-0 rounded-2xl border border-[#BFE5D3]/60 dark:border-[#26302A] sm:border-none">
+          <label className="text-xs font-extrabold text-[#1F8F68] dark:text-[#22C55E] uppercase tracking-wider whitespace-nowrap">
             <span className="font-black">C</span>ountry:
           </label>
           
@@ -156,21 +156,21 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
             <button
               type="button"
               onClick={() => setOpenDropdown(openDropdown === 'country' ? null : 'country')}
-              className="w-full sm:w-auto flex items-center justify-between gap-2.5 bg-white sm:bg-[#F3FBF7] hover:bg-[#EAF7F1] border border-[#BFE5D3] rounded-xl px-3 py-2 sm:py-1.5 text-xs font-extrabold text-[#12372A] focus:outline-none transition-all cursor-pointer shadow-2xs group"
+              className="w-full sm:w-auto flex items-center justify-between gap-2.5 bg-white dark:bg-[#101512] sm:bg-[#F3FBF7] dark:sm:bg-[#151C17] hover:bg-[#EAF7F1] dark:hover:bg-[#1C251F] border border-[#BFE5D3] dark:border-[#26302A] rounded-xl px-3 py-2 sm:py-1.5 text-xs font-extrabold text-[#12372A] dark:text-[#F9FAFB] focus:outline-none transition-all cursor-pointer shadow-2xs group"
             >
               <div className="flex items-center gap-2">
-                <Globe className="w-3.5 h-3.5 text-[#1F8F68]" />
+                <Globe className="w-3.5 h-3.5 text-[#1F8F68] dark:text-[#22C55E]" />
                 <span>{countriesList.find((c) => c.code === inputs.country)?.name}</span>
               </div>
               <ChevronDown
-                className={`w-3.5 h-3.5 text-[#1F8F68] transition-transform duration-200 ${
+                className={`w-3.5 h-3.5 text-[#1F8F68] dark:text-[#22C55E] transition-transform duration-200 ${
                   openDropdown === 'country' ? 'rotate-180' : ''
                 }`}
               />
             </button>
 
             {openDropdown === 'country' && (
-              <div className="absolute right-0 top-full mt-2 w-52 bg-white/95 backdrop-blur-xl border border-[#BFE5D3] rounded-2xl shadow-xl p-1.5 z-50 animate-in fade-in zoom-in-95">
+              <div className="absolute right-0 top-full mt-2 w-52 bg-white/95 dark:bg-[#101512]/95 backdrop-blur-xl border border-[#BFE5D3] dark:border-[#26302A] rounded-2xl shadow-xl p-1.5 z-50 animate-in fade-in zoom-in-95">
                 {countriesList.map((c) => {
                   const isSelected = inputs.country === c.code;
                   return (
@@ -183,12 +183,12 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                       }}
                       className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
                         isSelected
-                          ? 'bg-[#1F8F68] text-white shadow-2xs'
-                          : 'text-slate-800 hover:bg-[#F3FBF7] hover:text-[#1F8F68]'
+                          ? 'bg-[#1F8F68] dark:bg-[#22C55E] text-white shadow-2xs'
+                          : 'text-slate-800 dark:text-slate-200 hover:bg-[#F3FBF7] dark:hover:bg-[#151C17] hover:text-[#1F8F68] dark:hover:text-[#22C55E]'
                       }`}
                     >
                       <div className="flex items-center gap-2">
-                        <Globe className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-[#1F8F68]'}`} />
+                        <Globe className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-[#1F8F68] dark:text-[#22C55E]'}`} />
                         <span>{c.name}</span>
                       </div>
                       {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
@@ -211,10 +211,10 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
       >
         {/* Employment Type Control Bar with Flexible Wrapping */}
         <div className="space-y-1.5">
-          <label className="block text-xs font-semibold text-[#12372A]">
+          <label className="block text-xs font-semibold text-[#12372A] dark:text-[#F9FAFB]">
             {t.employmentTypeAndTaxTerm}
           </label>
-          <div className="flex flex-wrap gap-1.5 p-1.5 bg-[#F3FBF7] rounded-2xl border border-[#BFE5D3] text-xs font-bold text-slate-600">
+          <div className="flex flex-wrap gap-1.5 p-1.5 bg-[#F3FBF7] dark:bg-[#151C17] rounded-2xl border border-[#BFE5D3] dark:border-[#26302A] text-xs font-bold text-slate-600 dark:text-slate-300">
             {getEmploymentOptions().map((opt) => {
               const isSelected = inputs.employmentType === opt;
               let label = opt;
@@ -229,8 +229,8 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                   onClick={() => handleEmploymentTypeChange(opt)}
                   className={`flex-1 min-w-[95px] sm:min-w-[110px] py-2 px-2.5 rounded-xl transition-all text-center leading-tight whitespace-normal break-words text-[11px] sm:text-xs cursor-pointer ${
                     isSelected
-                      ? 'bg-[#1F8F68] text-white shadow-xs font-extrabold'
-                      : 'hover:text-[#12372A] hover:bg-[#EAF7F1] text-slate-700 bg-white/60 font-semibold'
+                      ? 'bg-[#1F8F68] dark:bg-[#22C55E] text-white shadow-xs font-extrabold'
+                      : 'hover:text-[#12372A] dark:hover:text-white hover:bg-[#EAF7F1] dark:hover:bg-[#1C251F] text-slate-700 dark:text-slate-300 bg-white/60 dark:bg-[#101512]/60 font-semibold'
                   }`}
                 >
                   {label}
@@ -244,11 +244,11 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Gross Income Input */}
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-[#12372A]">
+            <label className="block text-xs font-semibold text-[#12372A] dark:text-[#F9FAFB]">
               {isContractor ? t.hourlyRateLabel : t.annualGrossIncome}
             </label>
             <div className="relative">
-              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#1F8F68] font-bold text-sm pointer-events-none">
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#1F8F68] dark:text-[#22C55E] font-bold text-sm pointer-events-none">
                 {getCurrencySymbol()}
               </div>
               <input
@@ -271,10 +271,10 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                   });
                 }}
                 placeholder={isContractor ? 'e.g. 60' : 'e.g. 120,000'}
-                className={`w-full pl-9 pr-3.5 py-2.5 bg-white border rounded-xl text-sm font-bold text-[#12372A] focus:outline-none transition-all shadow-2xs ${
+                className={`w-full pl-9 pr-3.5 py-2.5 bg-white dark:bg-[#101512] border rounded-xl text-sm font-bold text-[#12372A] dark:text-[#F9FAFB] focus:outline-none transition-all shadow-2xs ${
                   incomeError
                     ? 'border-red-500 ring-2 ring-red-200'
-                    : 'border-[#BFE5D3] focus:ring-2 focus:ring-[#1F8F68]'
+                    : 'border-[#BFE5D3] dark:border-[#26302A] focus:ring-2 focus:ring-[#1F8F68] dark:focus:ring-[#22C55E]'
                 }`}
               />
             </div>

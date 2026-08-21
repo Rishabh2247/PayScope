@@ -56,7 +56,7 @@ export const FeatureBar: React.FC<FeatureBarProps> = ({ onSelectFeature }) => {
   return (
     <div className="space-y-8 pt-16">
       {/* Centered Heading */}
-      <h3 className="text-2xl sm:text-3xl font-bold text-center text-slate-900 tracking-tight">
+      <h3 className="text-2xl sm:text-3xl font-bold text-center text-slate-900 dark:text-[#F9FAFB] tracking-tight">
         <span className="font-extrabold">E</span>verything that shapes your paycheck
       </h3>
 
@@ -66,16 +66,16 @@ export const FeatureBar: React.FC<FeatureBarProps> = ({ onSelectFeature }) => {
           <div
             key={item.id}
             onClick={() => onSelectFeature(item.id)}
-            className="p-6 bg-white border border-slate-200/80 rounded-2xl shadow-xs hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group space-y-3"
+            className="p-6 bg-white dark:bg-[#101512] border border-slate-200/80 dark:border-[#26302A] rounded-2xl shadow-xs hover:shadow-md hover:border-blue-300 dark:hover:border-[#22C55E]/40 transition-all cursor-pointer group space-y-3"
           >
-            <div className={`w-10 h-10 rounded-xl ${item.bgColor} flex items-center justify-center`}>
+            <div className={`w-10 h-10 rounded-xl ${item.bgColor} dark:bg-[#151C17] flex items-center justify-center`}>
               {item.icon}
             </div>
             <div className="space-y-1">
-              <h4 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+              <h4 className="text-base font-bold text-slate-900 dark:text-[#F9FAFB] group-hover:text-blue-600 dark:group-hover:text-[#22C55E] transition-colors">
                 {item.title}
               </h4>
-              <p className="text-xs text-slate-800 font-normal leading-relaxed">{item.desc}</p>
+              <p className="text-xs text-slate-800 dark:text-slate-300 font-normal leading-relaxed">{item.desc}</p>
             </div>
           </div>
         ))}
