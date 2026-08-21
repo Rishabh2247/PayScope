@@ -64,33 +64,33 @@ export const FuelCommute: React.FC<FuelCommuteProps> = ({ snapshot }) => {
   };
 
   return (
-    <div className="bg-white p-5 rounded-3xl border border-[#BFE5D3] shadow-sm flex flex-col justify-between h-full min-h-[380px] space-y-4 hover:border-[#1F8F68] transition-colors">
+    <div className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm flex flex-col justify-between h-full min-h-[380px] space-y-4 hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
       {/* Title & Live Prices Bar */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-base font-bold text-[#12372A]">{t.fuelCommuteTitle}</h3>
-            <p className="text-xs text-slate-500">{economic.cityLabel} Live Prices</p>
+            <h3 className="text-base font-bold text-[#12372A] dark:text-[#F9FAFB]">{t.fuelCommuteTitle}</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{economic.cityLabel} Live Prices</p>
           </div>
-          <Info className="w-4 h-4 text-[#1F8F68] cursor-pointer shrink-0" />
+          <Info className="w-4 h-4 text-[#1F8F68] dark:text-[#22C55E] cursor-pointer shrink-0" />
         </div>
 
         {/* Minimal Live Price Badges Bar */}
-        <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-bold text-[#12372A]">
-          <span className="bg-[#EAF7F1] text-[#1F8F68] border border-[#BFE5D3] px-2 py-0.5 rounded-lg flex items-center gap-1">
+        <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-bold text-[#12372A] dark:text-[#F9FAFB]">
+          <span className="bg-[#EAF7F1] dark:bg-[#151C17] text-[#1F8F68] dark:text-[#22C55E] border border-[#BFE5D3] dark:border-[#26302A] px-2 py-0.5 rounded-lg flex items-center gap-1">
             ⛽ Gas: ${liveGasPrice.toFixed(2)}/{economic.fuelPriceUnit || 'gal'}
           </span>
-          <span className="bg-[#EAF7F1] text-[#1F8F68] border border-[#BFE5D3] px-2 py-0.5 rounded-lg flex items-center gap-1">
+          <span className="bg-[#EAF7F1] dark:bg-[#151C17] text-[#1F8F68] dark:text-[#22C55E] border border-[#BFE5D3] dark:border-[#26302A] px-2 py-0.5 rounded-lg flex items-center gap-1">
             ⚡ EV: ${liveEvPrice.toFixed(2)}/kWh
           </span>
-          <span className="bg-[#EAF7F1] text-[#1F8F68] border border-[#BFE5D3] px-2 py-0.5 rounded-lg flex items-center gap-1">
+          <span className="bg-[#EAF7F1] dark:bg-[#151C17] text-[#1F8F68] dark:text-[#22C55E] border border-[#BFE5D3] dark:border-[#26302A] px-2 py-0.5 rounded-lg flex items-center gap-1">
             🚌 Transit: ${liveTransitPrice.toFixed(2)}/day
           </span>
         </div>
       </div>
 
       {/* Transit Mode Selection */}
-      <div className="grid grid-cols-4 gap-1 p-1 bg-[#F3FBF7] rounded-xl border border-[#BFE5D3] text-xs font-bold text-[#12372A]">
+      <div className="grid grid-cols-4 gap-1 p-1 bg-[#F3FBF7] dark:bg-[#151C17] rounded-xl border border-[#BFE5D3] dark:border-[#26302A] text-xs font-bold text-[#12372A] dark:text-[#F9FAFB]">
         {(['Gasoline', 'Hybrid', 'EV', 'Public Transit'] as const).map((mode) => (
           <button
             key={mode}
@@ -98,8 +98,8 @@ export const FuelCommute: React.FC<FuelCommuteProps> = ({ snapshot }) => {
             onClick={() => handleModeChange(mode)}
             className={`py-1 px-1 rounded-lg transition-all text-center truncate cursor-pointer flex items-center justify-center gap-1 ${
               commuteMode === mode
-                ? 'bg-[#1F8F68] text-white shadow-xs font-extrabold'
-                : 'hover:text-[#12372A] hover:bg-[#EAF7F1] text-slate-700'
+                ? 'bg-[#1F8F68] dark:bg-[#22C55E] text-white shadow-xs font-extrabold'
+                : 'hover:text-[#12372A] dark:hover:text-white hover:bg-[#EAF7F1] dark:hover:bg-[#1C251F] text-slate-700 dark:text-slate-300'
             }`}
           >
             <span>{modeIcons[mode]}</span>
@@ -109,11 +109,11 @@ export const FuelCommute: React.FC<FuelCommuteProps> = ({ snapshot }) => {
       </div>
 
       {/* Minimal Numerical Inputs (NO Sliders) */}
-      <div className="bg-[#F3FBF7] p-3 rounded-2xl border border-[#BFE5D3] space-y-2.5 text-xs">
+      <div className="bg-[#F3FBF7] dark:bg-[#151C17] p-3 rounded-2xl border border-[#BFE5D3] dark:border-[#26302A] space-y-2.5 text-xs">
         <div className="grid grid-cols-3 gap-2">
           {/* User Price Input */}
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-[#12372A] block">
+            <label className="text-[10px] font-bold text-[#12372A] dark:text-[#F9FAFB] block">
               {commuteMode === 'EV' ? 'Price ($/kWh)' : commuteMode === 'Public Transit' ? 'Fare ($/day)' : 'Gas ($/gal)'}
             </label>
             <input
@@ -121,61 +121,61 @@ export const FuelCommute: React.FC<FuelCommuteProps> = ({ snapshot }) => {
               step="0.05"
               value={customPrice || ''}
               onChange={(e) => setCustomPrice(Number(e.target.value))}
-              className="w-full px-2 py-1.5 bg-white border border-[#BFE5D3] rounded-lg text-[#12372A] font-bold text-center focus:ring-2 focus:ring-[#1F8F68]"
+              className="w-full px-2 py-1.5 bg-white dark:bg-[#101512] border border-[#BFE5D3] dark:border-[#26302A] rounded-lg text-[#12372A] dark:text-[#F9FAFB] font-bold text-center focus:ring-2 focus:ring-[#1F8F68] dark:focus:ring-[#22C55E]"
             />
           </div>
 
           {/* User Miles Input */}
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-[#12372A] block">One-way Miles</label>
+            <label className="text-[10px] font-bold text-[#12372A] dark:text-[#F9FAFB] block">One-way Miles</label>
             <input
               type="number"
               value={milesPerDay || ''}
               onChange={(e) => setMilesPerDay(Number(e.target.value))}
-              className="w-full px-2 py-1.5 bg-white border border-[#BFE5D3] rounded-lg text-[#12372A] font-bold text-center focus:ring-2 focus:ring-[#1F8F68]"
+              className="w-full px-2 py-1.5 bg-white dark:bg-[#101512] border border-[#BFE5D3] dark:border-[#26302A] rounded-lg text-[#12372A] dark:text-[#F9FAFB] font-bold text-center focus:ring-2 focus:ring-[#1F8F68] dark:focus:ring-[#22C55E]"
             />
           </div>
 
           {/* User Days Input */}
           <div className="space-y-1">
-            <label className="text-[10px] font-bold text-[#12372A] block">Days / Week</label>
+            <label className="text-[10px] font-bold text-[#12372A] dark:text-[#F9FAFB] block">Days / Week</label>
             <input
               type="number"
               min={1}
               max={7}
               value={daysPerWeek || ''}
               onChange={(e) => setDaysPerWeek(Number(e.target.value))}
-              className="w-full px-2 py-1.5 bg-white border border-[#BFE5D3] rounded-lg text-[#12372A] font-bold text-center focus:ring-2 focus:ring-[#1F8F68]"
+              className="w-full px-2 py-1.5 bg-white dark:bg-[#101512] border border-[#BFE5D3] dark:border-[#26302A] rounded-lg text-[#12372A] dark:text-[#F9FAFB] font-bold text-center focus:ring-2 focus:ring-[#1F8F68] dark:focus:ring-[#22C55E]"
             />
           </div>
         </div>
       </div>
 
       {/* Calculated Commute Cost Results */}
-      <div className="bg-[#F3FBF7] p-3 rounded-2xl border border-[#BFE5D3] space-y-1.5 min-w-0 overflow-hidden">
-        <div className="flex items-center justify-between text-[10px] font-bold text-[#1F8F68] uppercase tracking-wider">
+      <div className="bg-[#F3FBF7] dark:bg-[#151C17] p-3 rounded-2xl border border-[#BFE5D3] dark:border-[#26302A] space-y-1.5 min-w-0 overflow-hidden">
+        <div className="flex items-center justify-between text-[10px] font-bold text-[#1F8F68] dark:text-[#22C55E] uppercase tracking-wider">
           <span>{commuteMode} Cost Result</span>
-          <span className="text-[#12372A] bg-white px-2 py-0.5 rounded-md border border-[#BFE5D3]">
+          <span className="text-[#12372A] dark:text-[#F9FAFB] bg-white dark:bg-[#101512] px-2 py-0.5 rounded-md border border-[#BFE5D3] dark:border-[#26302A]">
             {milesPerDay * 2} mi/day · {daysPerWeek}d/wk
           </span>
         </div>
 
         <div className="grid grid-cols-3 gap-1 text-center">
-          <div className="bg-white py-1.5 px-1 rounded-xl border border-[#BFE5D3]/60 min-w-0 overflow-hidden">
-            <p className="text-[9px] text-slate-400 font-semibold truncate">Daily</p>
-            <p className="text-[11px] font-extrabold text-[#12372A] truncate">
+          <div className="bg-white dark:bg-[#101512] py-1.5 px-1 rounded-xl border border-[#BFE5D3]/60 dark:border-[#26302A] min-w-0 overflow-hidden">
+            <p className="text-[9px] text-slate-400 dark:text-slate-400 font-semibold truncate">Daily</p>
+            <p className="text-[11px] font-extrabold text-[#12372A] dark:text-[#F9FAFB] truncate">
               {formatCurrency(dailyCost, inputs.currency)}
             </p>
           </div>
-          <div className="bg-white py-1.5 px-1 rounded-xl border border-[#BFE5D3]/60 min-w-0 overflow-hidden">
-            <p className="text-[9px] text-slate-400 font-semibold truncate">Monthly</p>
-            <p className="text-[11px] font-black text-[#1F8F68] truncate">
+          <div className="bg-white dark:bg-[#101512] py-1.5 px-1 rounded-xl border border-[#BFE5D3]/60 dark:border-[#26302A] min-w-0 overflow-hidden">
+            <p className="text-[9px] text-slate-400 dark:text-slate-400 font-semibold truncate">Monthly</p>
+            <p className="text-[11px] font-black text-[#1F8F68] dark:text-[#22C55E] truncate">
               {formatCurrency(monthlyCost, inputs.currency)}
             </p>
           </div>
-          <div className="bg-white py-1.5 px-1 rounded-xl border border-[#BFE5D3]/60 min-w-0 overflow-hidden">
-            <p className="text-[9px] text-slate-400 font-semibold truncate">Yearly</p>
-            <p className="text-[11px] font-extrabold text-[#12372A] truncate">
+          <div className="bg-white dark:bg-[#101512] py-1.5 px-1 rounded-xl border border-[#BFE5D3]/60 dark:border-[#26302A] min-w-0 overflow-hidden">
+            <p className="text-[9px] text-slate-400 dark:text-slate-400 font-semibold truncate">Yearly</p>
+            <p className="text-[11px] font-extrabold text-[#12372A] dark:text-[#F9FAFB] truncate">
               {formatCurrency(annualCost, inputs.currency)}
             </p>
           </div>

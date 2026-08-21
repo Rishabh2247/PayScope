@@ -40,7 +40,7 @@ export const Footer: React.FC = () => {
           {/* Main Navigation */}
           <div className="space-y-2 text-xs">
             <h3 className="font-black text-slate-900 dark:text-[#F9FAFB] uppercase tracking-wider text-xs footer-title">{t.quickLinks}</h3>
-            <ul className="space-y-1.5 text-slate-600 dark:text-slate-400 font-medium">
+            <ul className="space-y-1.5 text-slate-600 dark:text-slate-300 font-medium">
               <li>
                 <Link href="/" className="hover:text-emerald-600 dark:hover:text-[#22C55E] transition-colors">
                   Calculator & Hero
@@ -72,7 +72,7 @@ export const Footer: React.FC = () => {
           {/* Legal Pages */}
           <div className="space-y-2 text-xs">
             <h3 className="font-black text-slate-900 dark:text-[#F9FAFB] uppercase tracking-wider text-xs footer-title">{t.legal}</h3>
-            <ul className="space-y-1.5 text-slate-600 dark:text-slate-400 font-medium">
+            <ul className="space-y-1.5 text-slate-600 dark:text-slate-300 font-medium">
               <li>
                 <Link href="/disclaimer" className="hover:text-emerald-600 dark:hover:text-[#22C55E] transition-colors font-bold text-emerald-600 dark:text-[#22C55E]">
                   Disclaimer Notice
@@ -99,10 +99,10 @@ export const Footer: React.FC = () => {
           {/* Product Modes & Recruiter Platform */}
           <div className="space-y-2 text-xs">
             <h3 className="font-black text-slate-900 dark:text-[#F9FAFB] uppercase tracking-wider text-xs footer-title">Financial Platform</h3>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed font-normal">
+            <p className="text-[11px] text-slate-500 dark:text-slate-300 leading-relaxed font-normal">
               Empowering employees, remote contractors, and talent teams across the Americas with statutory tax algorithms and purchasing power benchmarks.
             </p>
-            <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 pt-1">
+            <p className="text-[11px] font-bold text-slate-400 dark:text-slate-400 pt-1">
               © {new Date().getFullYear()} PayScope. {t.allRightsReserved}
             </p>
           </div>

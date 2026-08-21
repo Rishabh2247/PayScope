@@ -60,12 +60,13 @@ void main() {
   vec2 p = uv - 0.5;
   p.x *= ratio;
 
-  float t = u_time * 0.1;
+  // Active continuous gradient flow speed
+  float t = u_time * 0.35;
 
   // Multi-frequency noise fields moving independently
-  float n1 = snoise(p * 0.45 + vec2(t * 0.18, -t * 0.22));
-  float n2 = snoise(p * 0.60 + vec2(-t * 0.14, t * 0.20) + n1 * 0.25);
-  float n3 = snoise(p * 0.70 + vec2(t * 0.10, -t * 0.16) + n2 * 0.20);
+  float n1 = snoise(p * 0.55 + vec2(t * 0.45, -t * 0.50));
+  float n2 = snoise(p * 0.70 + vec2(-t * 0.35, t * 0.40) + n1 * 0.30);
+  float n3 = snoise(p * 0.85 + vec2(t * 0.25, -t * 0.35) + n2 * 0.25);
 
   vec3 col = u_bg;
 
@@ -104,16 +105,16 @@ export interface VelarisProps {
 // Light Mode Configuration: Clean off-white base + visible, ambient soft green gradient motion
 const LIGHT_BG = '#FAFBF8';
 const LIGHT_COLORS = ['#BBF7D0', '#86EFAC', '#4ADE80', '#16A34A'];
-const LIGHT_SPEED = 0.5;
+const LIGHT_SPEED = 1.0;
 const LIGHT_GRAIN = 0.015;
-const LIGHT_MIX_INTENSITY = 0.38;
+const LIGHT_MIX_INTENSITY = 0.40;
 const LIGHT_GLOW_INTENSITY = 0.0;
 const LIGHT_VIGNETTE_INTENSITY = 0.0;
 
 // Dark Mode Configuration: Deep cinematic black + rich emerald gradients
 const DARK_BG = '#080B09';
 const DARK_COLORS = ['#052E16', '#064E3B', '#166534', '#22C55E'];
-const DARK_SPEED = 0.5;
+const DARK_SPEED = 1.0;
 const DARK_GRAIN = 0.05;
 const DARK_MIX_INTENSITY = 0.85;
 const DARK_GLOW_INTENSITY = 0.25;
@@ -135,7 +136,6 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Target values for fast, smooth theme lerp
   const targetThemeRef = useRef<'light' | 'dark'>('light');
 
   useEffect(() => {
@@ -232,6 +232,7 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
 
     let raf: number;
     let isPaused = false;
+    let startTime = performance.now();
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -253,8 +254,8 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
         const targetGlow = isDark ? DARK_GLOW_INTENSITY : LIGHT_GLOW_INTENSITY;
         const targetVignette = isDark ? DARK_VIGNETTE_INTENSITY : LIGHT_VIGNETTE_INTENSITY;
 
-        // Fast & Buttery-Smooth Lerp Rate (0.28 factor = ~200-250ms completion time)
-        const lerpRate = 0.28;
+        // Ultra-Fast & Snappy Theme Lerp Rate (0.55 factor = ~80ms-120ms completion time)
+        const lerpRate = 0.55;
         currentBgRgb[0] = lerp(currentBgRgb[0], targetBg[0], lerpRate);
         currentBgRgb[1] = lerp(currentBgRgb[1], targetBg[1], lerpRate);
         currentBgRgb[2] = lerp(currentBgRgb[2], targetBg[2], lerpRate);
@@ -269,10 +270,10 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
         currentGlow = lerp(currentGlow, targetGlow, lerpRate);
         currentVignette = lerp(currentVignette, targetVignette, lerpRate);
 
-        const timeVal = prefersReducedMotion ? 1000 : t * 0.001 * currentSpeed;
+        const elapsedTime = (t - startTime) * 0.001 * currentSpeed;
 
         gl.uniform2f(locs.res, canvas.width, canvas.height);
-        gl.uniform1f(locs.time, timeVal);
+        gl.uniform1f(locs.time, prefersReducedMotion ? 1.0 : elapsedTime);
         gl.uniform1f(locs.grain, currentGrain);
         gl.uniform1f(locs.mixIntensity, currentMix);
         gl.uniform1f(locs.glowIntensity, currentGlow);
