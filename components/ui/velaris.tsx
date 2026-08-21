@@ -20,6 +20,9 @@ varying vec2 vUv;
 uniform vec2  u_resolution;
 uniform float u_time;
 uniform float u_grain;
+uniform float u_mixIntensity;
+uniform float u_glowIntensity;
+uniform float u_vignetteIntensity;
 uniform vec3  u_colors[4];
 uniform vec3  u_bg;
 
@@ -59,27 +62,35 @@ void main() {
 
   float t = u_time * 0.1;
 
-  float n1 = snoise(p * 0.4 + vec2(t * 0.2, -t * 0.3));
-  float n2 = snoise(p * 0.55 + vec2(-t * 0.15, t * 0.25) + n1 * 0.25);
-  float n3 = snoise(p * 0.75 + vec2(t * 0.1, -t * 0.2) + n2 * 0.2);
+  // Multiple independent noise channels distributed across the screen
+  float n1 = snoise(p * 0.45 + vec2(t * 0.18, -t * 0.22));
+  float n2 = snoise(p * 0.60 + vec2(-t * 0.14, t * 0.20) + n1 * 0.2);
+  float n3 = snoise(p * 0.70 + vec2(t * 0.10, -t * 0.16) + n2 * 0.15);
 
   vec3 col = u_bg;
-  
+
+  // Soft distributed color blending controlled by u_mixIntensity
+  col = mix(col, u_colors[0], smoothstep(0.1, 0.7, n1) * u_mixIntensity * 0.6);
+  col = mix(col, u_colors[1], smoothstep(0.0, 0.6, n2) * u_mixIntensity * 0.5);
+  col = mix(col, u_colors[2], smoothstep(0.2, 0.8, n3) * u_mixIntensity * 0.4);
+  col = mix(col, u_colors[3], smoothstep(0.1, 0.6, n1 * n2) * u_mixIntensity * 0.3);
+
+  // Central ambient glow (disabled in light mode, active in dark mode)
   float dist = length(p) * 1.5;
-  float vignette = 1.0 - smoothstep(0.3, 1.2, dist);
-  
-  col = mix(col, u_colors[0], smoothstep(-0.2, 0.5, n1) * 0.85);
-  col = mix(col, u_colors[1], smoothstep(-0.1, 0.6, n2) * 0.7);
-  col = mix(col, u_colors[2], smoothstep(-0.3, 0.4, n3) * 0.6);
-  col = mix(col, u_colors[3], smoothstep(0.0, 0.7, n1 * n2) * 0.5);
+  if (u_glowIntensity > 0.001) {
+    float glow = smoothstep(0.8, 0.0, dist) * u_glowIntensity;
+    col += u_colors[1] * glow;
+  }
 
-  float glow = smoothstep(0.8, 0.0, dist) * 0.3;
-  col += u_colors[1] * glow;
+  // Vignette effect (disabled in light mode, active in dark mode)
+  if (u_vignetteIntensity > 0.001) {
+    float vignette = 1.0 - smoothstep(0.3, 1.2, dist) * u_vignetteIntensity;
+    col *= vignette;
+  }
 
-  col = mix(col * 0.2, col, vignette);
-
+  // Film grain
   float grain = fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453 + u_time);
-  col += (grain - 0.5) * u_grain * 0.1;
+  col += (grain - 0.5) * u_grain * 0.05;
 
   gl_FragColor = vec4(col, 1.0);
 }
@@ -90,15 +101,23 @@ export interface VelarisProps {
   children?: React.ReactNode;
 }
 
-const LIGHT_BG = '#F7F8F4';
-const LIGHT_COLORS = ['#DCFCE7', '#BBF7D0', '#86EFAC', '#15803D'];
-const LIGHT_SPEED = 0.6;
-const LIGHT_GRAIN = 0.08;
+// Light Mode Configuration: 85-90% clean white background + 10-15% soft green gradients
+const LIGHT_BG = '#FAFCFA';
+const LIGHT_COLORS = ['#DCFCE7', '#BBF7D0', '#86EFAC', '#4ADE80'];
+const LIGHT_SPEED = 0.5;
+const LIGHT_GRAIN = 0.015;
+const LIGHT_MIX_INTENSITY = 0.14;
+const LIGHT_GLOW_INTENSITY = 0.0;
+const LIGHT_VIGNETTE_INTENSITY = 0.0;
 
+// Dark Mode Configuration: Deep cinematic black + rich emerald gradients
 const DARK_BG = '#080B09';
 const DARK_COLORS = ['#052E16', '#064E3B', '#166534', '#22C55E'];
 const DARK_SPEED = 0.5;
 const DARK_GRAIN = 0.05;
+const DARK_MIX_INTENSITY = 0.85;
+const DARK_GLOW_INTENSITY = 0.25;
+const DARK_VIGNETTE_INTENSITY = 0.70;
 
 const hexToRgb = (hex: string): [number, number, number] => {
   const h = hex.replace('#', '');
@@ -116,7 +135,7 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Target values for smooth lerp
+  // Target values for smooth 400ms-500ms theme lerp
   const targetThemeRef = useRef<'light' | 'dark'>('light');
 
   useEffect(() => {
@@ -182,6 +201,9 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
       res: gl.getUniformLocation(program, 'u_resolution'),
       time: gl.getUniformLocation(program, 'u_time'),
       grain: gl.getUniformLocation(program, 'u_grain'),
+      mixIntensity: gl.getUniformLocation(program, 'u_mixIntensity'),
+      glowIntensity: gl.getUniformLocation(program, 'u_glowIntensity'),
+      vignetteIntensity: gl.getUniformLocation(program, 'u_vignetteIntensity'),
       colors: gl.getUniformLocation(program, 'u_colors'),
       bg: gl.getUniformLocation(program, 'u_bg'),
     };
@@ -198,11 +220,15 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
     ro.observe(container);
     resize();
 
-    // Color Interpolation State
-    let currentBgRgb = hexToRgb(targetThemeRef.current === 'dark' ? DARK_BG : LIGHT_BG);
-    let currentColorsRgb = (targetThemeRef.current === 'dark' ? DARK_COLORS : LIGHT_COLORS).flatMap(hexToRgb);
-    let currentSpeed = targetThemeRef.current === 'dark' ? DARK_SPEED : LIGHT_SPEED;
-    let currentGrain = targetThemeRef.current === 'dark' ? DARK_GRAIN : LIGHT_GRAIN;
+    // Initial State Based On Active Theme
+    const initialIsDark = targetThemeRef.current === 'dark';
+    let currentBgRgb = hexToRgb(initialIsDark ? DARK_BG : LIGHT_BG);
+    let currentColorsRgb = (initialIsDark ? DARK_COLORS : LIGHT_COLORS).flatMap(hexToRgb);
+    let currentSpeed = initialIsDark ? DARK_SPEED : LIGHT_SPEED;
+    let currentGrain = initialIsDark ? DARK_GRAIN : LIGHT_GRAIN;
+    let currentMix = initialIsDark ? DARK_MIX_INTENSITY : LIGHT_MIX_INTENSITY;
+    let currentGlow = initialIsDark ? DARK_GLOW_INTENSITY : LIGHT_GLOW_INTENSITY;
+    let currentVignette = initialIsDark ? DARK_VIGNETTE_INTENSITY : LIGHT_VIGNETTE_INTENSITY;
 
     let raf: number;
     let isPaused = false;
@@ -223,9 +249,12 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
         const targetColors = (isDark ? DARK_COLORS : LIGHT_COLORS).flatMap(hexToRgb);
         const targetSpeed = isDark ? DARK_SPEED : LIGHT_SPEED;
         const targetGrain = isDark ? DARK_GRAIN : LIGHT_GRAIN;
+        const targetMix = isDark ? DARK_MIX_INTENSITY : LIGHT_MIX_INTENSITY;
+        const targetGlow = isDark ? DARK_GLOW_INTENSITY : LIGHT_GLOW_INTENSITY;
+        const targetVignette = isDark ? DARK_VIGNETTE_INTENSITY : LIGHT_VIGNETTE_INTENSITY;
 
-        // Smooth Lerp Transition (~700ms interpolation)
-        const lerpRate = 0.05;
+        // Smooth 400ms-500ms Lerp Transition Rate (0.12 factor at 60fps)
+        const lerpRate = 0.12;
         currentBgRgb[0] = lerp(currentBgRgb[0], targetBg[0], lerpRate);
         currentBgRgb[1] = lerp(currentBgRgb[1], targetBg[1], lerpRate);
         currentBgRgb[2] = lerp(currentBgRgb[2], targetBg[2], lerpRate);
@@ -236,12 +265,18 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
 
         currentSpeed = lerp(currentSpeed, targetSpeed, lerpRate);
         currentGrain = lerp(currentGrain, targetGrain, lerpRate);
+        currentMix = lerp(currentMix, targetMix, lerpRate);
+        currentGlow = lerp(currentGlow, targetGlow, lerpRate);
+        currentVignette = lerp(currentVignette, targetVignette, lerpRate);
 
         const timeVal = prefersReducedMotion ? 1000 : t * 0.001 * currentSpeed;
 
         gl.uniform2f(locs.res, canvas.width, canvas.height);
         gl.uniform1f(locs.time, timeVal);
         gl.uniform1f(locs.grain, currentGrain);
+        gl.uniform1f(locs.mixIntensity, currentMix);
+        gl.uniform1f(locs.glowIntensity, currentGlow);
+        gl.uniform1f(locs.vignetteIntensity, currentVignette);
         gl.uniform3f(locs.bg, currentBgRgb[0], currentBgRgb[1], currentBgRgb[2]);
         gl.uniform3fv(locs.colors, new Float32Array(currentColorsRgb));
 
@@ -276,12 +311,12 @@ export const Velaris: React.FC<VelarisProps> = ({ className, children }) => {
       {webglSupported ? (
         <canvas
           ref={canvasRef}
-          className="pointer-events-none absolute inset-0 h-full w-full transition-opacity duration-700"
+          className="pointer-events-none absolute inset-0 h-full w-full"
         />
       ) : (
         /* CSS WebGL Fallback */
-        <div className="absolute inset-0 bg-[#F7F8F4] dark:bg-[#080B09] transition-colors duration-700">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(187,247,208,0.4),rgba(247,248,244,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(22,101,52,0.3),rgba(8,11,9,0))]" />
+        <div className="absolute inset-0 bg-[#FAFCFA] dark:bg-[#080B09] transition-colors duration-500">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(220,252,231,0.3),rgba(250,252,250,0))] dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(22,101,52,0.3),rgba(8,11,9,0))]" />
         </div>
       )}
       {children}
