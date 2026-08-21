@@ -52,25 +52,7 @@
   --border-color: #BFE5D3;
 }
 
-.dark {
-  --green-primary: #22C55E;
-  --green-hover: #16A34A;
-  --green-dark: #064E3B;
-  --green-light: #151C17;
-  --green-subtle: #101512;
-  --green-border: #26302A;
-  --green-success: #22C55E;
 
-  --bg-primary: #080B09;
-  --bg-surface: #101512;
-  --bg-elevated: #151C17;
-  --text-heading: #F5F7F6;
-  --text-body: #D1D5DB;
-  --text-secondary: #9CA3AF;
-  --text-muted: #9CA3AF;
-  --text-label: #F5F7F6;
-  --border-color: #26302A;
-}
 
 @theme {
   --font-sans: 'Rogles', var(--font-playfair), 'Playfair Display', var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
@@ -139,7 +121,7 @@ body,
   font-family: 'DomineDigits', var(--font-domine), 'Domine', 'Rogles', var(--font-playfair), 'Playfair Display', Georgia, serif;
 }
 
-/* Fast, seamless theme color transitions without animating layout or geometry */
+/* Fast, hardware-friendly theme color transitions without animating layout geometry */
 html, body, header, nav, footer, main, section, article, div, button, input, select, textarea, span, p, h1, h2, h3, h4, h5, h6, table, tr, td, th, a {
   transition:
     background-color 180ms ease-out,

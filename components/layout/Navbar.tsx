@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { CountryCode, CurrencyCode } from '../../lib/types';
 import { SupportedLanguage, useTranslation } from '../../lib/i18n';
-import { ThemeToggle } from './ThemeToggle';
 import {
   Users,
   Briefcase,
@@ -272,11 +271,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
         </div>
 
-        {/* Right Desktop Controls - Language, Currency, & Theme Toggle */}
+        {/* Right Desktop Controls - Language & Currency */}
         <div className="flex items-center gap-2.5 sm:gap-3">
-          {/* Theme Toggle Button */}
-          <ThemeToggle />
-
           {/* Currency Button */}
           <div className="relative">
             <button
