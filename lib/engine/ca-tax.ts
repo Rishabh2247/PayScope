@@ -112,7 +112,7 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
       color: '#EF4444',
     },
     {
-      name: `Provincial Tax (${province})`,
+      name: province === 'Quebec' ? 'Provincial Tax (Quebec Revenu Québec)' : `Provincial Tax (${province})`,
       amount: provincialTax,
       percentage: gross > 0 ? (provincialTax / gross) * 100 : 0,
       color: '#F59E0B',
@@ -121,7 +121,7 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
 
   if (cpp > 0) {
     breakdown.push({
-      name: isSoleProp ? 'CPP Tier 1 (Self-Employed 11.9%)' : 'CPP Pension (Employee 5.95%)',
+      name: isSoleProp ? 'CPP Contribution (Base + 1st Additional 11.9%)' : 'CPP Contribution (Base 4.95% + 1st Additional 1.00%)',
       amount: cpp,
       percentage: gross > 0 ? (cpp / gross) * 100 : 0,
       color: '#3B82F6',
@@ -130,7 +130,7 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
 
   if (cpp2 > 0) {
     breakdown.push({
-      name: isSoleProp ? 'CPP2 Tier 2 (Self-Employed 8%)' : 'CPP2 Tier 2 (Employee 4%)',
+      name: isSoleProp ? 'CPP2 Second Additional Contribution (8.0%)' : 'CPP2 Second Additional Contribution (4.0%)',
       amount: cpp2,
       percentage: gross > 0 ? (cpp2 / gross) * 100 : 0,
       color: '#60A5FA',
@@ -139,7 +139,7 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
 
   if (ei > 0) {
     breakdown.push({
-      name: 'EI Premium (1.64%)',
+      name: province === 'Quebec' ? 'EI Premium (Quebec Standard Estimate)' : 'EI Premium (1.63%)',
       amount: ei,
       percentage: gross > 0 ? (ei / gross) * 100 : 0,
       color: '#8B5CF6',

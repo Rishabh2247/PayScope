@@ -72,7 +72,7 @@ export function calculateMXTax(inputs: FinancialInputs): TaxCalculationResult {
 
   if (imss > 0) {
     breakdown.push({
-      name: 'IMSS Seguridad Social (2.75%)',
+      name: 'IMSS Employee Contribution (Estimated ~2.75%)',
       amount: imss,
       percentage: gross > 0 ? (imss / gross) * 100 : 0,
       color: '#3B82F6',

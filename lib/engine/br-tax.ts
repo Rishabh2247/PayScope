@@ -67,7 +67,7 @@ export function calculateBRTax(inputs: FinancialInputs): TaxCalculationResult {
       color: '#1F8F68',
     },
     {
-      name: simplesPjTax > 0 ? 'Simples Nacional PJ Tax' : 'IRRF (Imposto de Renda Receita Federal)',
+      name: simplesPjTax > 0 ? 'Simples Nacional PJ (Anexo III Estimated 6.0%)' : 'IRRF (Imposto de Renda Receita Federal)',
       amount: simplesPjTax > 0 ? simplesPjTax : irrfAnnual,
       percentage: gross > 0 ? ((simplesPjTax > 0 ? simplesPjTax : irrfAnnual) / gross) * 100 : 0,
       color: '#EF4444',
