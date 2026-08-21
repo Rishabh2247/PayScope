@@ -6,7 +6,6 @@ import { generateFinancialSnapshotPdf } from '../../lib/pdfReportEngine';
 import { Wallet, Calendar, Clock, Download, ArrowRight, Pencil, ShieldCheck } from 'lucide-react';
 
 import { AnimatedCounter } from '../ui/AnimatedCounter';
-import { GlareCard } from '../ui/GlareCard';
 
 interface TopKpiRowProps {
   snapshot: CompleteFinancialSnapshot;
@@ -86,7 +85,7 @@ export const TopKpiRow: React.FC<TopKpiRowProps> = ({ snapshot, onInputsChange }
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
         {/* CARD 1 */}
-        <GlareCard className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm space-y-2 flex flex-col justify-between hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
+        <div className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm space-y-2 flex flex-col justify-between hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors relative">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-[#EAF7F1] dark:bg-[#151C17] text-[#1F8F68] dark:text-[#22C55E] flex items-center justify-center shrink-0">
@@ -131,10 +130,10 @@ export const TopKpiRow: React.FC<TopKpiRowProps> = ({ snapshot, onInputsChange }
               ? `${tax.annualBillableHours.toLocaleString()} billable hrs/yr`
               : `${formatPercent(tax.takeHomePercentage)} ${t.grossIncome}`}
           </div>
-        </GlareCard>
+        </div>
 
         {/* CARD 2 */}
-        <GlareCard className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm space-y-2 flex flex-col justify-between hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
+        <div className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm space-y-2 flex flex-col justify-between hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-[#EAF7F1] dark:bg-[#151C17] text-[#1F8F68] dark:text-[#22C55E] flex items-center justify-center shrink-0">
               <Calendar className="w-5 h-5" />
@@ -159,10 +158,10 @@ export const TopKpiRow: React.FC<TopKpiRowProps> = ({ snapshot, onInputsChange }
           <div className="inline-block bg-[#EAF7F1] dark:bg-[#151C17] text-[#1F8F68] dark:text-[#22C55E] text-[10px] font-extrabold px-2 py-0.5 rounded-full w-fit">
             12 monthly pay cycles
           </div>
-        </GlareCard>
+        </div>
 
         {/* CARD 3 */}
-        <GlareCard className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm space-y-2 flex flex-col justify-between hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
+        <div className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm space-y-2 flex flex-col justify-between hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-[#EAF7F1] dark:bg-[#151C17] text-[#1F8F68] dark:text-[#22C55E] flex items-center justify-center shrink-0">
               <Wallet className="w-5 h-5" />
@@ -189,10 +188,10 @@ export const TopKpiRow: React.FC<TopKpiRowProps> = ({ snapshot, onInputsChange }
           <div className="inline-block bg-[#EAF7F1] dark:bg-[#151C17] text-[#1F8F68] dark:text-[#22C55E] text-[10px] font-extrabold px-2 py-0.5 rounded-full w-fit">
             {tax.annualBillableHours.toLocaleString()} hrs/yr
           </div>
-        </GlareCard>
+        </div>
 
         {/* CARD 4: Effective Tax Rate & Deductions */}
-        <GlareCard className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm space-y-2 flex flex-col justify-between hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
+        <div className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm space-y-2 flex flex-col justify-between hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-[#EAF7F1] dark:bg-[#151C17] text-[#1F8F68] dark:text-[#22C55E] flex items-center justify-center shrink-0">
               <ShieldCheck className="w-5 h-5" />
@@ -210,7 +209,7 @@ export const TopKpiRow: React.FC<TopKpiRowProps> = ({ snapshot, onInputsChange }
           <div className="inline-block bg-[#EAF7F1] dark:bg-[#151C17] text-[#1F8F68] dark:text-[#22C55E] text-[10px] font-extrabold px-2 py-0.5 rounded-full w-fit">
             Official 2026 Statutory Rules
           </div>
-        </GlareCard>
+        </div>
       </div>
     </div>
   );

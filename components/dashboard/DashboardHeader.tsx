@@ -6,8 +6,6 @@ import { isContractorRole, formatCurrency } from '../../lib/formatters';
 import { useTranslation } from '../../lib/i18n';
 import { MapPin, Briefcase, DollarSign, User, Users } from 'lucide-react';
 
-import { GlareCard } from '../ui/GlareCard';
-
 interface DashboardHeaderProps {
   inputs: FinancialInputs;
 }
@@ -29,7 +27,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ inputs }) => {
     : (inputs.incomeRate || inputs.annualSalary || 0);
 
   return (
-    <GlareCard className="rounded-3xl bg-white dark:bg-[#101512] border border-[#BFE5D3] dark:border-[#26302A] shadow-sm min-h-[160px] flex items-center transition-colors duration-300">
+    <div className="relative rounded-3xl bg-white dark:bg-[#101512] border border-[#BFE5D3] dark:border-[#26302A] shadow-sm overflow-hidden min-h-[160px] flex items-center transition-colors duration-300">
       {/* Background Skyline Visual Image - Result Page Card Placement */}
       <div className="absolute right-0 top-0 bottom-0 w-3/4 sm:w-2/3 md:w-1/2 pointer-events-none overflow-hidden">
         <img
@@ -92,6 +90,6 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ inputs }) => {
           </div>
         </div>
       </div>
-    </GlareCard>
+    </div>
   );
 };

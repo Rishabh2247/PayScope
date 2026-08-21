@@ -7,8 +7,6 @@ import { ArrowRight, Pencil } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { FullBreakdownModal } from './FullBreakdownModal';
 
-import { GlareCard } from '../ui/GlareCard';
-
 interface TaxBreakdownProps {
   snapshot: CompleteFinancialSnapshot;
   onInputsChange?: (newInputs: any) => void;
@@ -35,7 +33,7 @@ export const TaxBreakdown: React.FC<TaxBreakdownProps> = ({ snapshot, onInputsCh
 
   return (
     <>
-      <GlareCard className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm flex flex-col justify-between h-full space-y-4 hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
+      <div className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm flex flex-col justify-between h-full space-y-4 hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors relative">
         {/* Title & Pen Icon Customizer */}
         <div className="flex items-center justify-between">
           <div>
@@ -49,7 +47,7 @@ export const TaxBreakdown: React.FC<TaxBreakdownProps> = ({ snapshot, onInputsCh
 
           <button
             onClick={() => setIsEditMode(!isEditMode)}
-            className="p-1.5 rounded-xl bg-[#F3FBF7] dark:bg-[#151C17] hover:bg-[#EAF7F1] dark:hover:bg-[#1C251F] text-[#1F8F68] dark:text-[#22C55E] border border-[#BFE5D3] dark:border-[#26302A] transition-all cursor-pointer z-20"
+            className="p-1.5 rounded-xl bg-[#F3FBF7] dark:bg-[#151C17] hover:bg-[#EAF7F1] dark:hover:bg-[#1C251F] text-[#1F8F68] dark:text-[#22C55E] border border-[#BFE5D3] dark:border-[#26302A] transition-all cursor-pointer"
             title="Edit Tax Card Values (Pen Icon)"
           >
             <Pencil className="w-4 h-4" />
@@ -58,7 +56,7 @@ export const TaxBreakdown: React.FC<TaxBreakdownProps> = ({ snapshot, onInputsCh
 
         {/* Inline Card Pen Customizer Popover */}
         {isEditMode && (
-          <div className="bg-[#F3FBF7] dark:bg-[#151C17] p-3 rounded-2xl border border-[#BFE5D3] dark:border-[#26302A] space-y-2 text-xs z-20 relative">
+          <div className="bg-[#F3FBF7] dark:bg-[#151C17] p-3 rounded-2xl border border-[#BFE5D3] dark:border-[#26302A] space-y-2 text-xs">
             <div className="flex items-center justify-between font-bold text-[#12372A] dark:text-[#F9FAFB]">
               <span>✏️ Tax Customizer:</span>
               <button onClick={() => setIsEditMode(false)} className="text-[10px] text-slate-400 hover:text-slate-600">✕ Close</button>
@@ -145,16 +143,16 @@ export const TaxBreakdown: React.FC<TaxBreakdownProps> = ({ snapshot, onInputsCh
         </div>
 
         {/* Bottom Link */}
-        <div className="pt-2 border-t border-[#BFE5D3]/60 dark:border-[#26302A] flex items-center justify-between z-20 relative">
+        <div className="pt-2 border-t border-[#BFE5D3]/60 dark:border-[#26302A] flex items-center justify-between">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center gap-1 text-xs font-bold text-[#1F8F68] dark:text-[#22C55E] hover:text-[#176F52] dark:hover:text-[#16A34A] cursor-pointer"
+            className="inline-flex items-center gap-1 text-xs font-bold text-[#1F8F68] dark:text-[#22C55E] hover:text-[#176F52] dark:hover:text-[#16A34A]"
           >
             <span>View full breakdown</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
-      </GlareCard>
+      </div>
 
       <FullBreakdownModal
         isOpen={isModalOpen}

@@ -6,8 +6,6 @@ import { formatCurrency, formatPercent } from '../../lib/formatters';
 import { ArrowRight } from 'lucide-react';
 import { FullBreakdownModal } from './FullBreakdownModal';
 
-import { GlareCard } from '../ui/GlareCard';
-
 interface CostOfLivingProps {
   snapshot: CompleteFinancialSnapshot;
 }
@@ -18,7 +16,7 @@ export const CostOfLiving: React.FC<CostOfLivingProps> = ({ snapshot }) => {
 
   return (
     <>
-      <GlareCard className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm flex flex-col justify-between h-full min-h-[380px] space-y-4 hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
+      <div className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm flex flex-col justify-between h-full min-h-[380px] space-y-4 hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
         {/* Title */}
         <div className="flex items-center justify-between">
           <div>
@@ -30,7 +28,7 @@ export const CostOfLiving: React.FC<CostOfLivingProps> = ({ snapshot }) => {
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="text-xs font-bold text-[#1F8F68] dark:text-[#22C55E] hover:text-[#176F52] dark:hover:text-[#16A34A] inline-flex items-center gap-1 z-20 relative cursor-pointer"
+            className="text-xs font-bold text-[#1F8F68] dark:text-[#22C55E] hover:text-[#176F52] dark:hover:text-[#16A34A] inline-flex items-center gap-1 cursor-pointer"
           >
             <span>See details</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -82,7 +80,7 @@ export const CostOfLiving: React.FC<CostOfLivingProps> = ({ snapshot }) => {
             Regional Data
           </span>
         </div>
-      </GlareCard>
+      </div>
 
       <FullBreakdownModal
         isOpen={isModalOpen}

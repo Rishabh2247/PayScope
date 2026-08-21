@@ -6,8 +6,6 @@ import { formatCurrency } from '../../lib/formatters';
 import { ArrowRight, RefreshCw, Info, Pencil } from 'lucide-react';
 import { FullBreakdownModal } from './FullBreakdownModal';
 
-import { GlareCard } from '../ui/GlareCard';
-
 interface HousingSnapshotProps {
   snapshot: CompleteFinancialSnapshot;
   onInputsChange?: (newInputs: any) => void;
@@ -66,7 +64,7 @@ export const HousingSnapshot: React.FC<HousingSnapshotProps> = ({ snapshot, onIn
 
   return (
     <>
-      <GlareCard className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm flex flex-col justify-between h-full min-h-[380px] space-y-4 hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
+      <div className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm flex flex-col justify-between h-full min-h-[380px] space-y-4 hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
         {/* Header */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
@@ -80,7 +78,7 @@ export const HousingSnapshot: React.FC<HousingSnapshotProps> = ({ snapshot, onIn
               <span>{economic.cityLabel}</span>
               <button
                 onClick={() => setIsEditMode(!isEditMode)}
-                className="p-1 rounded-lg bg-[#F3FBF7] dark:bg-[#151C17] hover:bg-[#EAF7F1] dark:hover:bg-[#1C251F] text-[#1F8F68] dark:text-[#22C55E] border border-[#BFE5D3] dark:border-[#26302A] transition-all cursor-pointer z-20"
+                className="p-1 rounded-lg bg-[#F3FBF7] dark:bg-[#151C17] hover:bg-[#EAF7F1] dark:hover:bg-[#1C251F] text-[#1F8F68] dark:text-[#22C55E] border border-[#BFE5D3] dark:border-[#26302A] transition-all cursor-pointer"
                 title="Edit Housing Rent Values (Pen Icon)"
               >
                 <Pencil className="w-3.5 h-3.5" />
@@ -91,7 +89,7 @@ export const HousingSnapshot: React.FC<HousingSnapshotProps> = ({ snapshot, onIn
 
           {/* Inline Pen Customizer */}
           {isEditMode && (
-            <div className="bg-[#F3FBF7] dark:bg-[#151C17] p-2.5 rounded-2xl border border-[#BFE5D3] dark:border-[#26302A] space-y-1.5 text-xs z-20 relative">
+            <div className="bg-[#F3FBF7] dark:bg-[#151C17] p-2.5 rounded-2xl border border-[#BFE5D3] dark:border-[#26302A] space-y-1.5 text-xs">
               <div className="flex items-center justify-between font-bold text-[#12372A] dark:text-[#F9FAFB]">
                 <span>✏️ Custom Rent Override:</span>
                 <button onClick={() => setIsEditMode(false)} className="text-[10px] text-slate-400">✕</button>
@@ -107,7 +105,7 @@ export const HousingSnapshot: React.FC<HousingSnapshotProps> = ({ snapshot, onIn
           )}
 
           {/* Mode Tabs (Rent, Buy, Room/Dorm) */}
-          <div className="flex items-center gap-1 p-1 bg-[#F3FBF7] dark:bg-[#151C17] rounded-xl border border-[#BFE5D3] dark:border-[#26302A] text-xs font-semibold text-slate-600 dark:text-slate-300 z-20 relative">
+          <div className="flex items-center gap-1 p-1 bg-[#F3FBF7] dark:bg-[#151C17] rounded-xl border border-[#BFE5D3] dark:border-[#26302A] text-xs font-semibold text-slate-600 dark:text-slate-300">
             <button
               onClick={() => setActiveMode('Rent')}
               className={`flex-1 py-1.5 rounded-lg transition-all text-center cursor-pointer ${
@@ -139,7 +137,7 @@ export const HousingSnapshot: React.FC<HousingSnapshotProps> = ({ snapshot, onIn
             <span className="text-[#12372A] dark:text-[#F9FAFB] font-extrabold text-xs">
               Top 5 Neighborhoods ({activeMode})
             </span>
-            <div className="flex items-center gap-1.5 z-20 relative">
+            <div className="flex items-center gap-1.5">
               <select
                 value={bedroomFilter}
                 onChange={(e) => setBedroomFilter(e.target.value)}
@@ -203,7 +201,7 @@ export const HousingSnapshot: React.FC<HousingSnapshotProps> = ({ snapshot, onIn
         </div>
 
         {/* Footer Link & Timestamp */}
-        <div className="flex items-center justify-between border-t border-[#BFE5D3]/60 dark:border-[#26302A] pt-3 text-xs z-20 relative">
+        <div className="flex items-center justify-between border-t border-[#BFE5D3]/60 dark:border-[#26302A] pt-3 text-xs">
           <button
             onClick={() => setIsModalOpen(true)}
             className="font-bold text-[#1F8F68] dark:text-[#22C55E] hover:text-[#176F52] dark:hover:text-[#16A34A] inline-flex items-center gap-1 cursor-pointer"
@@ -217,7 +215,7 @@ export const HousingSnapshot: React.FC<HousingSnapshotProps> = ({ snapshot, onIn
             <RefreshCw className="w-3.5 h-3.5 text-[#1F8F68] dark:text-[#22C55E] cursor-pointer" />
           </div>
         </div>
-      </GlareCard>
+      </div>
 
       <FullBreakdownModal
         isOpen={isModalOpen}

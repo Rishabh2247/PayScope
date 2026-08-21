@@ -8,8 +8,6 @@ import { FullBreakdownModal } from './FullBreakdownModal';
 
 import { AnimatedCounter } from '../ui/AnimatedCounter';
 
-import { GlareCard } from '../ui/GlareCard';
-
 interface RealIncomeCardProps {
   snapshot: CompleteFinancialSnapshot;
   onInputsChange?: (newInputs: any) => void;
@@ -32,7 +30,7 @@ export const RealIncomeCard: React.FC<RealIncomeCardProps> = ({ snapshot, onInpu
 
   return (
     <>
-      <GlareCard className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm flex flex-col justify-between h-full min-h-[380px] space-y-4 hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors animate-fade-in">
+      <div className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm flex flex-col justify-between h-full min-h-[380px] space-y-4 overflow-hidden hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors relative animate-fade-in">
         {/* Title & Pen Icon Customizer */}
         <div className="flex items-center justify-between">
           <div>
@@ -44,7 +42,7 @@ export const RealIncomeCard: React.FC<RealIncomeCardProps> = ({ snapshot, onInpu
           <div className="flex items-center gap-1.5 shrink-0">
             <button
               onClick={() => setIsEditMode(!isEditMode)}
-              className="p-1.5 rounded-xl bg-[#F3FBF7] dark:bg-[#151C17] hover:bg-[#EAF7F1] dark:hover:bg-[#1C251F] text-[#1F8F68] dark:text-[#22C55E] border border-[#BFE5D3] dark:border-[#26302A] transition-all cursor-pointer z-20"
+              className="p-1.5 rounded-xl bg-[#F3FBF7] dark:bg-[#151C17] hover:bg-[#EAF7F1] dark:hover:bg-[#1C251F] text-[#1F8F68] dark:text-[#22C55E] border border-[#BFE5D3] dark:border-[#26302A] transition-all cursor-pointer"
               title="Edit Card Values (Pen Icon)"
             >
               <Pencil className="w-4 h-4" />
@@ -55,7 +53,7 @@ export const RealIncomeCard: React.FC<RealIncomeCardProps> = ({ snapshot, onInpu
 
         {/* Inline Card Pen Customizer Popover */}
         {isEditMode && (
-          <div className="bg-[#F3FBF7] dark:bg-[#151C17] p-3 rounded-2xl border border-[#BFE5D3] dark:border-[#26302A] space-y-2 text-xs z-20 relative">
+          <div className="bg-[#F3FBF7] dark:bg-[#151C17] p-3 rounded-2xl border border-[#BFE5D3] dark:border-[#26302A] space-y-2 text-xs">
             <div className="flex items-center justify-between font-bold text-[#12372A] dark:text-[#F9FAFB]">
               <span>✏️ Card Customizer:</span>
               <button onClick={() => setIsEditMode(false)} className="text-[10px] text-slate-400 hover:text-slate-600">✕ Close</button>
@@ -84,7 +82,7 @@ export const RealIncomeCard: React.FC<RealIncomeCardProps> = ({ snapshot, onInpu
         )}
 
         {/* Interactive Expense Adjuster */}
-        <div className="bg-[#F3FBF7] dark:bg-[#151C17] p-2.5 rounded-2xl border border-[#BFE5D3] dark:border-[#26302A] space-y-1 z-20 relative">
+        <div className="bg-[#F3FBF7] dark:bg-[#151C17] p-2.5 rounded-2xl border border-[#BFE5D3] dark:border-[#26302A] space-y-1">
           <div className="flex items-center justify-between text-[11px] font-bold text-[#12372A] dark:text-[#F9FAFB]">
             <span>Custom Monthly Expenses:</span>
             <span className="text-[#1F8F68] dark:text-[#22C55E]">${customExpenseOffset > 0 ? `+${customExpenseOffset}` : customExpenseOffset}</span>
@@ -160,16 +158,16 @@ export const RealIncomeCard: React.FC<RealIncomeCardProps> = ({ snapshot, onInpu
         </div>
 
         {/* Footer Link */}
-        <div className="flex items-center justify-between border-t border-[#BFE5D3]/60 dark:border-[#26302A] pt-3 text-xs z-20 relative">
+        <div className="flex items-center justify-between border-t border-[#BFE5D3]/60 dark:border-[#26302A] pt-3 text-xs">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="font-bold text-[#1F8F68] dark:text-[#22C55E] hover:text-[#176F52] dark:hover:text-[#16A34A] inline-flex items-center gap-1 cursor-pointer"
+            className="font-bold text-[#1F8F68] dark:text-[#22C55E] hover:text-[#176F52] dark:hover:text-[#16A34A] inline-flex items-center gap-1"
           >
             <span>View full breakdown</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
-      </GlareCard>
+      </div>
 
       <FullBreakdownModal
         isOpen={isModalOpen}
