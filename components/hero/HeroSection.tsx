@@ -41,8 +41,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           {t.allInOnePlace}
         </h1>
 
-        {/* Subtitle with Darker Text & Unbolded Font */}
-        <p className="text-slate-800 text-sm sm:text-base font-normal max-w-2xl mx-auto leading-relaxed">
+        {/* Subtitle with Refined Compact Font Size */}
+        <p className="text-slate-700 text-xs sm:text-sm font-normal max-w-xl mx-auto leading-relaxed">
           {t.heroSubtitle}
         </p>
       </div>
