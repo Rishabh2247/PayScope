@@ -4,42 +4,42 @@ export const US_FEDERAL_TAX_2026 = {
   metadata: {
     effectiveYear: 2026,
     source: 'Internal Revenue Service (IRS) & Social Security Administration (SSA)',
-    sourceUrl: 'https://www.irs.gov/newsroom/irs-releases-tax-blooper-inflation-adjustments',
-    lastVerified: '2026-01-15',
+    sourceUrl: 'https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments',
+    lastVerified: '2026-02-21',
   } as TaxRuleMetadata,
 
-  // IRS 2026 Federal Brackets (Single Filing Status)
+  // IRS 2026 Official Federal Brackets (Single Filing Status)
   bracketsSingle: [
-    { min: 0, max: 11925, rate: 0.10 },
-    { min: 11925, max: 48475, rate: 0.12 },
-    { min: 48475, max: 103350, rate: 0.22 },
-    { min: 103350, max: 197300, rate: 0.24 },
-    { min: 197300, max: 250525, rate: 0.32 },
-    { min: 250525, max: 626350, rate: 0.35 },
-    { min: 626350, max: null, rate: 0.37 },
+    { min: 0, max: 12400, rate: 0.10 },
+    { min: 12400, max: 50400, rate: 0.12 },
+    { min: 50400, max: 105700, rate: 0.22 },
+    { min: 105700, max: 201775, rate: 0.24 },
+    { min: 201775, max: 256225, rate: 0.32 },
+    { min: 256225, max: 640600, rate: 0.35 },
+    { min: 640600, max: null, rate: 0.37 },
   ] as TaxBracket[],
 
-  // IRS 2026 Federal Brackets (Married Filing Jointly)
+  // IRS 2026 Official Federal Brackets (Married Filing Jointly)
   bracketsJoint: [
-    { min: 0, max: 23850, rate: 0.10 },
-    { min: 23850, max: 96950, rate: 0.12 },
-    { min: 96950, max: 206700, rate: 0.22 },
-    { min: 206700, max: 394600, rate: 0.24 },
-    { min: 394600, max: 501050, rate: 0.32 },
-    { min: 501050, max: 751600, rate: 0.35 },
-    { min: 751600, max: null, rate: 0.37 },
+    { min: 0, max: 24800, rate: 0.10 },
+    { min: 24800, max: 100800, rate: 0.12 },
+    { min: 100800, max: 211400, rate: 0.22 },
+    { min: 211400, max: 403550, rate: 0.24 },
+    { min: 403550, max: 512450, rate: 0.32 },
+    { min: 512450, max: 768700, rate: 0.35 },
+    { min: 768700, max: null, rate: 0.37 },
   ] as TaxBracket[],
 
-  standardDeductionSingle: 15000,
-  standardDeductionJoint: 30000,
+  standardDeductionSingle: 16100,
+  standardDeductionJoint: 32200,
 
   // FICA / Social Security (FICA OASDI) 2026
   socialSecurity: {
-    wageCap: 176100,
+    wageCap: 184500,
     employeeRate: 0.062, // 6.2%
     selfEmployedRate: 0.124, // 12.4%
-    maxEmployeeContrib: 10918.20,
-    maxSelfEmployedContrib: 21836.40,
+    maxEmployeeContrib: 11439.00,
+    maxSelfEmployedContrib: 22878.00,
   },
 
   // Medicare (FICA HI) 2026
