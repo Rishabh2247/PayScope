@@ -16,13 +16,16 @@ export function calculateSnapshot(inputs: FinancialInputs): CompleteFinancialSna
   let annualGross = 0;
   let contractBillingRate = 0;
 
+  const rawRate = typeof inputs.incomeRate === 'number' ? inputs.incomeRate : (inputs.annualSalary ?? 0);
+  const sanitizedRate = Math.max(0, isNaN(rawRate) ? 0 : rawRate);
+
   if (isContractor) {
     // Input is Per Hour Rate for Contractors (e.g. 60)
-    contractBillingRate = inputs.incomeRate || inputs.annualSalary || 60;
-    annualGross = contractBillingRate * hoursPerWeek * weeksPerYear;
+    contractBillingRate = sanitizedRate;
+    annualGross = contractBillingRate * annualBillableHours;
   } else {
     // Input is Annual Salary for Full-time / Employees (e.g. 120,000)
-    annualGross = inputs.incomeRate || inputs.annualSalary || 120000;
+    annualGross = sanitizedRate;
     contractBillingRate = annualBillableHours > 0 ? annualGross / annualBillableHours : 0;
   }
 

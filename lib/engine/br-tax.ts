@@ -6,7 +6,7 @@ export function calculateBRTax(inputs: FinancialInputs): TaxCalculationResult {
   const weeksPerYear = inputs.weeksPerYear || 52;
   const annualHours = hoursPerWeek * weeksPerYear;
 
-  const gross = inputs.annualSalary || (inputs.incomeRate ? inputs.incomeRate * annualHours : 120000);
+  const gross = Math.max(0, typeof inputs.annualSalary === 'number' ? inputs.annualSalary : (inputs.incomeRate ? inputs.incomeRate * annualHours : 0));
   const monthlyGross = gross / 12;
   const empType = inputs.employmentType || 'CLT (Employee)';
 
@@ -69,7 +69,7 @@ export function calculateBRTax(inputs: FinancialInputs): TaxCalculationResult {
     {
       name: simplesPjTax > 0 ? 'Simples Nacional PJ Tax' : 'IRRF (Imposto de Renda Receita Federal)',
       amount: simplesPjTax > 0 ? simplesPjTax : irrfAnnual,
-      percentage: ((simplesPjTax > 0 ? simplesPjTax : irrfAnnual) / gross) * 100,
+      percentage: gross > 0 ? ((simplesPjTax > 0 ? simplesPjTax : irrfAnnual) / gross) * 100 : 0,
       color: '#EF4444',
     },
   ];
@@ -78,7 +78,7 @@ export function calculateBRTax(inputs: FinancialInputs): TaxCalculationResult {
     breakdown.push({
       name: 'INSS Previdência Social',
       amount: inssAnnual,
-      percentage: (inssAnnual / gross) * 100,
+      percentage: gross > 0 ? (inssAnnual / gross) * 100 : 0,
       color: '#3B82F6',
     });
   }
@@ -107,17 +107,17 @@ export function calculateBRTax(inputs: FinancialInputs): TaxCalculationResult {
     estimatedPersonalTakeHome: takeHomePayAnnual,
     effectivePersonalNetRate: effectiveHourlyRate,
     federalTax: irrfAnnual + simplesPjTax,
-    federalTaxPercentage: ((irrfAnnual + simplesPjTax) / gross) * 100,
+    federalTaxPercentage: gross > 0 ? ((irrfAnnual + simplesPjTax) / gross) * 100 : 0,
     stateTax: 0,
     stateTaxPercentage: 0,
     socialSecurityTax: inssAnnual,
-    socialSecurityTaxPercentage: (inssAnnual / gross) * 100,
+    socialSecurityTaxPercentage: gross > 0 ? (inssAnnual / gross) * 100 : 0,
     medicareTax: 0,
     medicareTaxPercentage: 0,
     otherDeductions: businessWriteOffs,
-    otherDeductionsPercentage: (businessWriteOffs / gross) * 100,
+    otherDeductionsPercentage: gross > 0 ? (businessWriteOffs / gross) * 100 : 0,
     totalTax: mandatoryDeductions + businessWriteOffs,
-    effectiveTaxRate: ((mandatoryDeductions + businessWriteOffs) / gross) * 100,
+    effectiveTaxRate: gross > 0 ? ((mandatoryDeductions + businessWriteOffs) / gross) * 100 : 0,
     breakdown,
   };
 }

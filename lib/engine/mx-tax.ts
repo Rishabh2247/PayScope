@@ -6,7 +6,7 @@ export function calculateMXTax(inputs: FinancialInputs): TaxCalculationResult {
   const weeksPerYear = inputs.weeksPerYear || 52;
   const annualHours = hoursPerWeek * weeksPerYear;
 
-  const gross = inputs.annualSalary || (inputs.incomeRate ? inputs.incomeRate * annualHours : 300000);
+  const gross = Math.max(0, typeof inputs.annualSalary === 'number' ? inputs.annualSalary : (inputs.incomeRate ? inputs.incomeRate * annualHours : 0));
   const empType = inputs.employmentType || 'Sueldos y Salarios (Employee)';
 
   let isr = 0;
@@ -65,7 +65,7 @@ export function calculateMXTax(inputs: FinancialInputs): TaxCalculationResult {
     {
       name: 'ISR (Impuesto Sobre la Renta SAT 2026)',
       amount: isr,
-      percentage: (isr / gross) * 100,
+      percentage: gross > 0 ? (isr / gross) * 100 : 0,
       color: '#EF4444',
     },
   ];
@@ -74,7 +74,7 @@ export function calculateMXTax(inputs: FinancialInputs): TaxCalculationResult {
     breakdown.push({
       name: 'IMSS Seguridad Social (2.75%)',
       amount: imss,
-      percentage: (imss / gross) * 100,
+      percentage: gross > 0 ? (imss / gross) * 100 : 0,
       color: '#3B82F6',
     });
   }
@@ -103,17 +103,17 @@ export function calculateMXTax(inputs: FinancialInputs): TaxCalculationResult {
     estimatedPersonalTakeHome: takeHomePayAnnual,
     effectivePersonalNetRate: effectiveHourlyRate,
     federalTax: isr,
-    federalTaxPercentage: (isr / gross) * 100,
+    federalTaxPercentage: gross > 0 ? (isr / gross) * 100 : 0,
     stateTax: 0,
     stateTaxPercentage: 0,
     socialSecurityTax: imss,
-    socialSecurityTaxPercentage: (imss / gross) * 100,
+    socialSecurityTaxPercentage: gross > 0 ? (imss / gross) * 100 : 0,
     medicareTax: 0,
     medicareTaxPercentage: 0,
     otherDeductions: businessWriteOffs,
-    otherDeductionsPercentage: (businessWriteOffs / gross) * 100,
+    otherDeductionsPercentage: gross > 0 ? (businessWriteOffs / gross) * 100 : 0,
     totalTax: mandatoryDeductions + businessWriteOffs,
-    effectiveTaxRate: ((mandatoryDeductions + businessWriteOffs) / gross) * 100,
+    effectiveTaxRate: gross > 0 ? ((mandatoryDeductions + businessWriteOffs) / gross) * 100 : 0,
     breakdown,
   };
 }

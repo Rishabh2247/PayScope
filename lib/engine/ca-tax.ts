@@ -7,7 +7,7 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
   const weeksPerYear = inputs.weeksPerYear || 52;
   const annualHours = hoursPerWeek * weeksPerYear;
 
-  const gross = inputs.annualSalary || (inputs.incomeRate ? inputs.incomeRate * annualHours : 120000);
+  const gross = Math.max(0, typeof inputs.annualSalary === 'number' ? inputs.annualSalary : (inputs.incomeRate ? inputs.incomeRate * annualHours : 0));
   const province = inputs.state || 'Ontario';
   const empType = inputs.employmentType || 'Full-time Employee';
 
@@ -108,13 +108,13 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
     {
       name: 'Federal Income Tax (CRA 2026)',
       amount: federalTax,
-      percentage: (federalTax / gross) * 100,
+      percentage: gross > 0 ? (federalTax / gross) * 100 : 0,
       color: '#EF4444',
     },
     {
       name: `Provincial Tax (${province})`,
       amount: provincialTax,
-      percentage: (provincialTax / gross) * 100,
+      percentage: gross > 0 ? (provincialTax / gross) * 100 : 0,
       color: '#F59E0B',
     },
   ];
@@ -123,7 +123,7 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
     breakdown.push({
       name: isSoleProp ? 'CPP Tier 1 (Self-Employed 11.9%)' : 'CPP Pension (Employee 5.95%)',
       amount: cpp,
-      percentage: (cpp / gross) * 100,
+      percentage: gross > 0 ? (cpp / gross) * 100 : 0,
       color: '#3B82F6',
     });
   }
@@ -132,7 +132,7 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
     breakdown.push({
       name: isSoleProp ? 'CPP2 Tier 2 (Self-Employed 8%)' : 'CPP2 Tier 2 (Employee 4%)',
       amount: cpp2,
-      percentage: (cpp2 / gross) * 100,
+      percentage: gross > 0 ? (cpp2 / gross) * 100 : 0,
       color: '#60A5FA',
     });
   }
@@ -141,7 +141,7 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
     breakdown.push({
       name: 'EI Premium (1.64%)',
       amount: ei,
-      percentage: (ei / gross) * 100,
+      percentage: gross > 0 ? (ei / gross) * 100 : 0,
       color: '#8B5CF6',
     });
   }
@@ -150,7 +150,7 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
     breakdown.push({
       name: 'Small Business Corp Tax (12.2%)',
       amount: smallBusinessCorpTax,
-      percentage: (smallBusinessCorpTax / gross) * 100,
+      percentage: gross > 0 ? (smallBusinessCorpTax / gross) * 100 : 0,
       color: '#8B5CF6',
     });
   }
@@ -159,7 +159,7 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
     breakdown.push({
       name: 'Business Expense Write-offs',
       amount: businessWriteOffs,
-      percentage: (businessWriteOffs / gross) * 100,
+      percentage: gross > 0 ? (businessWriteOffs / gross) * 100 : 0,
       color: '#6366F1',
     });
   }
@@ -188,17 +188,17 @@ export function calculateCATax(inputs: FinancialInputs): TaxCalculationResult {
     estimatedPersonalTakeHome: takeHomePayAnnual,
     effectivePersonalNetRate: effectiveHourlyRate,
     federalTax,
-    federalTaxPercentage: (federalTax / gross) * 100,
+    federalTaxPercentage: gross > 0 ? (federalTax / gross) * 100 : 0,
     stateTax: provincialTax,
-    stateTaxPercentage: (provincialTax / gross) * 100,
+    stateTaxPercentage: gross > 0 ? (provincialTax / gross) * 100 : 0,
     socialSecurityTax: cpp + cpp2,
-    socialSecurityTaxPercentage: ((cpp + cpp2) / gross) * 100,
+    socialSecurityTaxPercentage: gross > 0 ? ((cpp + cpp2) / gross) * 100 : 0,
     medicareTax: ei,
-    medicareTaxPercentage: (ei / gross) * 100,
+    medicareTaxPercentage: gross > 0 ? (ei / gross) * 100 : 0,
     otherDeductions: businessWriteOffs,
-    otherDeductionsPercentage: (businessWriteOffs / gross) * 100,
+    otherDeductionsPercentage: gross > 0 ? (businessWriteOffs / gross) * 100 : 0,
     totalTax: mandatoryDeductions + businessWriteOffs,
-    effectiveTaxRate: ((mandatoryDeductions + businessWriteOffs) / gross) * 100,
+    effectiveTaxRate: gross > 0 ? ((mandatoryDeductions + businessWriteOffs) / gross) * 100 : 0,
     breakdown,
   };
 }

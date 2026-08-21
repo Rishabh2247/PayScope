@@ -7,7 +7,7 @@ export function calculateUSTax(inputs: FinancialInputs): TaxCalculationResult {
   const weeksPerYear = inputs.weeksPerYear || 52;
   const annualHours = hoursPerWeek * weeksPerYear;
 
-  const gross = inputs.annualSalary || (inputs.incomeRate ? inputs.incomeRate * annualHours : 120000);
+  const gross = Math.max(0, typeof inputs.annualSalary === 'number' ? inputs.annualSalary : (inputs.incomeRate ? inputs.incomeRate * annualHours : 0));
   const state = inputs.state || 'Texas';
   const empType = inputs.employmentType || 'Full-time Employee';
   const isJoint = inputs.filingStatus === 'Married Jointly';
@@ -104,7 +104,7 @@ export function calculateUSTax(inputs: FinancialInputs): TaxCalculationResult {
     {
       name: 'Federal Income Tax (IRS 2026)',
       amount: federalTax,
-      percentage: (federalTax / gross) * 100,
+      percentage: gross > 0 ? (federalTax / gross) * 100 : 0,
       color: '#EF4444',
     },
   ];
@@ -113,7 +113,7 @@ export function calculateUSTax(inputs: FinancialInputs): TaxCalculationResult {
     breakdown.push({
       name: `State Tax (${state})`,
       amount: stateTax,
-      percentage: (stateTax / gross) * 100,
+      percentage: gross > 0 ? (stateTax / gross) * 100 : 0,
       color: '#F59E0B',
     });
   }
@@ -122,7 +122,7 @@ export function calculateUSTax(inputs: FinancialInputs): TaxCalculationResult {
     breakdown.push({
       name: is1099 ? 'Self-Employment Social Security (12.4%)' : 'Social Security (6.2%)',
       amount: socialSecurity,
-      percentage: (socialSecurity / gross) * 100,
+      percentage: gross > 0 ? (socialSecurity / gross) * 100 : 0,
       color: '#3B82F6',
     });
   }
@@ -131,7 +131,7 @@ export function calculateUSTax(inputs: FinancialInputs): TaxCalculationResult {
     breakdown.push({
       name: is1099 ? 'Self-Employment Medicare (2.9%)' : 'Medicare (1.45%)',
       amount: medicare,
-      percentage: (medicare / gross) * 100,
+      percentage: gross > 0 ? (medicare / gross) * 100 : 0,
       color: '#8B5CF6',
     });
   }
@@ -140,7 +140,7 @@ export function calculateUSTax(inputs: FinancialInputs): TaxCalculationResult {
     breakdown.push({
       name: 'Business Expense Write-offs',
       amount: businessWriteOffs,
-      percentage: (businessWriteOffs / gross) * 100,
+      percentage: gross > 0 ? (businessWriteOffs / gross) * 100 : 0,
       color: '#6366F1',
     });
   }
@@ -169,17 +169,17 @@ export function calculateUSTax(inputs: FinancialInputs): TaxCalculationResult {
     estimatedPersonalTakeHome: takeHomePayAnnual,
     effectivePersonalNetRate: effectiveHourlyRate,
     federalTax,
-    federalTaxPercentage: (federalTax / gross) * 100,
+    federalTaxPercentage: gross > 0 ? (federalTax / gross) * 100 : 0,
     stateTax,
-    stateTaxPercentage: (stateTax / gross) * 100,
+    stateTaxPercentage: gross > 0 ? (stateTax / gross) * 100 : 0,
     socialSecurityTax: socialSecurity,
-    socialSecurityTaxPercentage: (socialSecurity / gross) * 100,
+    socialSecurityTaxPercentage: gross > 0 ? (socialSecurity / gross) * 100 : 0,
     medicareTax: medicare,
-    medicareTaxPercentage: (medicare / gross) * 100,
+    medicareTaxPercentage: gross > 0 ? (medicare / gross) * 100 : 0,
     otherDeductions: businessWriteOffs,
-    otherDeductionsPercentage: (businessWriteOffs / gross) * 100,
+    otherDeductionsPercentage: gross > 0 ? (businessWriteOffs / gross) * 100 : 0,
     totalTax: mandatoryDeductions + businessWriteOffs,
-    effectiveTaxRate: ((mandatoryDeductions + businessWriteOffs) / gross) * 100,
+    effectiveTaxRate: gross > 0 ? ((mandatoryDeductions + businessWriteOffs) / gross) * 100 : 0,
     breakdown,
   };
 }
