@@ -272,7 +272,7 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                 <span>
                   {inputs.filingStatus === 'Single'
                     ? t.single
-                    : inputs.filingStatus === 'Married Filing Jointly'
+                    : inputs.filingStatus === 'Married Jointly'
                     ? t.marriedFilingJointly
                     : t.headOfHousehold}
                 </span>
@@ -287,7 +287,7 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                 <div className="absolute left-0 right-0 top-full mt-1.5 bg-white/95 backdrop-blur-xl border border-[#BFE5D3] rounded-2xl shadow-xl p-1.5 z-50 animate-in fade-in zoom-in-95">
                   {[
                     { value: 'Single', label: t.single },
-                    { value: 'Married Filing Jointly', label: t.marriedFilingJointly },
+                    { value: 'Married Jointly', label: t.marriedFilingJointly },
                     { value: 'Head of Household', label: t.headOfHousehold },
                   ].map((item) => {
                     const isSelected = inputs.filingStatus === item.value;
