@@ -42,6 +42,8 @@ export const SnapshotCard: React.FC<SnapshotCardProps> = ({ snapshot, onExploreD
 
   const effectiveRate = tax.effectiveTaxRate || 22.8;
 
+  const hasValidIncome = (inputs.incomeRate || 0) > 0 || (inputs.annualSalary || 0) > 0;
+
   return (
     <div className="bg-[#12372A] text-white rounded-3xl p-5 sm:p-7 shadow-xl flex flex-col justify-between h-full min-h-[380px] relative overflow-hidden border border-[#BFE5D3]/30 animate-fade-in">
       {/* Glow background accent */}
@@ -60,23 +62,33 @@ export const SnapshotCard: React.FC<SnapshotCardProps> = ({ snapshot, onExploreD
           </span>
         </div>
 
-        {/* Primary Take-Home Highlight with Animated Counter */}
+        {/* Primary Take-Home Highlight with Animated Counter / Neutral Empty State */}
         <div className="space-y-0.5">
           <p className="text-xs font-bold text-[#BFE5D3]">
-            <span className="font-extrabold">E</span>stimated <span className="font-extrabold">M</span>onthly <span className="font-extrabold">T</span>ake-<span className="font-extrabold">H</span>ome
+            Estimated Monthly Take-Home
           </p>
           <div className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white">
-            <AnimatedCounter
-              value={monthlyNet}
-              formatter={(val) => formatCurrency(val, inputs.currency)}
-            />
+            {hasValidIncome ? (
+              <AnimatedCounter
+                value={monthlyNet}
+                formatter={(val) => formatCurrency(val, inputs.currency)}
+              />
+            ) : (
+              <span className="text-[#BFE5D3]/60">—</span>
+            )}
           </div>
           <p className="text-xs text-[#EAF7F1] font-bold pt-0.5">
-            <AnimatedCounter
-              value={effectiveRate}
-              decimals={1}
-              formatter={(val) => formatPercent(val)}
-            /> {t.effectiveTaxRate}
+            {hasValidIncome ? (
+              <>
+                <AnimatedCounter
+                  value={effectiveRate}
+                  decimals={1}
+                  formatter={(val) => formatPercent(val)}
+                /> {t.effectiveTaxRate}
+              </>
+            ) : (
+              <span className="text-[#BFE5D3]/80 font-normal">Enter your income to see your estimate</span>
+            )}
           </p>
         </div>
       </div>
@@ -96,13 +108,13 @@ export const SnapshotCard: React.FC<SnapshotCardProps> = ({ snapshot, onExploreD
                   <Clock className="w-3 h-3 text-[#BFE5D3]" /> {t.hourlyRateLabel}
                 </span>
                 <span className="text-xs font-semibold text-white/90">
-                  {t.beforeTax}: <strong className="text-white"><AnimatedCounter value={beforeTaxHourly} formatter={(val) => `${formatCurrency(val, inputs.currency)}/hr`} /></strong>
+                  {t.beforeTax}: <strong className="text-white">{hasValidIncome ? <AnimatedCounter value={beforeTaxHourly} formatter={(val) => `${formatCurrency(val, inputs.currency)}/hr`} /> : '—'}</strong>
                 </span>
               </div>
               <div className="text-right">
                 <span className="text-[10px] font-bold text-[#198754] bg-[#EAF7F1] px-1.5 py-0.5 rounded uppercase block">{t.afterTaxNet}</span>
                 <span className="text-sm font-black text-white">
-                  <AnimatedCounter value={afterTaxHourly} formatter={(val) => `${formatCurrency(val, inputs.currency)}/hr`} />
+                  {hasValidIncome ? <AnimatedCounter value={afterTaxHourly} formatter={(val) => `${formatCurrency(val, inputs.currency)}/hr`} /> : <span className="text-[#BFE5D3]/60">—</span>}
                 </span>
               </div>
             </div>
@@ -115,13 +127,13 @@ export const SnapshotCard: React.FC<SnapshotCardProps> = ({ snapshot, onExploreD
                 <Calendar className="w-3 h-3 text-[#BFE5D3]" /> {t.monthlyPayLabel}
               </span>
               <span className="text-xs font-semibold text-white/90">
-                {t.beforeTax}: <strong className="text-white"><AnimatedCounter value={monthlyGross} formatter={(val) => formatCurrency(val, inputs.currency)} /></strong>
+                {t.beforeTax}: <strong className="text-white">{hasValidIncome ? <AnimatedCounter value={monthlyGross} formatter={(val) => formatCurrency(val, inputs.currency)} /> : '—'}</strong>
               </span>
             </div>
             <div className="text-right">
               <span className="text-[10px] font-bold text-[#198754] bg-[#EAF7F1] px-1.5 py-0.5 rounded uppercase block">{t.afterTaxNet}</span>
               <span className="text-sm font-black text-white">
-                <AnimatedCounter value={monthlyNet} formatter={(val) => formatCurrency(val, inputs.currency)} />
+                {hasValidIncome ? <AnimatedCounter value={monthlyNet} formatter={(val) => formatCurrency(val, inputs.currency)} /> : <span className="text-[#BFE5D3]/60">—</span>}
               </span>
             </div>
           </div>
@@ -133,13 +145,13 @@ export const SnapshotCard: React.FC<SnapshotCardProps> = ({ snapshot, onExploreD
                 <Calendar className="w-3 h-3 text-[#BFE5D3]" /> {t.yearlyTotalLabel}
               </span>
               <span className="text-xs font-semibold text-white/90">
-                {t.beforeTax}: <strong className="text-white"><AnimatedCounter value={yearlyGross || 0} formatter={(val) => formatCurrency(val, inputs.currency)} /></strong>
+                {t.beforeTax}: <strong className="text-white">{hasValidIncome ? <AnimatedCounter value={yearlyGross || 0} formatter={(val) => formatCurrency(val, inputs.currency)} /> : '—'}</strong>
               </span>
             </div>
             <div className="text-right">
               <span className="text-[10px] font-bold text-[#198754] bg-[#EAF7F1] px-1.5 py-0.5 rounded uppercase block">{t.afterTaxNet}</span>
               <span className="text-sm font-black text-white">
-                <AnimatedCounter value={yearlyNet} formatter={(val) => formatCurrency(val, inputs.currency)} />
+                {hasValidIncome ? <AnimatedCounter value={yearlyNet} formatter={(val) => formatCurrency(val, inputs.currency)} /> : <span className="text-[#BFE5D3]/60">—</span>}
               </span>
             </div>
           </div>

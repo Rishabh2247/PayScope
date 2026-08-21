@@ -65,13 +65,13 @@ export default function Home() {
     }
   }, [activeView, recruiterTab]);
 
-  // Employee/Contractor Inputs State
+  // Employee/Contractor Inputs State - Empty initial income for first-time visitors
   const [inputs, setInputs] = useState<FinancialInputs>({
     country: 'US',
     currency: 'USD',
     employmentType: 'Full-time Employee',
-    incomeRate: 120000,
-    annualSalary: 120000,
+    incomeRate: 0,
+    annualSalary: 0,
     state: 'Texas',
     city: 'Austin',
     filingStatus: 'Single',

@@ -254,7 +254,7 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                     annualSalary: isContractor ? val * inputs.workHoursPerWeek * inputs.weeksPerYear : val,
                   });
                 }}
-                placeholder={isContractor ? '60' : '120,000'}
+                placeholder={isContractor ? 'e.g. 60' : 'e.g. 120,000'}
                 className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-[#BFE5D3] rounded-xl text-sm font-bold text-[#12372A] focus:outline-none focus:ring-2 focus:ring-[#1F8F68] transition-all shadow-2xs"
               />
             </div>
@@ -498,7 +498,7 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
           onClick={onCalculate}
           className="w-full bg-[#1F8F68] hover:bg-[#176F52] text-white font-extrabold text-sm sm:text-base py-3.5 px-6 rounded-2xl shadow-lg shadow-[#1F8F68]/25 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] border border-[#1F8F68]"
         >
-          <span>See Your Full Interactive Financial Snapshot</span>
+          <span>See My Financial Snapshot →</span>
           <Calculator className="w-5 h-5" />
         </button>
       </div>
