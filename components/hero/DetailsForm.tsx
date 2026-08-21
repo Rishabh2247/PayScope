@@ -3,7 +3,7 @@ import { FinancialInputs, CountryCode } from '../../lib/types';
 import { isContractorRole, formatCurrency } from '../../lib/formatters';
 import { getProvincesForCountry, getCitiesForProvince } from '../../lib/geography';
 import { useTranslation } from '../../lib/i18n';
-import { Briefcase, ChevronDown, ChevronUp, Calculator, Clock, Calendar, Globe, Sparkles, Check } from 'lucide-react';
+import { Briefcase, ChevronDown, ChevronUp, Calculator, Clock, Calendar, Globe, Sparkles, Check, AlertCircle } from 'lucide-react';
 
 interface DetailsFormProps {
   inputs: FinancialInputs;
@@ -16,7 +16,9 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
   const { t } = useTranslation();
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<'country' | 'filing' | 'state' | 'city' | null>(null);
+  const [incomeError, setIncomeError] = useState(false);
   const formRef = useRef<HTMLDivElement | null>(null);
+  const incomeInputRef = useRef<HTMLInputElement | null>(null);
   const isContractor = isContractorRole(inputs.employmentType);
 
   useEffect(() => {
@@ -28,6 +30,18 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleFormSubmit = () => {
+    if (!inputs.incomeRate || inputs.incomeRate <= 0) {
+      setIncomeError(true);
+      if (incomeInputRef.current) {
+        incomeInputRef.current.focus();
+      }
+      return;
+    }
+    setIncomeError(false);
+    onCalculate();
+  };
 
   const countriesList: { code: CountryCode; name: string }[] = [
     { code: 'US', name: 'United States' },
@@ -191,7 +205,7 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          onCalculate();
+          handleFormSubmit();
         }}
         className="space-y-4"
       >
@@ -238,16 +252,18 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                 {getCurrencySymbol()}
               </div>
               <input
+                ref={incomeInputRef}
                 type="number"
                 value={inputs.incomeRate || ''}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
-                    onCalculate();
+                    handleFormSubmit();
                   }
                 }}
                 onChange={(e) => {
                   const val = Number(e.target.value);
+                  if (val > 0) setIncomeError(false);
                   onChange({
                     ...inputs,
                     incomeRate: val,
@@ -255,9 +271,19 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                   });
                 }}
                 placeholder={isContractor ? 'e.g. 60' : 'e.g. 120,000'}
-                className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-[#BFE5D3] rounded-xl text-sm font-bold text-[#12372A] focus:outline-none focus:ring-2 focus:ring-[#1F8F68] transition-all shadow-2xs"
+                className={`w-full pl-9 pr-3.5 py-2.5 bg-white border rounded-xl text-sm font-bold text-[#12372A] focus:outline-none transition-all shadow-2xs ${
+                  incomeError
+                    ? 'border-red-500 ring-2 ring-red-200'
+                    : 'border-[#BFE5D3] focus:ring-2 focus:ring-[#1F8F68]'
+                }`}
               />
             </div>
+            {incomeError && (
+              <p className="text-xs font-bold text-red-500 animate-in fade-in pt-0.5 flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                Please enter Values
+              </p>
+            )}
           </div>
 
           {/* Modern Custom Filing Status Selector */}
@@ -495,7 +521,7 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
 
         <button
           type="button"
-          onClick={onCalculate}
+          onClick={handleFormSubmit}
           className="w-full bg-[#1F8F68] hover:bg-[#176F52] text-white font-extrabold text-sm sm:text-base py-3.5 px-6 rounded-2xl shadow-lg shadow-[#1F8F68]/25 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] border border-[#1F8F68]"
         >
           <span>See My Financial Snapshot →</span>

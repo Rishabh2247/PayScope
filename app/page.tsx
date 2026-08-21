@@ -254,6 +254,17 @@ export default function Home() {
     setRecruiterTab('rate');
   };
 
+  const handleSwitchView = (view: 'hero' | 'dashboard') => {
+    if (view === 'dashboard') {
+      const hasIncome = (inputs.incomeRate || 0) > 0 || (inputs.annualSalary || 0) > 0;
+      if (!hasIncome) {
+        // Prevent entering result page if gross income has not been entered
+        return;
+      }
+    }
+    setActiveView(view);
+  };
+
   return (
     <LanguageProvider language={language} setLanguage={setLanguage}>
       <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-slate-900 relative overflow-hidden">
@@ -278,7 +289,7 @@ export default function Home() {
         onCurrencyChange={handleCurrencyChange}
         onLanguageChange={setLanguage}
         activeView={activeView}
-        onSwitchView={setActiveView}
+        onSwitchView={handleSwitchView}
         onReset={handleReset}
         productMode={productMode}
         onProductModeChange={setProductMode}
@@ -305,7 +316,7 @@ export default function Home() {
                   inputs={inputs}
                   snapshot={snapshot}
                   onInputsChange={setInputs}
-                  onCalculate={() => setActiveView('dashboard')}
+                  onCalculate={() => handleSwitchView('dashboard')}
                   onCountryChange={handleCountryChange}
                 />
               ) : (
