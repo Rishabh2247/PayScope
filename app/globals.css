@@ -41,11 +41,14 @@
   --green-border: #BFE5D3;
   --green-success: #198754;
 
-  --bg-primary: #F7F8F4;
+  --bg-primary: #FAFBF8;
   --bg-surface: #FFFFFF;
   --bg-elevated: #F3FBF7;
-  --text-primary: #111827;
+  --text-heading: #12372A;
+  --text-body: #374151;
   --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --text-label: #12372A;
   --border-color: #BFE5D3;
 }
 
@@ -61,8 +64,11 @@
   --bg-primary: #080B09;
   --bg-surface: #101512;
   --bg-elevated: #151C17;
-  --text-primary: #F9FAFB;
+  --text-heading: #F5F7F6;
+  --text-body: #D1D5DB;
   --text-secondary: #9CA3AF;
+  --text-muted: #9CA3AF;
+  --text-label: #F5F7F6;
   --border-color: #26302A;
 }
 
@@ -133,7 +139,10 @@ body,
   font-family: 'DomineDigits', var(--font-domine), 'Domine', 'Rogles', var(--font-playfair), 'Playfair Display', Georgia, serif;
 }
 
-/* Header dynamic scroll styling handles background */
+/* Fast, seamless theme color transitions across elements without flashing */
+html, body, button, input, select, textarea, div, span, p, h1, h2, h3, h4, h5, h6, table, tr, td, th, a {
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
 
 /* Navigation bar links: clean sans font, non-cursive, non-italic */
 header,
@@ -248,11 +257,64 @@ h1, h2, h3, h4, h5, h6 {
   font-style: normal !important;
 }
 
-/* Darken child text utility overrides for high contrast & legibility */
-.text-slate-400 { color: #475569 !important; }
-.text-slate-500 { color: #1E293B !important; }
-.text-slate-600 { color: #0F172A !important; }
-.text-slate-700 { color: #0F172A !important; }
+/* Light mode high-contrast text slate defaults */
+html:not(.dark) .text-slate-400 { color: #475569; }
+html:not(.dark) .text-slate-500 { color: #334155; }
+html:not(.dark) .text-slate-600 { color: #1E293B; }
+html:not(.dark) .text-slate-700 { color: #0F172A; }
+html:not(.dark) .text-slate-800 { color: #0F172A; }
+html:not(.dark) .text-slate-900 { color: #0F172A; }
+
+/* Dark mode semantic typography system */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6,
+.dark .card-title,
+.dark .section-title {
+  color: #F5F7F6;
+}
+
+.dark label {
+  color: #F5F7F6;
+}
+
+/* Form inputs, textareas, selects and dropdowns in dark mode */
+.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.dark select,
+.dark textarea {
+  background-color: #101512;
+  color: #F5F7F6;
+  border-color: #26302A;
+}
+
+.dark input::placeholder {
+  color: #9CA3AF;
+}
+
+.dark option {
+  background-color: #101512;
+  color: #F5F7F6;
+}
+
+/* Dark mode utility overrides for slate & green text classes */
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-slate-700,
+.dark .text-\[\#12372A\] {
+  color: #F5F7F6;
+}
+
+.dark .text-slate-600,
+.dark .text-slate-500 {
+  color: #D1D5DB;
+}
+
+.dark .text-slate-400 {
+  color: #9CA3AF;
+}
 
 /* Minimum Touch Target Size & Touch Enhancements for Mobile */
 button,
@@ -286,11 +348,6 @@ textarea {
 }
 .font-eb-garamond {
   font-family: 'Rogles', var(--font-playfair), 'Playfair Display', var(--font-cormorant), 'Cormorant Garamond', Georgia, serif !important;
-}
-
-/* Global Smooth Transitions & Slider Smooth Scroll */
-* {
-  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Skeleton Loading Shimmer Keyframes */
@@ -393,12 +450,43 @@ svg rect[class*="stroke-"] {
 
 /* Bold Footer Headings Override */
 .footer-title,
-footer h3,
-footer .footer-title {
+footer h3 {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   font-weight: 900 !important;
-  color: #0F172A !important;
   letter-spacing: 0.05em !important;
   text-transform: uppercase !important;
+  color: #0F172A;
 }
 
+.dark .footer-title,
+.dark footer h3 {
+  color: #F5F7F6 !important;
+}
+
+.dark footer p,
+.dark footer a:not(:hover) {
+  color: #D1D5DB;
+}
+
+.dark footer a:hover {
+  color: #22C55E;
+}
+
+/* Table header and row text in dark mode */
+.dark table th,
+.dark table td {
+  color: #F5F7F6;
+  border-color: #26302A;
+}
+
+/* Chart text and grids in dark mode */
+.dark .recharts-text,
+.dark .recharts-legend-item-text {
+  fill: #D1D5DB !important;
+  color: #D1D5DB !important;
+}
+
+.dark .recharts-cartesian-grid-line line,
+.dark .recharts-cartesian-grid line {
+  stroke: rgba(255, 255, 255, 0.08) !important;
+}
