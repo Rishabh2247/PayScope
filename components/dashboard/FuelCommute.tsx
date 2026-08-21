@@ -6,6 +6,8 @@ import { formatCurrency } from '../../lib/formatters';
 import { useTranslation } from '../../lib/i18n';
 import { Info, Car } from 'lucide-react';
 
+import { GlareCard } from '../ui/GlareCard';
+
 interface FuelCommuteProps {
   snapshot: CompleteFinancialSnapshot;
 }
@@ -64,7 +66,7 @@ export const FuelCommute: React.FC<FuelCommuteProps> = ({ snapshot }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm flex flex-col justify-between h-full min-h-[380px] space-y-4 hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
+    <GlareCard className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm flex flex-col justify-between h-full min-h-[380px] space-y-4 hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
       {/* Title & Live Prices Bar */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
@@ -90,7 +92,7 @@ export const FuelCommute: React.FC<FuelCommuteProps> = ({ snapshot }) => {
       </div>
 
       {/* Transit Mode Selection */}
-      <div className="grid grid-cols-4 gap-1 p-1 bg-[#F3FBF7] dark:bg-[#151C17] rounded-xl border border-[#BFE5D3] dark:border-[#26302A] text-xs font-bold text-[#12372A] dark:text-[#F9FAFB]">
+      <div className="grid grid-cols-4 gap-1 p-1 bg-[#F3FBF7] dark:bg-[#151C17] rounded-xl border border-[#BFE5D3] dark:border-[#26302A] text-xs font-bold text-[#12372A] dark:text-[#F9FAFB] z-20 relative">
         {(['Gasoline', 'Hybrid', 'EV', 'Public Transit'] as const).map((mode) => (
           <button
             key={mode}
@@ -109,7 +111,7 @@ export const FuelCommute: React.FC<FuelCommuteProps> = ({ snapshot }) => {
       </div>
 
       {/* Minimal Numerical Inputs (NO Sliders) */}
-      <div className="bg-[#F3FBF7] dark:bg-[#151C17] p-3 rounded-2xl border border-[#BFE5D3] dark:border-[#26302A] space-y-2.5 text-xs">
+      <div className="bg-[#F3FBF7] dark:bg-[#151C17] p-3 rounded-2xl border border-[#BFE5D3] dark:border-[#26302A] space-y-2.5 text-xs z-20 relative">
         <div className="grid grid-cols-3 gap-2">
           {/* User Price Input */}
           <div className="space-y-1">
@@ -181,6 +183,6 @@ export const FuelCommute: React.FC<FuelCommuteProps> = ({ snapshot }) => {
           </div>
         </div>
       </div>
-    </div>
+    </GlareCard>
   );
 };

@@ -9,7 +9,6 @@ import { Navbar } from '../components/layout/Navbar';
 import { Footer } from '../components/layout/Footer';
 import { HeroSection } from '../components/hero/HeroSection';
 import { DashboardView } from '../components/dashboard/DashboardView';
-import { GoogleAdSlot } from '../components/ads/GoogleAdSlot';
 import { MotionContainer } from '../components/common/MotionContainer';
 import Velaris from '../components/ui/velaris';
 import { InteractiveGridPattern } from '../components/ui/InteractiveGridPattern';
@@ -550,11 +549,6 @@ export default function Home() {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-
-      {/* Bottom Google Leaderboard Ad Space */}
-      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-6">
-        <GoogleAdSlot type="in-feed" adSlotId="bottom-leaderboard-02" />
       </div>
 
       {/* Footer */}

@@ -5,6 +5,8 @@ import { CompleteFinancialSnapshot } from '../../lib/types';
 import { formatCurrency, isContractorRole } from '../../lib/formatters';
 import { Info } from 'lucide-react';
 
+import { GlareCard } from '../ui/GlareCard';
+
 interface IncomeBenchmarkProps {
   snapshot: CompleteFinancialSnapshot;
 }
@@ -19,7 +21,7 @@ export const IncomeBenchmark: React.FC<IncomeBenchmarkProps> = ({ snapshot }) =>
     : tax.annualGross;
 
   return (
-    <div className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm flex flex-col justify-between h-full min-h-[380px] space-y-4 hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
+    <GlareCard className="bg-white dark:bg-[#101512] p-5 rounded-3xl border border-[#BFE5D3] dark:border-[#26302A] shadow-sm flex flex-col justify-between h-full min-h-[380px] space-y-4 hover:border-[#1F8F68] dark:hover:border-[#22C55E]/50 transition-colors">
       {/* Title */}
       <div className="flex items-center justify-between">
         <div>
@@ -77,6 +79,6 @@ export const IncomeBenchmark: React.FC<IncomeBenchmarkProps> = ({ snapshot }) =>
         <span>Source: Official Regional Census</span>
         <span className="font-bold text-[#1F8F68] dark:text-[#22C55E]">2026 Data</span>
       </div>
-    </div>
+    </GlareCard>
   );
 };

@@ -366,14 +366,8 @@ export const Navbar: React.FC<NavbarProps> = ({
       {isMobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex flex-col justify-start">
           <div className="bg-white border-b border-[#BFE5D3] p-5 space-y-4 shadow-2xl animate-in slide-in-from-top duration-200">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-[#1F8F68] rounded-xl flex items-center justify-center text-white font-black">
-                  P
-                </div>
-                <span className="font-bold text-lg text-[#12372A]">PayScope</span>
-              </div>
-              <button onClick={() => setIsMobileMenuOpen(false)} className="text-slate-400 hover:text-slate-700 p-1">
+            <div className="flex items-center justify-end pb-3 border-b border-slate-100 dark:border-[#26302A]">
+              <button onClick={() => setIsMobileMenuOpen(false)} className="text-slate-400 dark:text-slate-300 hover:text-slate-700 dark:hover:text-white p-1">
                 <X className="w-6 h-6" />
               </button>
             </div>

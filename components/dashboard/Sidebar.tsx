@@ -18,7 +18,6 @@ import {
   RefreshCw,
   Download,
 } from 'lucide-react';
-import { GoogleAdSlot } from '../ads/GoogleAdSlot';
 
 interface SidebarProps {
   activeTab?: string;
@@ -113,10 +112,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, snapsh
               <span>Download Report</span>
             </button>
           </div>
-        </div>
-
-        <div className="pt-3 border-t border-[#BFE5D3]/60 dark:border-[#26302A]">
-          <GoogleAdSlot type="rectangle" adSlotId="sidebar-ad-01" className="my-0" />
         </div>
       </aside>
 

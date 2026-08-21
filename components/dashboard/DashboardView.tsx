@@ -19,7 +19,6 @@ import { HousingSection } from './HousingSection';
 import { FuelCommuteSection } from './FuelCommuteSection';
 import { RelocationSection } from './RelocationSection';
 import { SupportBanner } from './SupportBanner';
-import { GoogleAdSlot } from '../ads/GoogleAdSlot';
 
 interface DashboardViewProps {
   inputs: FinancialInputs;
