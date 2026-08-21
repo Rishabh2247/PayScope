@@ -364,10 +364,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Slide-Out Drawer Navigation */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex flex-col justify-start">
-          <div className="bg-white border-b border-[#BFE5D3] p-5 space-y-4 shadow-2xl animate-in slide-in-from-top duration-200">
+        <div className="lg:hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex flex-col justify-start">
+          <div className="bg-white dark:bg-[#101512] border-b border-[#BFE5D3] dark:border-[#26302A] p-5 space-y-4 shadow-2xl animate-in slide-in-from-top duration-200 text-slate-900 dark:text-[#F5F7F6]">
             <div className="flex items-center justify-end pb-3 border-b border-slate-100 dark:border-[#26302A]">
-              <button onClick={() => setIsMobileMenuOpen(false)} className="text-slate-400 dark:text-slate-300 hover:text-slate-700 dark:hover:text-white p-1">
+              <button onClick={() => setIsMobileMenuOpen(false)} className="text-slate-400 dark:text-slate-300 hover:text-slate-700 dark:hover:text-white p-1 cursor-pointer">
                 <X className="w-6 h-6" />
               </button>
             </div>
@@ -375,13 +375,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Mobile Controls */}
             <div className="grid grid-cols-2 gap-3 text-xs font-bold pt-1">
               <div>
-                <label className="text-[10px] font-bold text-[#1F8F68] uppercase tracking-wider block mb-1">
+                <label className="text-[10px] font-bold text-[#1F8F68] dark:text-[#22C55E] uppercase tracking-wider block mb-1">
                   Currency / Divisa
                 </label>
                 <select
                   value={currency}
                   onChange={(e) => onCurrencyChange(e.target.value as CurrencyCode)}
-                  className="w-full bg-[#F3FBF7] border border-[#BFE5D3] rounded-xl p-2.5 font-bold text-[#12372A]"
+                  className="w-full bg-[#F3FBF7] dark:bg-[#151C17] border border-[#BFE5D3] dark:border-[#26302A] rounded-xl p-2.5 font-bold text-[#12372A] dark:text-[#F5F7F6]"
                 >
                   <option value="USD">USD ($)</option>
                   <option value="CAD">CAD (CA$)</option>
@@ -391,13 +391,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
 
               <div>
-                <label className="text-[10px] font-bold text-[#1F8F68] uppercase tracking-wider block mb-1">
+                <label className="text-[10px] font-bold text-[#1F8F68] dark:text-[#22C55E] uppercase tracking-wider block mb-1">
                   Language / Idioma
                 </label>
                 <select
                   value={language}
                   onChange={(e) => onLanguageChange(e.target.value as SupportedLanguage)}
-                  className="w-full bg-[#F3FBF7] border border-[#BFE5D3] rounded-xl p-2.5 font-bold text-[#12372A]"
+                  className="w-full bg-[#F3FBF7] dark:bg-[#151C17] border border-[#BFE5D3] dark:border-[#26302A] rounded-xl p-2.5 font-bold text-[#12372A] dark:text-[#F5F7F6]"
                 >
                   <option value="en">English</option>
                   <option value="es">Español</option>
@@ -407,13 +407,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             {/* Navigation links in Mobile */}
-            <div className="space-y-2 pt-3 border-t border-slate-100 font-bold text-sm text-[#12372A]">
+            <div className="space-y-2 pt-3 border-t border-slate-100 dark:border-[#26302A] font-bold text-sm text-[#12372A] dark:text-[#F5F7F6]">
               <button
                 onClick={() => {
                   onSwitchView('hero');
                   setIsMobileMenuOpen(false);
                 }}
-                className="w-full text-left py-2 px-3 hover:bg-[#F3FBF7] rounded-xl text-[#1F8F68] flex items-center gap-2"
+                className="w-full text-left py-2 px-3 hover:bg-[#F3FBF7] dark:hover:bg-[#151C17] rounded-xl text-[#1F8F68] dark:text-[#22C55E] flex items-center gap-2 cursor-pointer"
               >
                 <Calculator className="w-4 h-4" /> Calculator
               </button>
@@ -422,7 +422,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onSwitchView('dashboard');
                   setIsMobileMenuOpen(false);
                 }}
-                className="w-full text-left py-2 px-3 hover:bg-[#F3FBF7] rounded-xl flex items-center gap-2"
+                className="w-full text-left py-2 px-3 hover:bg-[#F3FBF7] dark:hover:bg-[#151C17] rounded-xl flex items-center gap-2 cursor-pointer"
               >
                 <LayoutDashboard className="w-4 h-4" /> Dashboard
               </button>
@@ -431,7 +431,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onSwitchView('dashboard');
                   setIsMobileMenuOpen(false);
                 }}
-                className="w-full text-left py-2 px-3 hover:bg-[#F3FBF7] rounded-xl flex items-center gap-2"
+                className="w-full text-left py-2 px-3 hover:bg-[#F3FBF7] dark:hover:bg-[#151C17] rounded-xl flex items-center gap-2 cursor-pointer"
               >
                 <Scale className="w-4 h-4" /> Tax Engine
               </button>
