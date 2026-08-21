@@ -146,8 +146,22 @@ export const SnapshotCard: React.FC<SnapshotCardProps> = ({ snapshot, onExploreD
         </div>
       </div>
 
+      {/* Transparent Disclosure & Methodology Notice */}
+      <div className="bg-[#176F52]/40 border border-[#BFE5D3]/30 rounded-2xl p-3 text-[11px] text-[#EAF7F1] space-y-1.5 my-2">
+        <p className="font-bold text-[#BFE5D3]">Your estimate is based on:</p>
+        <ul className="space-y-1 text-[10px] font-medium text-white/90">
+          <li className="flex items-center gap-1.5"><CheckCircle className="w-3 h-3 text-[#BFE5D3] shrink-0" /> 2026 federal/provincial tax rules</li>
+          <li className="flex items-center gap-1.5"><CheckCircle className="w-3 h-3 text-[#BFE5D3] shrink-0" /> Employment type selected</li>
+          <li className="flex items-center gap-1.5"><CheckCircle className="w-3 h-3 text-[#BFE5D3] shrink-0" /> Income and working hours provided</li>
+          <li className="flex items-center gap-1.5"><CheckCircle className="w-3 h-3 text-[#BFE5D3] shrink-0" /> Standard deductions and contributions</li>
+        </ul>
+        <p className="text-[9.5px] text-[#BFE5D3]/80 pt-1.5 leading-snug border-t border-[#BFE5D3]/20 font-normal">
+          Some calculations use estimated assumptions, including local expenses, housing, fuel prices, and certain contractor contribution scenarios. This tool provides estimates and is not tax, financial, or legal advice.
+        </p>
+      </div>
+
       {/* Live Updates Footer Note */}
-      <p className="text-center text-[10px] text-[#BFE5D3] font-bold pt-2 flex items-center justify-center gap-1">
+      <p className="text-center text-[10px] text-[#BFE5D3] font-bold pt-1 flex items-center justify-center gap-1">
         <Zap className="w-3 h-3 text-[#BFE5D3]" /> {t.updatesLive}
       </p>
     </div>
