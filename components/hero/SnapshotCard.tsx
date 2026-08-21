@@ -14,6 +14,7 @@ import {
   Fuel,
   ShieldCheck,
   CheckCircle,
+  Zap,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -49,25 +50,28 @@ export const SnapshotCard: React.FC<SnapshotCardProps> = ({ snapshot, onExploreD
       {/* Top Header Badge */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <div className="inline-flex items-center gap-2 bg-[#176F52]/80 border border-[#BFE5D3]/40 rounded-full px-3 py-1 text-xs font-bold text-white">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#198754] animate-pulse" />
-            <span>⚡ {t.liveInstantEstimate}</span>
+          <div className="inline-flex items-center gap-1.5 bg-[#176F52]/80 border border-[#BFE5D3]/40 rounded-full px-3 py-1 text-xs font-bold text-white">
+            <span className="w-2 h-2 rounded-full bg-[#198754] animate-pulse" />
+            <Zap className="w-3.5 h-3.5 text-[#BFE5D3]" />
+            <span>{t.liveInstantEstimate}</span>
           </div>
-          <span className="text-[10px] font-bold text-[#BFE5D3] uppercase tracking-wider bg-[#176F52]/50 px-2 py-0.5 rounded-md">
+          <span className="text-[10px] font-extrabold text-[#BFE5D3] uppercase tracking-wider bg-[#176F52]/50 px-2 py-0.5 rounded-md">
             {isContractor ? t.contractorTaxMode : t.employeeMode}
           </span>
         </div>
 
         {/* Primary Take-Home Highlight with Animated Counter */}
         <div className="space-y-0.5">
-          <p className="text-xs font-semibold text-[#BFE5D3]">{t.estimatedMonthlyTakeHome}</p>
+          <p className="text-xs font-bold text-[#BFE5D3]">
+            <span className="font-extrabold">E</span>stimated <span className="font-extrabold">M</span>onthly <span className="font-extrabold">T</span>ake-<span className="font-extrabold">H</span>ome
+          </p>
           <div className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white">
             <AnimatedCounter
               value={monthlyNet}
               formatter={(val) => formatCurrency(val, inputs.currency)}
             />
           </div>
-          <p className="text-xs text-[#EAF7F1]/80 font-medium pt-0.5">
+          <p className="text-xs text-[#EAF7F1] font-bold pt-0.5">
             <AnimatedCounter
               value={effectiveRate}
               decimals={1}
@@ -79,7 +83,7 @@ export const SnapshotCard: React.FC<SnapshotCardProps> = ({ snapshot, onExploreD
 
       {/* Detailed Before vs After Tax Matrix Cards */}
       <div className="my-4 space-y-2">
-        <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#BFE5D3]">
+        <p className="text-[11px] font-black uppercase tracking-wider text-[#BFE5D3]">
           {isContractor ? t.contractorIncomeBreakdown : t.salaryTakeHomeBreakdown}
         </p>
 
@@ -88,8 +92,10 @@ export const SnapshotCard: React.FC<SnapshotCardProps> = ({ snapshot, onExploreD
           {isContractor && (
             <div className="bg-[#176F52]/50 border border-[#BFE5D3]/30 rounded-2xl p-2.5 flex items-center justify-between">
               <div className="space-y-0.5">
-                <span className="text-[10px] font-bold text-[#BFE5D3] uppercase tracking-wider block">⏱️ {t.hourlyRateLabel}</span>
-                <span className="text-xs font-medium text-white/80">
+                <span className="text-[10px] font-extrabold text-[#BFE5D3] uppercase tracking-wider flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-[#BFE5D3]" /> {t.hourlyRateLabel}
+                </span>
+                <span className="text-xs font-semibold text-white/90">
                   {t.beforeTax}: <strong className="text-white"><AnimatedCounter value={beforeTaxHourly} formatter={(val) => `${formatCurrency(val, inputs.currency)}/hr`} /></strong>
                 </span>
               </div>
@@ -105,8 +111,10 @@ export const SnapshotCard: React.FC<SnapshotCardProps> = ({ snapshot, onExploreD
           {/* Monthly Before & After */}
           <div className="bg-[#176F52]/50 border border-[#BFE5D3]/30 rounded-2xl p-2.5 flex items-center justify-between">
             <div className="space-y-0.5">
-              <span className="text-[10px] font-bold text-[#BFE5D3] uppercase tracking-wider block">📅 {t.monthlyPayLabel}</span>
-              <span className="text-xs font-medium text-white/80">
+              <span className="text-[10px] font-extrabold text-[#BFE5D3] uppercase tracking-wider flex items-center gap-1">
+                <Calendar className="w-3 h-3 text-[#BFE5D3]" /> {t.monthlyPayLabel}
+              </span>
+              <span className="text-xs font-semibold text-white/90">
                 {t.beforeTax}: <strong className="text-white"><AnimatedCounter value={monthlyGross} formatter={(val) => formatCurrency(val, inputs.currency)} /></strong>
               </span>
             </div>
@@ -121,8 +129,10 @@ export const SnapshotCard: React.FC<SnapshotCardProps> = ({ snapshot, onExploreD
           {/* Yearly Before & After */}
           <div className="bg-[#176F52]/50 border border-[#BFE5D3]/30 rounded-2xl p-2.5 flex items-center justify-between">
             <div className="space-y-0.5">
-              <span className="text-[10px] font-bold text-[#BFE5D3] uppercase tracking-wider block">🗓️ {t.yearlyTotalLabel}</span>
-              <span className="text-xs font-medium text-white/80">
+              <span className="text-[10px] font-extrabold text-[#BFE5D3] uppercase tracking-wider flex items-center gap-1">
+                <Calendar className="w-3 h-3 text-[#BFE5D3]" /> {t.yearlyTotalLabel}
+              </span>
+              <span className="text-xs font-semibold text-white/90">
                 {t.beforeTax}: <strong className="text-white"><AnimatedCounter value={yearlyGross || 0} formatter={(val) => formatCurrency(val, inputs.currency)} /></strong>
               </span>
             </div>
@@ -137,8 +147,8 @@ export const SnapshotCard: React.FC<SnapshotCardProps> = ({ snapshot, onExploreD
       </div>
 
       {/* Live Updates Footer Note */}
-      <p className="text-center text-[10px] text-[#BFE5D3]/80 font-medium pt-2">
-        ⚡ {t.updatesLive}
+      <p className="text-center text-[10px] text-[#BFE5D3] font-bold pt-2 flex items-center justify-center gap-1">
+        <Zap className="w-3 h-3 text-[#BFE5D3]" /> {t.updatesLive}
       </p>
     </div>
   );

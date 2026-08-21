@@ -6,6 +6,7 @@ import { useTranslation } from '../../lib/i18n';
 import { DetailsForm } from './DetailsForm';
 import { SnapshotCard } from './SnapshotCard';
 import { FeatureBar } from './FeatureBar';
+import { ShieldCheck, Scale, Building2, BarChart3, Fuel, Home, Globe } from 'lucide-react';
 
 interface HeroSectionProps {
   inputs: FinancialInputs;
@@ -30,18 +31,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="text-center max-w-3xl mx-auto space-y-4">
         {/* Top Data Badge Pill */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#EAF7F1] border border-[#BFE5D3] rounded-full text-xs font-bold text-[#1F8F68] shadow-2xs">
-          <span>🛡️</span>
+          <ShieldCheck className="w-4 h-4 text-[#1F8F68]" />
           <span>{t.backedByOfficialData}</span>
         </div>
 
         {/* Main Centered Title */}
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#12372A] tracking-tight leading-[1.15]">
-          Your income. <span className="text-[#1F8F68] font-great-vibes font-normal text-5xl sm:text-6xl lg:text-7xl align-baseline inline-block px-1">Decoded.</span> <br />
+          <span className="font-black">Y</span>our income. <span className="text-[#1F8F68] font-great-vibes font-normal text-5xl sm:text-6xl lg:text-7xl align-baseline inline-block px-1">Decoded.</span> <br />
           {t.allInOnePlace}
         </h1>
 
-        {/* Subtitle */}
-        <p className="text-slate-600 text-sm sm:text-base font-medium max-w-2xl mx-auto leading-relaxed">
+        {/* Subtitle with Darker Text & Unbolded Font */}
+        <p className="text-slate-800 text-sm sm:text-base font-normal max-w-2xl mx-auto leading-relaxed">
           {t.heroSubtitle}
         </p>
       </div>
@@ -53,7 +54,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <h4 className="text-xs font-black text-[#1F8F68] leading-tight whitespace-nowrap">
               {t.trustedByThousands}
             </h4>
-            <p className="text-[10px] font-bold text-slate-500 whitespace-nowrap">
+            <p className="text-[10px] font-normal text-slate-800 whitespace-nowrap">
               {t.acrossNorthAmerica}
             </p>
           </div>
@@ -105,32 +106,32 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       {/* Official Data Sources Row */}
       <div className="pt-12 text-center space-y-4 border-t border-[#BFE5D3]/60">
         <p className="text-xs font-extrabold uppercase tracking-wider text-[#1F8F68]">
-          Official verified data sources
+          <span className="font-black">O</span>fficial <span className="font-black">V</span>erified <span className="font-black">D</span>ata <span className="font-black">S</span>ources
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs font-bold text-[#12372A]">
           <div className="flex items-center gap-1.5 bg-[#F3FBF7] px-3.5 py-1.5 rounded-xl border border-[#BFE5D3]">
-            <span>🇺🇸</span> IRS Tax Code
+            <Scale className="w-3.5 h-3.5 text-[#1F8F68]" /> IRS Tax Code
           </div>
           <div className="flex items-center gap-1.5 bg-[#F3FBF7] px-3.5 py-1.5 rounded-xl border border-[#BFE5D3]">
-            <span>🇨🇦</span> CRA Agency
+            <Building2 className="w-3.5 h-3.5 text-[#1F8F68]" /> CRA Agency
           </div>
           <div className="flex items-center gap-1.5 bg-[#F3FBF7] px-3.5 py-1.5 rounded-xl border border-[#BFE5D3]">
-            <span>🇨🇦</span> Statistics Canada
+            <BarChart3 className="w-3.5 h-3.5 text-[#1F8F68]" /> Statistics Canada
           </div>
           <div className="flex items-center gap-1.5 bg-[#F3FBF7] px-3.5 py-1.5 rounded-xl border border-[#BFE5D3]">
-            <span>🇺🇸</span> U.S. EIA Energy Data
+            <Fuel className="w-3.5 h-3.5 text-[#1F8F68]" /> U.S. EIA Energy Data
           </div>
           <div className="flex items-center gap-1.5 bg-[#F3FBF7] px-3.5 py-1.5 rounded-xl border border-[#BFE5D3]">
-            <span>🏠</span> Zillow Index
+            <Home className="w-3.5 h-3.5 text-[#1F8F68]" /> Zillow Index
           </div>
           <div className="flex items-center gap-1.5 bg-[#F3FBF7] px-3.5 py-1.5 rounded-xl border border-[#BFE5D3]">
-            <span>🇺🇸</span> U.S. BLS Labor Stats
+            <BarChart3 className="w-3.5 h-3.5 text-[#1F8F68]" /> U.S. BLS Labor Stats
           </div>
           <div className="flex items-center gap-1.5 bg-[#F3FBF7] px-3.5 py-1.5 rounded-xl border border-[#BFE5D3]">
-            <span>🇧🇷</span> Receita Federal
+            <Building2 className="w-3.5 h-3.5 text-[#1F8F68]" /> Receita Federal
           </div>
           <div className="flex items-center gap-1.5 bg-[#F3FBF7] px-3.5 py-1.5 rounded-xl border border-[#BFE5D3]">
-            <span>🇲🇽</span> SAT Tax Authority
+            <Scale className="w-3.5 h-3.5 text-[#1F8F68]" /> SAT Tax Authority
           </div>
         </div>
       </div>

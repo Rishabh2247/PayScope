@@ -1,7 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Domine:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap');
 @import "tailwindcss";
+
+@font-face {
+  font-family: 'Rogles';
+  src: local('Rogles'), local('Rogles Serif'), local('Rogles-Regular');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Denton';
+  src: local('Denton'), local('Denton Serif'), local('Denton-Regular');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Denton Serif';
+  src: local('Denton Serif'), local('Denton');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --font-great-vibes-family: var(--font-great-vibes), 'Great Vibes', cursive;
+  --font-lora-family: var(--font-lora), 'Lora', Georgia, serif;
+  --font-domine-family: var(--font-domine), 'Domine', Georgia, serif;
+  --font-rogles-family: 'Rogles', var(--font-playfair), 'Playfair Display', var(--font-cormorant), 'Cormorant Garamond', 'Instrument Serif', Georgia, serif;
+  --font-denton-family: 'Rogles', var(--font-playfair), 'Playfair Display', var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
   --green-primary: #1F8F68;
   --green-hover: #176F52;
   --green-dark: #12372A;
@@ -12,8 +41,14 @@
 }
 
 @theme {
+  --font-sans: 'Rogles', var(--font-playfair), 'Playfair Display', var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  --font-serif: 'Rogles', var(--font-playfair), 'Playfair Display', var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
   --font-great-vibes: var(--font-great-vibes), 'Great Vibes', cursive;
-  --font-eb-garamond: var(--font-eb-garamond), 'EB Garamond', Georgia, serif;
+  --font-lora: var(--font-lora), 'Lora', Georgia, serif;
+  --font-domine: var(--font-domine), 'Domine', Georgia, serif;
+  --font-rogles: 'Rogles', var(--font-playfair), 'Playfair Display', var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  --font-denton: 'Rogles', var(--font-playfair), 'Playfair Display', var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  --font-eb-garamond: 'Rogles', var(--font-playfair), 'Playfair Display', var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
   --color-green-primary: #1F8F68;
   --color-green-hover: #176F52;
   --color-green-dark: #12372A;
@@ -47,16 +82,151 @@
   --color-emerald-800: #12372A;
 }
 
-html,
-body {
-  font-family: var(--font-eb-garamond), 'EB Garamond', Georgia, serif;
-  overflow-x: hidden;
-  width: 100%;
-  max-width: 100vw;
-  scroll-behavior: smooth;
-  background-color: #FAF9F5; /* Cream White */
-  color: #12372A;
+/* Bold the heading of each section across both pages */
+h1, h2, h3, h4, h5, h6, .font-heading, .section-title, .card-title, [class*="title"] {
+  font-family: 'Rogles', var(--font-playfair), 'Playfair Display', var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-weight: 700 !important;
 }
+
+html {
+  scroll-behavior: smooth !important;
+}
+
+@font-face {
+  font-family: 'DomineDigits';
+  src: local('Domine'), url('https://fonts.gstatic.com/s/domine/v16/L0x5DF02iFML4hGCyOCzLw.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0030-0039, U+0024, U+0025, U+002B, U+002D, U+002C, U+002E, U+002F, U+00A3, U+20AC, U+006B, U+004D, U+004B;
+}
+
+html,
+body,
+* {
+  font-family: 'DomineDigits', var(--font-domine), 'Domine', 'Rogles', var(--font-playfair), 'Playfair Display', Georgia, serif;
+}
+
+/* Header dynamic scroll styling handles background */
+
+/* Navigation bar links: clean sans font, non-cursive, non-italic */
+header,
+header *,
+nav,
+nav * {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif !important;
+  font-style: normal !important;
+}
+
+/* Lora Regular for Child Texts, Sliders & Options (Normal Style, non-curved, unbolded) */
+.font-lora,
+p,
+span:not(.font-great-vibes):not(.font-heading):not(.font-extrabold):not(.font-black):not(.font-bold):not(.font-semibold):not(.font-numeric),
+small,
+label,
+sub,
+sup,
+input:not([type="number"]),
+select,
+option,
+input[type="range"],
+.slider-option,
+.text-xs:not(.font-numeric),
+.text-sm:not(.font-numeric) {
+  font-family: var(--font-lora), 'Lora', Georgia, serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Domine Font for Numbers across the website (Result Page, Dashboard, Hero, Modals) */
+.font-numeric,
+.number-val,
+input[type="number"],
+.animated-counter,
+span.animated-counter-val,
+[data-numeric="true"],
+td, th,
+.metric-value,
+.stat-value,
+.currency-val {
+  font-family: 'DomineDigits', var(--font-domine), 'Domine', Georgia, serif !important;
+  font-style: normal !important;
+}
+
+/* Small numbers -> Regular 400 */
+.text-xs,
+.text-sm,
+.text-base,
+.text-xs *,
+.text-sm *,
+.text-base *,
+small,
+label {
+  font-family: 'DomineDigits', var(--font-domine), 'Domine', 'Lora', Georgia, serif;
+}
+
+.text-xs .font-numeric,
+.text-sm .font-numeric,
+.text-base .font-numeric,
+.text-xs.font-numeric,
+.text-sm.font-numeric,
+.text-base.font-numeric,
+small .font-numeric,
+label .font-numeric,
+p .font-numeric {
+  font-weight: 400 !important;
+}
+
+/* Bigger numbers -> Medium 500 */
+.text-lg,
+.text-xl,
+.text-2xl,
+.text-3xl,
+.text-4xl,
+.text-5xl,
+.text-6xl,
+.text-lg *,
+.text-xl *,
+.text-2xl *,
+.text-3xl *,
+.text-4xl *,
+.text-5xl *,
+.text-6xl * {
+  font-family: 'DomineDigits', var(--font-domine), 'Domine', 'Rogles', Georgia, serif;
+}
+
+.text-lg .font-numeric,
+.text-xl .font-numeric,
+.text-2xl .font-numeric,
+.text-3xl .font-numeric,
+.text-4xl .font-numeric,
+.text-5xl .font-numeric,
+.text-6xl .font-numeric,
+.text-lg.font-numeric,
+.text-xl.font-numeric,
+.text-2xl.font-numeric,
+.text-3xl.font-numeric,
+.text-4xl.font-numeric,
+.text-5xl.font-numeric,
+.text-6xl.font-numeric {
+  font-weight: 500 !important;
+}
+
+/* Ensure normal non-curved style for icons, SVGs, feature cards, and buttons */
+svg,
+button,
+a,
+.feature-card,
+.feature-card *,
+h1, h2, h3, h4, h5, h6 {
+  font-style: normal !important;
+}
+
+/* Darken child text utility overrides for high contrast & legibility */
+.text-slate-400 { color: #475569 !important; }
+.text-slate-500 { color: #1E293B !important; }
+.text-slate-600 { color: #0F172A !important; }
+.text-slate-700 { color: #0F172A !important; }
 
 /* Minimum Touch Target Size & Touch Enhancements for Mobile */
 button,
@@ -78,11 +248,18 @@ textarea {
 .text-green-dark { color: var(--green-dark); }
 .text-green-hover { color: var(--green-hover); }
 .font-great-vibes {
-  font-family: var(--font-great-vibes), 'Great Vibes', cursive;
+  font-family: var(--font-great-vibes), 'Great Vibes', cursive !important;
   font-weight: 400;
+  font-style: normal !important;
+}
+.font-rogles {
+  font-family: 'Rogles', var(--font-playfair), 'Playfair Display', var(--font-cormorant), 'Cormorant Garamond', Georgia, serif !important;
+}
+.font-denton {
+  font-family: 'Rogles', var(--font-playfair), 'Playfair Display', var(--font-cormorant), 'Cormorant Garamond', Georgia, serif !important;
 }
 .font-eb-garamond {
-  font-family: var(--font-eb-garamond), 'EB Garamond', Georgia, serif;
+  font-family: 'Rogles', var(--font-playfair), 'Playfair Display', var(--font-cormorant), 'Cormorant Garamond', Georgia, serif !important;
 }
 
 /* Global Smooth Transitions & Slider Smooth Scroll */
@@ -172,5 +349,30 @@ textarea {
   .animate-marquee-slow:hover {
     animation-play-state: paused;
   }
+}
+
+/* Light & Blurry Grid Line CSS Overrides */
+.recharts-cartesian-grid-line line,
+.recharts-cartesian-grid line,
+.recharts-cartesian-grid-vertical line,
+.recharts-cartesian-grid-horizontal line {
+  stroke: rgba(18, 55, 42, 0.08) !important;
+  stroke-dasharray: 4 4 !important;
+  filter: blur(0.4px) !important;
+}
+
+svg rect[class*="stroke-"] {
+  filter: blur(0.4px);
+}
+
+/* Bold Footer Headings Override */
+.footer-title,
+footer h3,
+footer .footer-title {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-weight: 900 !important;
+  color: #0F172A !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
 }
 

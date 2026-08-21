@@ -58,6 +58,13 @@ export default function Home() {
     setCandidateJobs(recruiterStore.getCandidateJobs());
   }, []);
 
+  // Reset scroll position to very top when switching to result page
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+  }, [activeView, recruiterTab]);
+
   // Employee/Contractor Inputs State
   const [inputs, setInputs] = useState<FinancialInputs>({
     country: 'US',
@@ -282,7 +289,7 @@ export default function Home() {
 
 
       {/* Main Container - Expanded Width (max-w-[1440px]) with Motion.dev Animations */}
-      <div className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-2">
+      <div className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-4">
         <AnimatePresence mode="wait">
           {productMode === 'payscope' ? (
             /* ---------------- EMPLOYEE MODE ---------------- */

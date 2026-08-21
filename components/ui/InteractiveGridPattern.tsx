@@ -56,8 +56,9 @@ export const InteractiveGridPattern: React.FC<InteractiveGridPatternProps> = ({
       ref={containerRef}
       width={width * horizontal}
       height={height * vertical}
+      style={{ filter: 'blur(0.6px)' }}
       className={cn(
-        'pointer-events-none absolute inset-0 h-full w-full border-none select-none',
+        'pointer-events-none absolute inset-0 h-full w-full border-none select-none opacity-60',
         className
       )}
       {...props}
@@ -71,8 +72,13 @@ export const InteractiveGridPattern: React.FC<InteractiveGridPatternProps> = ({
             y={getY(index)}
             width={width}
             height={height}
+            style={{
+              stroke: 'rgba(18, 55, 42, 0.08)',
+              strokeWidth: '0.5px',
+              filter: 'blur(0.8px)',
+            }}
             className={cn(
-              'stroke-gray-300/50 stroke-[0.75px] transition-all duration-700 ease-out',
+              'transition-all duration-700 ease-out',
               isHovered
                 ? 'fill-[#1F8F68]/25 stroke-[#1F8F68]/70 stroke-1 duration-75'
                 : 'fill-transparent',

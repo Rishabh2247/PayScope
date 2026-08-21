@@ -39,7 +39,7 @@ export const Footer: React.FC = () => {
 
           {/* Main Navigation */}
           <div className="space-y-2 text-xs">
-            <p className="font-bold text-slate-900 uppercase tracking-wider">{t.quickLinks}</p>
+            <h3 className="font-black text-slate-900 uppercase tracking-wider text-xs footer-title">{t.quickLinks}</h3>
             <ul className="space-y-1.5 text-slate-600 font-medium">
               <li>
                 <Link href="/" className="hover:text-indigo-600 transition-colors">
@@ -71,7 +71,7 @@ export const Footer: React.FC = () => {
 
           {/* Legal Pages */}
           <div className="space-y-2 text-xs">
-            <p className="font-bold text-slate-900 uppercase tracking-wider">{t.legal}</p>
+            <h3 className="font-black text-slate-900 uppercase tracking-wider text-xs footer-title">{t.legal}</h3>
             <ul className="space-y-1.5 text-slate-600 font-medium">
               <li>
                 <Link href="/disclaimer" className="hover:text-indigo-600 transition-colors font-bold text-indigo-600">
@@ -103,7 +103,7 @@ export const Footer: React.FC = () => {
 
           {/* Copyright & Disclaimer Note */}
           <div className="space-y-2 text-xs">
-            <p className="font-bold text-slate-900 uppercase tracking-wider">Compliance & Notice</p>
+            <h3 className="font-black text-slate-900 uppercase tracking-wider text-xs footer-title">Compliance & Notice</h3>
             <p className="text-[11px] text-slate-500 leading-relaxed">
               PayScope provides estimated financial insights for educational purposes only. PayScope is not a licensed tax advisor or financial planner.
             </p>

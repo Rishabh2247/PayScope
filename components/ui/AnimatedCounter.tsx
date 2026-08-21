@@ -62,5 +62,5 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
         maximumFractionDigits: decimals,
       })}${suffix}`;
 
-  return <span className={className}>{formattedOutput}</span>;
+  return <span className={`font-numeric ${className}`}>{formattedOutput}</span>;
 };
