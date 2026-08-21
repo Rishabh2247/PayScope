@@ -93,19 +93,26 @@ export const FuelCommute: React.FC<FuelCommuteProps> = ({ snapshot }) => {
 
       {/* Transit Mode Selection */}
       <div className="grid grid-cols-4 gap-1 p-1 bg-[#F3FBF7] dark:bg-[#151C17] rounded-xl border border-[#BFE5D3] dark:border-[#26302A] text-xs font-bold text-[#12372A] dark:text-[#F9FAFB] z-20 relative">
-        {(['Gasoline', 'Hybrid', 'EV', 'Public Transit'] as const).map((mode) => (
+        {(
+          [
+            { id: 'Gasoline', label: 'Gas', icon: '⛽' },
+            { id: 'Hybrid', label: 'Hybrid', icon: '🔋' },
+            { id: 'EV', label: 'EV', icon: '⚡' },
+            { id: 'Public Transit', label: 'Transit', icon: '🚌' },
+          ] as const
+        ).map((item) => (
           <button
-            key={mode}
+            key={item.id}
             type="button"
-            onClick={() => handleModeChange(mode)}
-            className={`py-1 px-1 rounded-lg transition-all text-center truncate cursor-pointer flex items-center justify-center gap-1 ${
-              commuteMode === mode
+            onClick={() => handleModeChange(item.id)}
+            className={`py-1 px-1 rounded-lg transition-all text-center cursor-pointer flex items-center justify-center gap-1 text-[11px] ${
+              commuteMode === item.id
                 ? 'bg-[#1F8F68] dark:bg-[#22C55E] text-white shadow-xs font-extrabold'
                 : 'hover:text-[#12372A] dark:hover:text-white hover:bg-[#EAF7F1] dark:hover:bg-[#1C251F] text-slate-700 dark:text-slate-300'
             }`}
           >
-            <span>{modeIcons[mode]}</span>
-            <span className="hidden sm:inline truncate">{mode}</span>
+            <span>{item.icon}</span>
+            <span>{item.label}</span>
           </button>
         ))}
       </div>
