@@ -288,12 +288,12 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
 
           {/* Modern Custom Filing Status Selector */}
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-[#12372A]">{t.filingStatus}</label>
+            <label className="block text-xs font-semibold text-[#12372A] dark:text-[#F9FAFB]">{t.filingStatus}</label>
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'filing' ? null : 'filing')}
-                className="w-full flex items-center justify-between px-3.5 py-2.5 bg-white hover:bg-[#F3FBF7] border border-[#BFE5D3] rounded-xl text-sm font-semibold text-[#12372A] transition-all cursor-pointer shadow-2xs"
+                className="w-full flex items-center justify-between px-3.5 py-2.5 bg-white dark:bg-[#101512] hover:bg-[#F3FBF7] dark:hover:bg-[#151C17] border border-[#BFE5D3] dark:border-[#26302A] rounded-xl text-sm font-semibold text-[#12372A] dark:text-[#F9FAFB] transition-all cursor-pointer shadow-2xs"
               >
                 <span>
                   {inputs.filingStatus === 'Single'
@@ -303,14 +303,14 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                     : t.headOfHousehold}
                 </span>
                 <ChevronDown
-                  className={`w-4 h-4 text-[#1F8F68] transition-transform duration-200 ${
+                  className={`w-4 h-4 text-[#1F8F68] dark:text-[#22C55E] transition-transform duration-200 ${
                     openDropdown === 'filing' ? 'rotate-180' : ''
                   }`}
                 />
               </button>
 
               {openDropdown === 'filing' && (
-                <div className="absolute left-0 right-0 top-full mt-1.5 bg-white/95 backdrop-blur-xl border border-[#BFE5D3] rounded-2xl shadow-xl p-1.5 z-50 animate-in fade-in zoom-in-95">
+                <div className="absolute left-0 right-0 top-full mt-1.5 bg-white/95 dark:bg-[#101512]/95 backdrop-blur-xl border border-[#BFE5D3] dark:border-[#26302A] rounded-2xl shadow-xl p-1.5 z-50 animate-in fade-in zoom-in-95">
                   {[
                     { value: 'Single', label: t.single },
                     { value: 'Married Jointly', label: t.marriedFilingJointly },
@@ -327,8 +327,8 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                         }}
                         className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                           isSelected
-                            ? 'bg-[#1F8F68] text-white font-extrabold shadow-2xs'
-                            : 'text-slate-800 hover:bg-[#F3FBF7] hover:text-[#1F8F68]'
+                            ? 'bg-[#1F8F68] dark:bg-[#22C55E] text-white font-extrabold shadow-2xs'
+                            : 'text-slate-800 dark:text-slate-200 hover:bg-[#F3FBF7] dark:hover:bg-[#151C17] hover:text-[#1F8F68] dark:hover:text-[#22C55E]'
                         }`}
                       >
                         <span>{item.label}</span>
@@ -346,23 +346,23 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Modern Custom State/Province Popover */}
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-[#12372A]">{t.stateProvinceLabel}</label>
+            <label className="block text-xs font-semibold text-[#12372A] dark:text-[#F9FAFB]">{t.stateProvinceLabel}</label>
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'state' ? null : 'state')}
-                className="w-full flex items-center justify-between px-3.5 py-2.5 bg-white hover:bg-[#F3FBF7] border border-[#BFE5D3] rounded-xl text-sm font-semibold text-[#12372A] transition-all cursor-pointer shadow-2xs"
+                className="w-full flex items-center justify-between px-3.5 py-2.5 bg-white dark:bg-[#101512] hover:bg-[#F3FBF7] dark:hover:bg-[#151C17] border border-[#BFE5D3] dark:border-[#26302A] rounded-xl text-sm font-semibold text-[#12372A] dark:text-[#F9FAFB] transition-all cursor-pointer shadow-2xs"
               >
                 <span className="truncate">{inputs.state}</span>
                 <ChevronDown
-                  className={`w-4 h-4 text-[#1F8F68] shrink-0 transition-transform duration-200 ${
+                  className={`w-4 h-4 text-[#1F8F68] dark:text-[#22C55E] shrink-0 transition-transform duration-200 ${
                     openDropdown === 'state' ? 'rotate-180' : ''
                   }`}
                 />
               </button>
 
               {openDropdown === 'state' && (
-                <div className="absolute left-0 right-0 top-full mt-1.5 bg-white/95 backdrop-blur-xl border border-[#BFE5D3] rounded-2xl shadow-xl p-1.5 z-50 max-h-56 overflow-y-auto animate-in fade-in zoom-in-95">
+                <div className="absolute left-0 right-0 top-full mt-1.5 bg-white/95 dark:bg-[#101512]/95 backdrop-blur-xl border border-[#BFE5D3] dark:border-[#26302A] rounded-2xl shadow-xl p-1.5 z-50 max-h-56 overflow-y-auto animate-in fade-in zoom-in-95">
                   {provinces.map((prov) => {
                     const isSelected = inputs.state === prov.name;
                     return (
@@ -375,8 +375,8 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                         }}
                         className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                           isSelected
-                            ? 'bg-[#1F8F68] text-white font-extrabold shadow-2xs'
-                            : 'text-slate-800 hover:bg-[#F3FBF7] hover:text-[#1F8F68]'
+                            ? 'bg-[#1F8F68] dark:bg-[#22C55E] text-white font-extrabold shadow-2xs'
+                            : 'text-slate-800 dark:text-slate-200 hover:bg-[#F3FBF7] dark:hover:bg-[#151C17] hover:text-[#1F8F68] dark:hover:text-[#22C55E]'
                         }`}
                       >
                         <span className="truncate">{prov.name}</span>
@@ -391,23 +391,23 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
 
           {/* Modern Custom City Popover */}
           <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-[#12372A]">{t.cityLabel}</label>
+            <label className="block text-xs font-semibold text-[#12372A] dark:text-[#F9FAFB]">{t.cityLabel}</label>
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'city' ? null : 'city')}
-                className="w-full flex items-center justify-between px-3.5 py-2.5 bg-white hover:bg-[#F3FBF7] border border-[#BFE5D3] rounded-xl text-sm font-semibold text-[#12372A] transition-all cursor-pointer shadow-2xs"
+                className="w-full flex items-center justify-between px-3.5 py-2.5 bg-white dark:bg-[#101512] hover:bg-[#F3FBF7] dark:hover:bg-[#151C17] border border-[#BFE5D3] dark:border-[#26302A] rounded-xl text-sm font-semibold text-[#12372A] dark:text-[#F9FAFB] transition-all cursor-pointer shadow-2xs"
               >
                 <span className="truncate">{inputs.city}</span>
                 <ChevronDown
-                  className={`w-4 h-4 text-[#1F8F68] shrink-0 transition-transform duration-200 ${
+                  className={`w-4 h-4 text-[#1F8F68] dark:text-[#22C55E] shrink-0 transition-transform duration-200 ${
                     openDropdown === 'city' ? 'rotate-180' : ''
                   }`}
                 />
               </button>
 
               {openDropdown === 'city' && (
-                <div className="absolute left-0 right-0 top-full mt-1.5 bg-white/95 backdrop-blur-xl border border-[#BFE5D3] rounded-2xl shadow-xl p-1.5 z-50 max-h-56 overflow-y-auto animate-in fade-in zoom-in-95">
+                <div className="absolute left-0 right-0 top-full mt-1.5 bg-white/95 dark:bg-[#101512]/95 backdrop-blur-xl border border-[#BFE5D3] dark:border-[#26302A] rounded-2xl shadow-xl p-1.5 z-50 max-h-56 overflow-y-auto animate-in fade-in zoom-in-95">
                   {cities.map((ct) => {
                     const isSelected = inputs.city === ct;
                     return (
@@ -420,8 +420,8 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                         }}
                         className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                           isSelected
-                            ? 'bg-[#1F8F68] text-white font-extrabold shadow-2xs'
-                            : 'text-slate-800 hover:bg-[#F3FBF7] hover:text-[#1F8F68]'
+                            ? 'bg-[#1F8F68] dark:bg-[#22C55E] text-white font-extrabold shadow-2xs'
+                            : 'text-slate-800 dark:text-slate-200 hover:bg-[#F3FBF7] dark:hover:bg-[#151C17] hover:text-[#1F8F68] dark:hover:text-[#22C55E]'
                         }`}
                       >
                         <span className="truncate">{ct}</span>
@@ -440,17 +440,17 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
           <button
             type="button"
             onClick={() => setShowAdvanced(!showAdvanced)}
-            className="w-full py-2.5 px-4 bg-white hover:bg-[#F3FBF7] border border-[#BFE5D3] rounded-xl text-xs font-semibold text-[#12372A] transition-all flex items-center justify-between shadow-2xs cursor-pointer"
+            className="w-full py-2.5 px-4 bg-white dark:bg-[#101512] hover:bg-[#F3FBF7] dark:hover:bg-[#151C17] border border-[#BFE5D3] dark:border-[#26302A] rounded-xl text-xs font-semibold text-[#12372A] dark:text-[#F9FAFB] transition-all flex items-center justify-between shadow-2xs cursor-pointer"
           >
             <span>{t.moreDetailsAccordion}</span>
-            <span className="text-[#1F8F68] font-bold text-base">{showAdvanced ? '−' : '+'}</span>
+            <span className="text-[#1F8F68] dark:text-[#22C55E] font-bold text-base">{showAdvanced ? '−' : '+'}</span>
           </button>
 
           {showAdvanced && (
-            <div className="mt-3 p-4 bg-[#F3FBF7] rounded-2xl border border-[#BFE5D3] space-y-3 text-xs">
+            <div className="mt-3 p-4 bg-[#F3FBF7] dark:bg-[#151C17] rounded-2xl border border-[#BFE5D3] dark:border-[#26302A] space-y-3 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[#12372A] font-semibold mb-1">{t.workHoursPerWeek}</label>
+                  <label className="block text-[#12372A] dark:text-[#F9FAFB] font-semibold mb-1">{t.workHoursPerWeek}</label>
                   <input
                     type="number"
                     value={inputs.workHoursPerWeek}
@@ -462,11 +462,11 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                         annualSalary: isContractor ? inputs.incomeRate * val * inputs.weeksPerYear : inputs.incomeRate,
                       });
                     }}
-                    className="w-full px-3 py-2 bg-white border border-[#BFE5D3] rounded-lg text-[#12372A] font-bold focus:outline-none focus:ring-2 focus:ring-[#1F8F68]"
+                    className="w-full px-3 py-2 bg-white dark:bg-[#101512] border border-[#BFE5D3] dark:border-[#26302A] rounded-lg text-[#12372A] dark:text-[#F9FAFB] font-bold focus:outline-none focus:ring-2 focus:ring-[#1F8F68] dark:focus:ring-[#22C55E]"
                   />
                 </div>
                 <div>
-                  <label className="block text-[#12372A] font-semibold mb-1">{t.weeksPerYear}</label>
+                  <label className="block text-[#12372A] dark:text-[#F9FAFB] font-semibold mb-1">{t.weeksPerYear}</label>
                   <input
                     type="number"
                     value={inputs.weeksPerYear}
@@ -478,32 +478,32 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
                         annualSalary: isContractor ? inputs.incomeRate * inputs.workHoursPerWeek * val : inputs.incomeRate,
                       });
                     }}
-                    className="w-full px-3 py-2 bg-white border border-[#BFE5D3] rounded-lg text-[#12372A] font-bold focus:outline-none focus:ring-2 focus:ring-[#1F8F68]"
+                    className="w-full px-3 py-2 bg-white dark:bg-[#101512] border border-[#BFE5D3] dark:border-[#26302A] rounded-lg text-[#12372A] dark:text-[#F9FAFB] font-bold focus:outline-none focus:ring-2 focus:ring-[#1F8F68] dark:focus:ring-[#22C55E]"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[#12372A] font-semibold mb-1">{t.dependents}</label>
+                  <label className="block text-[#12372A] dark:text-[#F9FAFB] font-semibold mb-1">{t.dependents}</label>
                   <input
                     type="number"
                     min={0}
                     max={10}
                     value={inputs.dependents}
                     onChange={(e) => handleFieldChange('dependents', Number(e.target.value))}
-                    className="w-full px-3 py-2 bg-white border border-[#BFE5D3] rounded-lg text-[#12372A] font-bold focus:outline-none focus:ring-2 focus:ring-[#1F8F68]"
+                    className="w-full px-3 py-2 bg-white dark:bg-[#101512] border border-[#BFE5D3] dark:border-[#26302A] rounded-lg text-[#12372A] dark:text-[#F9FAFB] font-bold focus:outline-none focus:ring-2 focus:ring-[#1F8F68] dark:focus:ring-[#22C55E]"
                   />
                 </div>
                 <div>
-                  <label className="block text-[#12372A] font-semibold mb-1">
+                  <label className="block text-[#12372A] dark:text-[#F9FAFB] font-semibold mb-1">
                     {isContractor ? t.businessExpenseWriteoff : t.k401Contribution}
                   </label>
                   <input
                     type="number"
                     value={inputs.k401Contribution || 0}
                     onChange={(e) => handleFieldChange('k401Contribution', Number(e.target.value))}
-                    className="w-full px-3 py-2 bg-white border border-[#BFE5D3] rounded-lg text-[#12372A] font-bold focus:outline-none focus:ring-2 focus:ring-[#1F8F68]"
+                    className="w-full px-3 py-2 bg-white dark:bg-[#101512] border border-[#BFE5D3] dark:border-[#26302A] rounded-lg text-[#12372A] dark:text-[#F9FAFB] font-bold focus:outline-none focus:ring-2 focus:ring-[#1F8F68] dark:focus:ring-[#22C55E]"
                     placeholder="e.g. 6%"
                   />
                 </div>
@@ -515,14 +515,14 @@ export const DetailsForm: React.FC<DetailsFormProps> = ({ inputs, onChange, onCa
 
       {/* Defaults Subtext & Primary CTA Button */}
       <div className="space-y-3 pt-2">
-        <p className="text-[11px] text-[#1F8F68] font-bold flex items-center gap-1.5">
-          <Sparkles className="w-3.5 h-3.5 text-[#1F8F68] shrink-0" /> <span>{t.defaultsApplied}</span>
+        <p className="text-[11px] text-[#1F8F68] dark:text-[#22C55E] font-bold flex items-center gap-1.5">
+          <Sparkles className="w-3.5 h-3.5 text-[#1F8F68] dark:text-[#22C55E] shrink-0" /> <span>{t.defaultsApplied}</span>
         </p>
 
         <button
           type="button"
           onClick={handleFormSubmit}
-          className="w-full bg-[#1F8F68] hover:bg-[#176F52] text-white font-extrabold text-sm sm:text-base py-3.5 px-6 rounded-2xl shadow-lg shadow-[#1F8F68]/25 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] border border-[#1F8F68]"
+          className="w-full bg-[#1F8F68] dark:bg-[#22C55E] hover:bg-[#176F52] dark:hover:bg-[#16A34A] text-white font-extrabold text-sm sm:text-base py-3.5 px-6 rounded-2xl shadow-lg shadow-[#1F8F68]/25 dark:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] border border-[#1F8F68] dark:border-[#22C55E]"
         >
           <span>See My Financial Snapshot →</span>
           <Calculator className="w-5 h-5" />
