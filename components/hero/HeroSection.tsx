@@ -28,7 +28,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     <section className="py-8 sm:py-14 space-y-12 relative max-w-6xl mx-auto page-fade-in">
       {/* Centered Hero Title & Top Pill Banner */}
-      <div className="text-center max-w-3xl mx-auto space-y-3 sm:space-y-4">
+      <div className="text-center max-w-3xl mx-auto space-y-2 sm:space-y-3">
         {/* Top Data Badge Pill */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#EAF7F1] border border-[#BFE5D3] rounded-full text-xs font-bold text-[#1F8F68] shadow-2xs">
           <ShieldCheck className="w-4 h-4 text-[#1F8F68]" />
@@ -36,13 +36,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
 
         {/* Main Centered Title */}
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#12372A] tracking-tight leading-[0.95] sm:leading-[1.15]">
-          <span className="font-black">Y</span>our income. <span className="text-[#1F8F68] font-great-vibes font-normal text-4xl sm:text-6xl lg:text-7xl align-baseline inline-block px-1 leading-[0.85] sm:leading-normal">Decoded.</span>{' '}
-          <span className="inline-block">{t.allInOnePlace}</span>
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#12372A] tracking-tight leading-[1.0] sm:leading-[1.05]">
+          <span><span className="font-black">Y</span>our income.</span>{' '}
+          <span className="text-[#1F8F68] font-great-vibes font-normal text-4xl sm:text-6xl lg:text-7xl align-baseline inline-block px-1 leading-none">Decoded.</span>
+          <span className="block mt-1 sm:mt-2 text-3xl sm:text-5xl lg:text-6xl font-black">{t.allInOnePlace}</span>
         </h1>
 
-        {/* Subtitle with Refined Compact Font Size & Tight Mobile Line Height */}
-        <p className="text-slate-700 text-xs sm:text-sm font-normal max-w-xl mx-auto leading-[1.4] sm:leading-relaxed">
+        {/* Subtitle with Refined Compact Font Size & Tight Vertical Spacing */}
+        <p className="text-slate-700 text-xs sm:text-sm font-normal max-w-xl mx-auto leading-relaxed pt-1">
           {t.heroSubtitle}
         </p>
       </div>
