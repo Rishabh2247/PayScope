@@ -21,7 +21,7 @@ export default function PrivacyPolicyPage() {
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Calculator</span>
           </Link>
-          <img src="/assets/logo.png" alt="PayScope Logo" className="h-10 w-auto mix-blend-multiply" />
+          <img src="/assets/logo.png" alt="PayScope Logo" width={140} height={40} loading="lazy" decoding="async" className="h-10 w-auto mix-blend-multiply" />
         </div>
       </header>
 

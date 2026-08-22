@@ -20,7 +20,7 @@ export default function AboutPage() {
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Calculator</span>
           </Link>
-          <img src="/assets/logo.png" alt="PayScope Logo" className="h-10 w-auto mix-blend-multiply" />
+          <img src="/assets/logo.png" alt="PayScope Logo" width={140} height={40} loading="lazy" decoding="async" className="h-10 w-auto mix-blend-multiply" />
         </div>
       </header>
 
@@ -61,6 +61,10 @@ export default function AboutPage() {
               <img
                 src="/assets/rishabh.png"
                 alt="Rishabh - Developer of PayScope"
+                width={112}
+                height={112}
+                loading="lazy"
+                decoding="async"
                 className="w-20 h-20 sm:w-28 sm:h-28 rounded-2xl border-2 border-indigo-100 object-cover shadow-md"
               />
               <span className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center text-[9px] text-white font-bold" title="Active Solo Developer">

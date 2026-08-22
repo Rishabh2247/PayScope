@@ -86,48 +86,43 @@ export const Navbar: React.FC<NavbarProps> = ({
     }
   };
 
-  // Scroll listener with debounced auto-collapse & scroll direction detection
+  // Scroll listener with throttled state updates
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const prevScrollY = lastScrollY.current;
+      if (ticking) return;
+      ticking = true;
 
-      const atTop = currentScrollY <= 15;
-      const goingDown = currentScrollY > prevScrollY + 4;
-      const goingUp = currentScrollY < prevScrollY - 4;
+      requestAnimationFrame(() => {
+        ticking = false;
+        const currentScrollY = window.scrollY;
+        const prevScrollY = lastScrollY.current;
 
-      setIsAtTop(atTop);
-      setIsScrollingDown(goingDown);
-      setIsScrollingUp(goingUp);
+        const atTop = currentScrollY <= 15;
+        const goingDown = currentScrollY > prevScrollY + 4;
+        const goingUp = currentScrollY < prevScrollY - 4;
 
-      clearTimers();
+        setIsAtTop((prev) => (prev !== atTop ? atTop : prev));
+        if (goingDown) setIsScrollingDown(true);
+        if (goingUp) setIsScrollingUp(true);
 
-      if (atTop) {
-        // 1. AT TOP: Always visible, transparent, original position
-        setIsNavbarVisible(true);
-      } else if (goingUp) {
-        // 2. SCROLLING UP: Immediately reveal & keep visible
-        setIsNavbarVisible(true);
-      } else if (goingDown) {
-        // 3. SCROLLING DOWN: Fixed glass mode, show navbar while actively scrolling
-        setIsNavbarVisible(true);
+        clearTimers();
 
-        // Schedule auto-collapse after scrolling stops (~800ms)
-        idleTimerRef.current = setTimeout(() => {
-          if (!isNavbarHovered && !isMobileMenuOpen && openDropdown === null) {
-            setIsNavbarVisible(false);
+        if (atTop || goingUp || goingDown) {
+          setIsNavbarVisible(true);
+
+          if (!atTop) {
+            idleTimerRef.current = setTimeout(() => {
+              if (!isNavbarHovered && !isMobileMenuOpen && openDropdown === null) {
+                setIsNavbarVisible(false);
+              }
+            }, 800);
           }
-        }, 800);
-      } else {
-        // 4. SCROLL STOPPED (IDLE) while scrolled down:
-        idleTimerRef.current = setTimeout(() => {
-          if (!isNavbarHovered && !isMobileMenuOpen && openDropdown === null) {
-            setIsNavbarVisible(false);
-          }
-        }, 800);
-      }
+        }
 
-      lastScrollY.current = currentScrollY;
+        lastScrollY.current = currentScrollY;
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -219,6 +214,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             <img
               src="/assets/logo.png"
               alt="PayScope Logo"
+              width={140}
+              height={40}
+              decoding="async"
               className="h-9 sm:h-10 w-auto object-contain transition-transform group-hover:scale-105 dark:brightness-110"
             />
           </div>
@@ -350,7 +348,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Mobile Hamburger Button Trigger (< 1024px) */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+            className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center p-2.5 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
             aria-label="Toggle Navigation Menu"
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

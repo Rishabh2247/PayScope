@@ -26,6 +26,18 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   const startTimeRef = useRef<number | null>(null);
 
   useEffect(() => {
+    if (startValueRef.current === value) {
+      setDisplayValue(value);
+      return;
+    }
+
+    const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      setDisplayValue(value);
+      startValueRef.current = value;
+      return;
+    }
+
     startValueRef.current = displayValue;
     startTimeRef.current = null;
 
@@ -45,6 +57,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
         animationFrameId = requestAnimationFrame(step);
       } else {
         setDisplayValue(value);
+        startValueRef.current = value;
       }
     };
 

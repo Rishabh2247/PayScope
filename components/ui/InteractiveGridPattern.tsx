@@ -73,36 +73,45 @@ export const InteractiveGridPattern: React.FC<InteractiveGridPatternProps> = ({
   const getX = (index: number) => (index % horizontal) * width;
   const getY = (index: number) => Math.floor(index / horizontal) * height;
 
+  const id = React.useId();
+
   return (
     <svg
       ref={containerRef}
-      width={width * horizontal}
-      height={height * vertical}
       className={cn(
         'pointer-events-none absolute inset-0 h-full w-full border-none select-none opacity-40',
         className
       )}
       {...props}
     >
-      {Array.from({ length: totalSquares }).map((_, index) => {
-        const isHovered = hoveredSquare === index;
-        return (
-          <rect
-            key={index}
-            x={getX(index)}
-            y={getY(index)}
-            width={width}
-            height={height}
-            className={cn(
-              'transition-colors duration-500 ease-out',
-              isHovered
-                ? 'fill-[#1F8F68]/25 stroke-[#1F8F68]/70 stroke-1 duration-75'
-                : 'fill-transparent stroke-[#12372A]/10 dark:stroke-[#22C55E]/10',
-              squaresClassName
-            )}
+      <defs>
+        <pattern
+          id={id}
+          width={width}
+          height={height}
+          patternUnits="userSpaceOnUse"
+        >
+          <path
+            d={`M ${width} 0 L 0 0 0 ${height}`}
+            fill="none"
+            className="stroke-[#12372A]/10 dark:stroke-[#22C55E]/10"
+            strokeWidth="1"
           />
-        );
-      })}
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill={`url(#${id})`} />
+      {hoveredSquare !== null && (
+        <rect
+          x={getX(hoveredSquare)}
+          y={getY(hoveredSquare)}
+          width={width}
+          height={height}
+          className={cn(
+            'fill-[#1F8F68]/25 stroke-[#1F8F68]/70 stroke-1 transition-colors duration-75',
+            squaresClassName
+          )}
+        />
+      )}
     </svg>
   );
 };

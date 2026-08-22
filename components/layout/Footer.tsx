@@ -30,6 +30,10 @@ export const Footer: React.FC = () => {
               <img
                 src="/assets/logo.png"
                 alt="PayScope Logo"
+                width={120}
+                height={36}
+                loading="lazy"
+                decoding="async"
                 className="h-7 sm:h-8 md:h-9 w-auto object-contain dark:brightness-110"
               />
             </div>

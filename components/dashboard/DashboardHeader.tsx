@@ -33,6 +33,10 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ inputs }) => {
         <img
           src={visualSrc}
           alt="City skyline visual"
+          width={600}
+          height={200}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover object-right opacity-100 dark:opacity-80 scale-105"
         />
         {/* Soft left-to-right fade gradient for text contrast */}

@@ -52,9 +52,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="flex justify-end -mt-6 -mb-4 pr-2">
         <div className="bg-white/95 dark:bg-[#101512]/95 backdrop-blur-md border border-[#BFE5D3] dark:border-[#26302A] rounded-2xl p-3 shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-3 shrink-0 max-w-xs">
           <div className="space-y-0.5">
-            <h4 className="text-xs font-black text-[#1F8F68] dark:text-[#22C55E] leading-tight whitespace-nowrap">
+            <h2 className="text-xs font-black text-[#1F8F68] dark:text-[#22C55E] leading-tight whitespace-nowrap">
               {t.trustedByThousands}
-            </h4>
+            </h2>
             <p className="text-[10px] font-normal text-slate-800 dark:text-slate-300 whitespace-nowrap">
               {t.acrossNorthAmerica}
             </p>
@@ -62,16 +62,28 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
           <div className="flex items-center -space-x-2 shrink-0">
             <img
+              width={28}
+              height={28}
+              loading="lazy"
+              decoding="async"
               className="inline-block h-7 w-7 rounded-full ring-2 ring-white dark:ring-[#101512] object-cover shadow-2xs"
               src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
               alt="User 1"
             />
             <img
+              width={28}
+              height={28}
+              loading="lazy"
+              decoding="async"
               className="inline-block h-7 w-7 rounded-full ring-2 ring-white dark:ring-[#101512] object-cover shadow-2xs"
               src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80"
               alt="User 2"
             />
             <img
+              width={28}
+              height={28}
+              loading="lazy"
+              decoding="async"
               className="inline-block h-7 w-7 rounded-full ring-2 ring-white dark:ring-[#101512] object-cover shadow-2xs"
               src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80"
               alt="User 3"

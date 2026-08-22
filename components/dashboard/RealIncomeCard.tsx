@@ -141,6 +141,10 @@ export const RealIncomeCard: React.FC<RealIncomeCardProps> = ({ snapshot, onInpu
             <img
               src="/assets/Household Visual.png"
               alt="Household Armchair Visual"
+              width={400}
+              height={200}
+              loading="lazy"
+              decoding="async"
               className="absolute inset-0 w-full h-full object-cover object-center scale-105 opacity-80"
             />
             <div className="absolute inset-0 bg-[#12372A]/10 dark:bg-[#080B09]/40 backdrop-blur-[0.5px]" />

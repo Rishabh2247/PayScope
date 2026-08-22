@@ -13,6 +13,8 @@ import { MotionContainer } from '../components/common/MotionContainer';
 import Velaris from '../components/ui/velaris';
 import { InteractiveGridPattern } from '../components/ui/InteractiveGridPattern';
 
+import dynamic from 'next/dynamic';
+
 // Recruiter Mode Imports
 import { RecruiterInputs, TalentCandidate } from '../lib/recruiterTypes';
 import { calculateRecruiterMetrics } from '../lib/recruiterEngine';
@@ -24,15 +26,15 @@ import {
   RecruiterActivityItem,
 } from '../lib/recruiterStore';
 
-import { RecruiterSidebar } from '../components/recruiter/RecruiterSidebar';
-import { SimplifiedDashboardView } from '../components/recruiter/SimplifiedDashboardView';
-import { JobManagementView } from '../components/recruiter/JobManagementView';
-import { TalentSearchSection } from '../components/recruiter/TalentSearchSection';
-import { RecruiterHeroSection } from '../components/recruiter/RecruiterHeroSection';
-import { RecruiterRateSnapshot } from '../components/recruiter/RecruiterRateSnapshot';
-import { RateCardBuilder } from '../components/recruiter/RateCardBuilder';
-import { ContractProfitabilitySection } from '../components/recruiter/ContractProfitabilitySection';
-import { ReportsView } from '../components/recruiter/ReportsView';
+const RecruiterSidebar = dynamic(() => import('../components/recruiter/RecruiterSidebar').then((m) => m.RecruiterSidebar), { ssr: false });
+const SimplifiedDashboardView = dynamic(() => import('../components/recruiter/SimplifiedDashboardView').then((m) => m.SimplifiedDashboardView), { ssr: false });
+const JobManagementView = dynamic(() => import('../components/recruiter/JobManagementView').then((m) => m.JobManagementView), { ssr: false });
+const TalentSearchSection = dynamic(() => import('../components/recruiter/TalentSearchSection').then((m) => m.TalentSearchSection), { ssr: false });
+const RecruiterHeroSection = dynamic(() => import('../components/recruiter/RecruiterHeroSection').then((m) => m.RecruiterHeroSection), { ssr: false });
+const RecruiterRateSnapshot = dynamic(() => import('../components/recruiter/RecruiterRateSnapshot').then((m) => m.RecruiterRateSnapshot), { ssr: false });
+const RateCardBuilder = dynamic(() => import('../components/recruiter/RateCardBuilder').then((m) => m.RateCardBuilder), { ssr: false });
+const ContractProfitabilitySection = dynamic(() => import('../components/recruiter/ContractProfitabilitySection').then((m) => m.ContractProfitabilitySection), { ssr: false });
+const ReportsView = dynamic(() => import('../components/recruiter/ReportsView').then((m) => m.ReportsView), { ssr: false });
 
 export default function Home() {
   // Product Mode: 'payscope' (employee/contractor) | 'recruiting' (PayScope Recruit)
@@ -378,7 +380,7 @@ export default function Home() {
 
 
       {/* Main Container - Expanded Width (max-w-[1440px]) with Motion.dev Animations */}
-      <div className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-4">
+      <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-4">
         <AnimatePresence mode="wait">
           {productMode === 'payscope' ? (
             /* ---------------- EMPLOYEE MODE ---------------- */
@@ -422,7 +424,7 @@ export default function Home() {
               />
 
               {/* Recruiter Main Workspace */}
-              <main className="flex-1 w-full space-y-6">
+              <div className="flex-1 w-full space-y-6">
                 <AnimatePresence mode="wait">
                   {/* TAB 1: DASHBOARD */}
                   {recruiterTab === 'dashboard' && (
@@ -545,11 +547,11 @@ export default function Home() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </main>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
+      </main>
 
       {/* Footer */}
       <Footer />

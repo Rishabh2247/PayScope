@@ -71,7 +71,7 @@ export default function ResourcesPage() {
       <header className="bg-white border-b border-[#BFE5D3] sticky top-0 z-40">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <img src="/assets/logo.png" alt="PayScope Logo" className="h-8 w-auto object-contain" />
+            <img src="/assets/logo.png" alt="PayScope Logo" width={120} height={32} loading="lazy" decoding="async" className="h-8 w-auto object-contain" />
           </Link>
           <div className="flex items-center gap-3">
             <Link

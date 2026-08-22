@@ -179,13 +179,27 @@ const VelarisComponent: React.FC<VelarisProps> = ({ className, children }) => {
       bg: gl.getUniformLocation(program, 'u_bg'),
     };
 
-    // Device-aware DPR optimization: 1.5 max on mobile (< 768px), 2.0 max on desktop
+    // Device-aware DPR optimization: avoid canvas resize on mobile address-bar scroll
+    let prevWidth = 0;
+    let prevHeight = 0;
+
     const resize = () => {
       if (!canvas || !container || !gl) return;
-      const isMobile = window.innerWidth < 768;
-      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2.0);
-      const newWidth = Math.floor(container.clientWidth * dpr);
-      const newHeight = Math.floor(container.clientHeight * dpr);
+      const isMobile = window.innerWidth < 768 || !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      const clientW = container.clientWidth;
+      const clientH = container.clientHeight;
+
+      // On mobile, ignore small height changes caused by address-bar collapse/expand during scroll
+      if (isMobile && prevWidth === clientW && Math.abs(prevHeight - clientH) < 140) {
+        return;
+      }
+
+      prevWidth = clientW;
+      prevHeight = clientH;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.0 : 1.5);
+      const newWidth = Math.floor(clientW * dpr);
+      const newHeight = Math.floor(clientH * dpr);
 
       if (canvas.width !== newWidth || canvas.height !== newHeight) {
         canvas.width = newWidth;
@@ -208,25 +222,34 @@ const VelarisComponent: React.FC<VelarisProps> = ({ className, children }) => {
     const startTime = performance.now();
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobileDevice = typeof window !== 'undefined' && (window.innerWidth < 768 || !window.matchMedia('(hover: hover) and (pointer: fine)').matches);
 
     const handleVisibilityChange = () => {
       isPaused = document.visibilityState === 'hidden';
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Continuous requestAnimationFrame render loop for smooth moving light gradients
+    // Continuous requestAnimationFrame render loop
+    let lastRenderTime = 0;
+    const targetFps = isMobileDevice ? 24 : 60;
+    const frameInterval = 1000 / targetFps;
+
     const render = (t: number) => {
       if (!isPaused && gl) {
-        const elapsedTime = (t - startTime) * 0.001;
+        const delta = t - lastRenderTime;
+        if (delta >= frameInterval) {
+          lastRenderTime = t - (delta % frameInterval);
+          const elapsedTime = (t - startTime) * 0.001;
 
-        gl.uniform2f(locs.res, canvas.width, canvas.height);
-        gl.uniform1f(locs.time, prefersReducedMotion ? 1.0 : elapsedTime);
-        gl.uniform1f(locs.grain, LIGHT_GRAIN);
-        gl.uniform1f(locs.mixIntensity, LIGHT_MIX_INTENSITY);
-        gl.uniform3f(locs.bg, bgRgb[0], bgRgb[1], bgRgb[2]);
-        gl.uniform3fv(locs.colors, colorsFloatBuffer);
+          gl.uniform2f(locs.res, canvas.width, canvas.height);
+          gl.uniform1f(locs.time, prefersReducedMotion ? 1.0 : elapsedTime);
+          gl.uniform1f(locs.grain, LIGHT_GRAIN);
+          gl.uniform1f(locs.mixIntensity, LIGHT_MIX_INTENSITY);
+          gl.uniform3f(locs.bg, bgRgb[0], bgRgb[1], bgRgb[2]);
+          gl.uniform3fv(locs.colors, colorsFloatBuffer);
 
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+          gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        }
       }
 
       if (!prefersReducedMotion) {
