@@ -118,6 +118,13 @@ const VelarisComponent: React.FC<VelarisProps> = ({ className, children }) => {
     const container = containerRef.current;
     if (!canvas || !container) return;
 
+    // Completely bypass WebGL context creation & shader compilation on mobile/touch devices
+    const isMobileDevice = typeof window !== 'undefined' && (window.innerWidth < 768 || !window.matchMedia('(hover: hover) and (pointer: fine)').matches);
+    if (isMobileDevice) {
+      setWebglSupported(false);
+      return;
+    }
+
     let gl: WebGLRenderingContext | null = null;
     try {
       gl = canvas.getContext('webgl', {
@@ -222,7 +229,6 @@ const VelarisComponent: React.FC<VelarisProps> = ({ className, children }) => {
     const startTime = performance.now();
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isMobileDevice = typeof window !== 'undefined' && (window.innerWidth < 768 || !window.matchMedia('(hover: hover) and (pointer: fine)').matches);
 
     const handleVisibilityChange = () => {
       isPaused = document.visibilityState === 'hidden';

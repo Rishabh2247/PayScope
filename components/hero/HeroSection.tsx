@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { CompleteFinancialSnapshot, FinancialInputs } from '../../lib/types';
 import { useTranslation } from '../../lib/i18n';
 import { DetailsForm } from './DetailsForm';
@@ -61,29 +62,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
 
           <div className="flex items-center -space-x-2 shrink-0">
-            <img
+            <Image
               width={28}
               height={28}
-              loading="lazy"
-              decoding="async"
               className="inline-block h-7 w-7 rounded-full ring-2 ring-white dark:ring-[#101512] object-cover shadow-2xs"
               src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
               alt="User 1"
             />
-            <img
+            <Image
               width={28}
               height={28}
-              loading="lazy"
-              decoding="async"
               className="inline-block h-7 w-7 rounded-full ring-2 ring-white dark:ring-[#101512] object-cover shadow-2xs"
               src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80"
               alt="User 2"
             />
-            <img
+            <Image
               width={28}
               height={28}
-              loading="lazy"
-              decoding="async"
               className="inline-block h-7 w-7 rounded-full ring-2 ring-white dark:ring-[#101512] object-cover shadow-2xs"
               src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80"
               alt="User 3"

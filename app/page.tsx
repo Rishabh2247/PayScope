@@ -349,7 +349,7 @@ export default function Home() {
         <Velaris />
 
         {/* Dynamic Interactive Grid Pattern Background Overlay */}
-        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-30 dark:opacity-20">
+        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-30 dark:opacity-20 hidden md:block">
           <InteractiveGridPattern
             width={40}
             height={40}

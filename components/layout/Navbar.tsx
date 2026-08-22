@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { CountryCode, CurrencyCode } from '../../lib/types';
 import { SupportedLanguage, useTranslation } from '../../lib/i18n';
 import {
@@ -211,12 +212,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center gap-3 cursor-pointer py-1 group transition-transform active:scale-95"
             onClick={() => onSwitchView('hero')}
           >
-            <img
+            <Image
               src="/assets/logo.png"
               alt="PayScope Logo"
               width={140}
               height={40}
-              decoding="async"
+              priority
               className="h-9 sm:h-10 w-auto object-contain transition-transform group-hover:scale-105 dark:brightness-110"
             />
           </div>
